@@ -10,7 +10,7 @@
 //extern HWND g_hDlg;
 
 // Client's proprietary event-context GUID
-//extern GUID g_guidMyContext;
+extern GUID g_guidMyContext;
 
 // Maximum volume level on trackbar
 #define MAX_VOL  100
@@ -86,6 +86,13 @@ public:
         {
             return E_INVALIDARG;
         }
+		char outTextBuff[200];
+		if(pNotify->guidEventContext != g_guidMyContext)
+			sprintf_s(outTextBuff, "On your Notify %f %s\n", pNotify->fMasterVolume, pNotify->bMuted?"mute":"unmute");
+		else
+			sprintf_s(outTextBuff, "On my Notify %f %s\n", pNotify->fMasterVolume, pNotify->bMuted?"mute":"unmute");
+		OutputDebugString(outTextBuff);
+
         //if (g_hDlg != NULL && pNotify->guidEventContext != g_guidMyContext)
         //{
             //PostMessage(GetDlgItem(g_hDlg, IDC_CHECK_MUTE), BM_SETCHECK,

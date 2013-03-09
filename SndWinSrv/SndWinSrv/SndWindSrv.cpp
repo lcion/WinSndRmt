@@ -39,9 +39,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	hr = srvNetork.Initialize();
 	if(FAILED(hr)) return -1;
 
-	hr = srvNetork.Accept();
-	if(FAILED(hr)) return -1;
-
 	//-----------------------------------------
     // Create an event handle and setup an overlapped structure for read.
     EventArray[EventTotal] = WSACreateEvent();
@@ -67,11 +64,16 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     EventTotal++;
 
-	srvNetork.ReceiveAsync();
+	//accept loop
+	while (1) {
+	  hr = srvNetork.Accept();
+	  if(FAILED(hr)) return -1;
 
-    //-----------------------------------------
-    // Process overlapped receives on the socket
-    while (1) {
+	  srvNetork.ReceiveAsync();
+
+      //-----------------------------------------
+      // client loop Process overlapped receives on the socket
+      while (1) {
 
         //-----------------------------------------
         // Wait for the overlapped I/O call to complete
@@ -88,14 +90,18 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		{
 			//read operation completed
 			if( srvNetork.OnDataReceived() < 0 )
-				return -1;
-
-		}else
+				//break out of the client loop and go find another client
+				break;
+		}
+		else if((Index - WSA_WAIT_EVENT_0) == 1)
 		{
 			//write operation completed
 			srvNetork.OnDataSent();
 		}
-    }
+	  }
+	  // client disconnected close socket
+	  srvNetork.CloseClientSocket();
+	}
 
     return 0;
 }

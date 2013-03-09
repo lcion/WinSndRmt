@@ -76,6 +76,14 @@ HRESULT CSrvNetwrk::Initialize(){
 	return hr;
 }
 
+void CSrvNetwrk::CloseClientSocket()
+{
+	if(AcceptSocket != INVALID_SOCKET){
+		closesocket(AcceptSocket);
+		AcceptSocket = INVALID_SOCKET;
+	}
+}
+
 HRESULT CSrvNetwrk::Accept()
 {
 	HRESULT hr = S_OK;

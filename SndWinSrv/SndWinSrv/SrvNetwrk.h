@@ -19,6 +19,7 @@ public:
 	void ReceiveAsync();
 	int OnDataReceived();
 	void OnDataSent();
+	void CloseClientSocket();
 
 private:
 	WSADATA wsaData;

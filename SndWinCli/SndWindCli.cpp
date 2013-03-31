@@ -8,10 +8,7 @@
 #pragma comment(lib, "ws2_32.lib")
 #define DATA_BUFSIZE 4096
 
-int APIENTRY WinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPSTR lpCmdLine,
-                     int nCmdShow)
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     HRESULT hr = S_OK;
 	char outTextBuff[512];
@@ -21,6 +18,20 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	DWORD Index = 0;
 	BOOL bResult = TRUE;
     DWORD BytesTransferred = 0;
+	char *ipAddress, *volValue, *next_token;
+
+	int argn = 0;
+	char *token = strtok_s(lpCmdLine, " ", &next_token);
+	while(token){
+		//use the token
+		if(argn == 0) ipAddress = token;
+		else if(argn == 1) volValue = token;
+		else if(argn == 2) break; 
+		argn++;
+		token = strtok_s(NULL, " ", &next_token);
+	}
+	//expecting arguments ex: 192.168.1.12 10
+	if(argn < 2) return 1;
 
     //----------------------
     // Initialize Winsock
@@ -46,7 +57,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     // IP address, and port of the server to be connected to.
     sockaddr_in clientService;
     clientService.sin_family = AF_INET;
-    clientService.sin_addr.s_addr = inet_addr("192.168.1.12");
+    clientService.sin_addr.s_addr = inet_addr(ipAddress);
     clientService.sin_port = htons(27015);
 
     //----------------------
@@ -95,12 +106,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     EventTotal++;
 
-
 	do{
 	// send some data
         //-----------------------------------------
         // set the volume on the server to 50%
-		sprintf_s(buffer, "50\n");
+		sprintf_s(buffer, "%s\n", volValue);
 		DataBuf.len = strlen(buffer)+1;
         iResult =
             WSASend(ConnectSocket, &DataBuf, 1, &RecvBytes, Flags, &AcceptOverlapped, NULL);
@@ -160,7 +170,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
             WSACleanup();
             return 1;
         }
-		sprintf_s(outTextBuff, "The data received, send it back %d, %d\n", BytesTransferred, DataBuf.len);
+		sprintf_s(outTextBuff, "The data received from server OK %d, %d\n", BytesTransferred, DataBuf.len);
 		OutputDebugString(outTextBuff);
 	}while(0);
     iResult = closesocket(ConnectSocket);

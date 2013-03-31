@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SndWinSrv", "SndWinSrv\SndWinSrv.vcxproj", "{121E6462-4DB3-4906-9556-32BC6A5F5ABA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SndWinCli", "..\SndWinCli\SndWinCli.vcxproj", "{3844138E-14A1-427B-8B37-16316401E38D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SndWinCli", "SndWinCli\SndWinCli.vcxproj", "{3844138E-14A1-427B-8B37-16316401E38D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

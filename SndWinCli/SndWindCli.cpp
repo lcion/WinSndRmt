@@ -1,186 +1,132 @@
 #define WIN32_LEAN_AND_MEAN
 
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <stdio.h>
+#include "CliNetwork.h"
+#include <commctrl.h>
+#include "Resource.h"
 
 // Need to link with Ws2_32.lib
 #pragma comment(lib, "ws2_32.lib")
-#define DATA_BUFSIZE 4096
 
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-{
-    HRESULT hr = S_OK;
-	char outTextBuff[512];
-    char buffer[DATA_BUFSIZE];
-    DWORD RecvBytes = 0;
-    DWORD Flags = 0;
-	DWORD Index = 0;
-	BOOL bResult = TRUE;
-    DWORD BytesTransferred = 0;
-	char *ipAddress, *volValue, *next_token;
+#define MAX_VOL 100
 
+BOOL CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+
+int PharseCmdLineArgs(char *lpCmdLine, char **ipAddress, char **volValue){
 	int argn = 0;
+	char *next_token;
 	char *token = strtok_s(lpCmdLine, " ", &next_token);
 	while(token){
 		//use the token
-		if(argn == 0) ipAddress = token;
-		else if(argn == 1) volValue = token;
-		else if(argn == 2) break; 
+		if(argn == 0) *ipAddress = token;
+		else if(argn == 1) *volValue = token;
+		else if(argn == 2) break;
 		argn++;
 		token = strtok_s(NULL, " ", &next_token);
 	}
-	//expecting arguments ex: 192.168.1.12 10
-	if(argn < 2) return 1;
+	return argn;
+}
 
-    //----------------------
-    // Initialize Winsock
-    WSADATA wsaData;
-    int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-    if (iResult != NO_ERROR) {
-        //wprintf(L"WSAStartup function failed with error: %d\n", iResult);
-		OutputDebugString("WSAStartup function failed with error: \n");
-        return 1;
-    }
-    //----------------------
-    // Create a SOCKET for connecting to server
-    SOCKET ConnectSocket;
-    ConnectSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (ConnectSocket == INVALID_SOCKET) {
-        // wprintf(L"socket function failed with error: %ld\n", WSAGetLastError());
-		OutputDebugString("socket function failed with error: %ld\n");
-        WSACleanup();
-        return 1;
-    }
-    //----------------------
-    // The sockaddr_in structure specifies the address family,
-    // IP address, and port of the server to be connected to.
-    sockaddr_in clientService;
-    clientService.sin_family = AF_INET;
-    clientService.sin_addr.s_addr = inet_addr(ipAddress);
-    clientService.sin_port = htons(27015);
+CCliNetwork *gCliNetwork;
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    HRESULT hr = S_OK;
+	DWORD Index = 0;
+	BOOL bResult = TRUE;
+	char *ipAddress, *volValue;
+	CCliNetwork myNetwork;
+	gCliNetwork = &myNetwork;
 
-    //----------------------
-    // Connect to server.
-    iResult = connect(ConnectSocket, (SOCKADDR *) & clientService, sizeof (clientService));
-    if (iResult == SOCKET_ERROR) {
-		OutputDebugString("connect function failed with error: %ld\n");
-        //wprintf(L"connect function failed with error: %ld\n", WSAGetLastError());
-        iResult = closesocket(ConnectSocket);
-        if (iResult == SOCKET_ERROR)
-			OutputDebugString("closesocket function failed with error: %ld\n");
-            //wprintf(L"closesocket function failed with error: %ld\n", WSAGetLastError());
-        WSACleanup();
-        return 1;
-    }
+	//pharse the command line parameters expecting arguments ex: 192.168.1.12 10
+	if(PharseCmdLineArgs(lpCmdLine, &ipAddress, &volValue) < 2)return 1;
 
+	if(myNetwork.Initialize()) return 1;
+
+	if(myNetwork.Connect(ipAddress)) return 1;
     //wprintf(L"Connected to server.\n");
 	OutputDebugString("Connected to server.\n");
 
+	InitCommonControls();
+    DialogBox(hInstance, "VOLUMECONTROL", NULL, (DLGPROC)DlgProc);
 
-	//setup overlapped read from socket
-	//-----------------------------------------
-    // Call WSARecv to receive data into DataBuf on 
-    // the accepted socket in overlapped I/O mode
-	WSAOVERLAPPED AcceptOverlapped;
-    WSAEVENT EventArray[WSA_MAXIMUM_WAIT_EVENTS];
-    DWORD EventTotal = 0;
-    WSABUF DataBuf;
+	return 0;
+}
 
-    //-----------------------------------------
-    // Create an event handle and setup an overlapped structure.
-    EventArray[EventTotal] = WSACreateEvent();
-    if (EventArray[EventTotal] == WSA_INVALID_EVENT) {
-        OutputDebugString("WSACreateEvent failed with error\n");
-		//wprintf(L"WSACreateEvent failed with error = %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
-        WSACleanup();
-        return 1;
+//-----------------------------------------------------------
+// DlgProc -- Dialog box procedure
+//-----------------------------------------------------------
+HWND g_hDlg = NULL;
+
+BOOL CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    BOOL bMute = FALSE;
+    float fVolume = 0.0f;
+    int nVolume = 0;
+    int nChecked;
+
+    switch (message)
+    {
+    case WM_INITDIALOG:
+        g_hDlg = hDlg;
+        SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_SETRANGEMIN, FALSE, 0);
+        SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_SETRANGEMAX, FALSE, MAX_VOL);
+        //hr = g_pEndptVol->GetMute(&bMute);
+        //ERROR_CANCEL(hr)
+        SendDlgItemMessage(hDlg, IDC_CHECK_MUTE, BM_SETCHECK,
+                           bMute ? BST_CHECKED : BST_UNCHECKED, 0);
+        //hr = g_pEndptVol->GetMasterVolumeLevelScalar(&fVolume);
+        //ERROR_CANCEL(hr)
+        nVolume = (int)(MAX_VOL*fVolume + 0.5);
+        SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_SETPOS, TRUE, nVolume);
+
+		// setup timer to process network events
+		SetTimer(hDlg, 0, 100, NULL);
+        return TRUE;
+
+    case WM_TIMER:
+		//OutputDebugString("On Timer\n");
+		gCliNetwork->DoTimerProc();
+		break;
+    case WM_HSCROLL:
+        switch (LOWORD(wParam))
+        {
+        case SB_THUMBPOSITION:
+        case SB_THUMBTRACK:
+        case SB_LINERIGHT:
+        case SB_LINELEFT:
+        case SB_PAGERIGHT:
+        case SB_PAGELEFT:
+        case SB_RIGHT:
+        case SB_LEFT:
+            // The user moved the volume slider in the dialog box.
+            SendDlgItemMessage(hDlg, IDC_CHECK_MUTE, BM_SETCHECK, BST_UNCHECKED, 0);
+            //hr = g_pEndptVol->SetMute(FALSE, &g_guidMyContext);
+            //ERROR_CANCEL(hr)
+            nVolume = SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_GETPOS, 0, 0);
+			OutputDebugString("Send new Volume to server.\n");
+			gCliNetwork->SendVolume(nVolume);
+            //fVolume = (float)nVolume/MAX_VOL;
+            //hr = g_pEndptVol->SetMasterVolumeLevelScalar(fVolume, &g_guidMyContext);
+            //ERROR_CANCEL(hr)
+            return TRUE;
+        }
+        break;
+
+    case WM_COMMAND:
+        switch ((int)LOWORD(wParam))
+        {
+        case IDC_CHECK_MUTE:
+            // The user selected the Mute check box in the dialog box.
+            nChecked = SendDlgItemMessage(hDlg, IDC_CHECK_MUTE, BM_GETCHECK, 0, 0);
+            bMute = (BST_CHECKED == nChecked);
+            //hr = g_pEndptVol->SetMute(bMute, &g_guidMyContext);
+            //ERROR_CANCEL(hr)
+            return TRUE;
+        case IDCANCEL:
+			KillTimer(hDlg, 0);
+            EndDialog(hDlg, TRUE);
+            return TRUE;
+        }
+        break;
     }
-
-	ZeroMemory(&AcceptOverlapped, sizeof (WSAOVERLAPPED));
-    AcceptOverlapped.hEvent = EventArray[EventTotal];
-
-	DataBuf.len = DATA_BUFSIZE;
-    DataBuf.buf = buffer;
-
-    EventTotal++;
-
-	do{
-	// send some data
-        //-----------------------------------------
-        // set the volume on the server to 50%
-		sprintf_s(buffer, "%s\n", volValue);
-		DataBuf.len = strlen(buffer)+1;
-        iResult =
-            WSASend(ConnectSocket, &DataBuf, 1, &RecvBytes, Flags, &AcceptOverlapped, NULL);
-        if (iResult != 0) {
-			OutputDebugString("WSASend failed with error = \n");
-            //wprintf(L"WSASend failed with error = %d\n", WSAGetLastError());
-        }
-
-        //-----------------------------------------         
-        // Reset the changed flags and overlapped structure
-        Flags = 0;
-        ZeroMemory(&AcceptOverlapped, sizeof (WSAOVERLAPPED));
-
-        AcceptOverlapped.hEvent = EventArray[Index - WSA_WAIT_EVENT_0];
-
-        //-----------------------------------------
-        // Reset the data buffer
-        DataBuf.len = DATA_BUFSIZE;
-        DataBuf.buf = buffer;
-
-		if (WSARecv(ConnectSocket, &DataBuf, 1, &RecvBytes, &Flags, &AcceptOverlapped, NULL) ==
-			SOCKET_ERROR) {
-			iResult = WSAGetLastError();
-			if (iResult != WSA_IO_PENDING){
-				OutputDebugString("WSARecv failed with error \n");
-				//wprintf(L"WSARecv failed with error = %d\n", iResult);
-			}
-		}
-		// receive some data
-		//-----------------------------------------
-        // Wait for the overlapped I/O call to complete
-        Index = WSAWaitForMultipleEvents(EventTotal, EventArray, FALSE, WSA_INFINITE, FALSE);
-
-        //-----------------------------------------
-        // Reset the signaled event
-        bResult = WSAResetEvent(EventArray[Index - WSA_WAIT_EVENT_0]);
-        if (bResult == FALSE) {
-			OutputDebugString("WSAResetEvent failed with error \n");
-            //wprintf(L"WSAResetEvent failed with error = %d\n", WSAGetLastError());
-        }
-        //-----------------------------------------
-        // Determine the status of the overlapped event
-        bResult =
-            WSAGetOverlappedResult(ConnectSocket, &AcceptOverlapped, &BytesTransferred, FALSE,
-                                   &Flags);
-        if (bResult == FALSE) {
-			OutputDebugString("WSAGetOverlappedResult failed with error ");
-            //wprintf(L"WSAGetOverlappedResult failed with error = %d\n", WSAGetLastError());
-        }
-        //-----------------------------------------
-        // If the connection has been closed, close the accepted socket
-        if (BytesTransferred == 0) {
-            sprintf_s(outTextBuff, "The connection has been closed, closing accept Socket %d\n", ConnectSocket);
-			OutputDebugString(outTextBuff);
-            closesocket(ConnectSocket);
-            WSACloseEvent(EventArray[Index - WSA_WAIT_EVENT_0]);
-            WSACleanup();
-            return 1;
-        }
-		sprintf_s(outTextBuff, "The data received from server OK %d, %d\n", BytesTransferred, DataBuf.len);
-		OutputDebugString(outTextBuff);
-	}while(0);
-    iResult = closesocket(ConnectSocket);
-    if (iResult == SOCKET_ERROR) {
-        //wprintf(L"closesocket function failed with error: %ld\n", WSAGetLastError());
-		OutputDebugString("closesocket function failed with error: %ld\n");
-        WSACleanup();
-        return 1;
-    }
-
-    WSACleanup();
-    return 0;
+    return FALSE;
 }

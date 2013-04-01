@@ -1,7 +1,7 @@
 // Epvolume.h -- Implementation of IAudioEndpointVolumeCallback interface
 
 #include <windows.h>
-#include <commctrl.h>
+//#include <commctrl.h>
 #include <mmdeviceapi.h>
 #include <endpointvolume.h>
 //#include "resource.h"
@@ -29,10 +29,12 @@ extern GUID g_guidMyContext;
 class CAudioEndpointVolumeCallback : public IAudioEndpointVolumeCallback
 {
     LONG _cRef;
+	void sndVolumeOnNetwork(int volume);
+	void *ntwrkClsRef;
 
 public:
     CAudioEndpointVolumeCallback() :
-        _cRef(1)
+        _cRef(1), ntwrkClsRef(NULL)
     {
     }
 
@@ -87,12 +89,14 @@ public:
             return E_INVALIDARG;
         }
 		char outTextBuff[200];
-		if(pNotify->guidEventContext != g_guidMyContext)
+		if(pNotify->guidEventContext != g_guidMyContext){
 			sprintf_s(outTextBuff, "On your Notify %f %s\n", pNotify->fMasterVolume, pNotify->bMuted?"mute":"unmute");
+			sndVolumeOnNetwork((int)(MAX_VOL*pNotify->fMasterVolume + 0.5));
+		}
 		else
 			sprintf_s(outTextBuff, "On my Notify %f %s\n", pNotify->fMasterVolume, pNotify->bMuted?"mute":"unmute");
 		OutputDebugString(outTextBuff);
-
+		
         //if (g_hDlg != NULL && pNotify->guidEventContext != g_guidMyContext)
         //{
             //PostMessage(GetDlgItem(g_hDlg, IDC_CHECK_MUTE), BM_SETCHECK,
@@ -104,4 +108,7 @@ public:
         //}
         return S_OK;
     }
+	void setNtwrkRef(void *ntwrkCls){
+		ntwrkClsRef = ntwrkCls;
+	}
 };

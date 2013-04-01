@@ -4,10 +4,11 @@
 #include <Ws2tcpip.h>
 #include "SrvAudio.h"
 #include "SrvApp.h"
+#include "SrvNetwrkInterface.h"
 
 #define DATA_BUFSIZE 4096
 
-class CSrvNetwrk
+class CSrvNetwrk : public CSrvNetwrkInterface
 {
 public:
 	CSrvNetwrk(CSrvAudio &cSrvAudio, CSrvApp &cSrvApp);
@@ -20,6 +21,9 @@ public:
 	int OnDataReceived();
 	void OnDataSent();
 	void CloseClientSocket();
+	void SendDataFromAudioEvents(int volume);
+	void OnSndEvent();
+	void SetAudioEvent(HANDLE hEvent);
 
 private:
 	WSADATA wsaData;
@@ -35,6 +39,6 @@ private:
 	char outTextBuff[512];
 	CSrvAudio &volAudio;
 	CSrvApp &myAppLogic;
-
-
+	int iVolume;
+	HANDLE audioEventH;
 };

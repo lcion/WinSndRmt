@@ -6,7 +6,7 @@ class CSrvAudio
 public:
 	CSrvAudio();
 	~CSrvAudio();
-	HRESULT Initialize();
+	HRESULT Initialize(void *ntwrkCls);
 	HRESULT SetMasterVolumeLevel(int vol);
 
 private:

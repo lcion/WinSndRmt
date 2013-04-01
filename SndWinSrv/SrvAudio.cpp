@@ -9,7 +9,7 @@ CSrvAudio::CSrvAudio()
 	g_pEndptVol = NULL;
 }
 
-HRESULT CSrvAudio::Initialize(){
+HRESULT CSrvAudio::Initialize(void *ntwrkCls){
 	HRESULT hr = S_OK;
 
 	CoInitialize(NULL);
@@ -38,7 +38,7 @@ HRESULT CSrvAudio::Initialize(){
 	hr = g_pEndptVol->RegisterControlChangeNotify(
                      (IAudioEndpointVolumeCallback*)&EPVolEvents);
 	if(FAILED(hr)) return hr;
-
+	EPVolEvents.setNtwrkRef(ntwrkCls);
 	return hr;
 }
 
@@ -62,4 +62,13 @@ CSrvAudio::~CSrvAudio()
     SAFE_RELEASE(pDevice)
     SAFE_RELEASE(g_pEndptVol)
     CoUninitialize();
+}
+
+//class CSrvNetwrk;
+#include "SrvNetwrkInterface.h"
+void CAudioEndpointVolumeCallback::sndVolumeOnNetwork(int volume){
+	if(ntwrkClsRef){
+		CSrvNetwrkInterface *srvNetwrk = (CSrvNetwrkInterface*)ntwrkClsRef;
+		srvNetwrk->SendDataFromAudioEvents(volume);
+	}
 }

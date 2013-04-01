@@ -33,7 +33,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         return 0;
     }
 
-	hr = volAudio.Initialize();
+	hr = volAudio.Initialize(&srvNetork);
 	if(FAILED(hr)) return -1;
 
 	hr = srvNetork.Initialize();
@@ -62,6 +62,16 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     //WriteOverlapped.hEvent = EventArray[EventTotal];
 	srvNetork.SetWriteEvent(EventArray[EventTotal]);
 
+    EventTotal++;
+
+	    //-----------------------------------------
+    // Create an event handle for the audio events
+    EventArray[EventTotal] = WSACreateEvent();
+    if (EventArray[EventTotal] == WSA_INVALID_EVENT) {
+        OutputDebugString("WSACreateEvent failed with error\n");
+        return 1;
+    }
+	srvNetork.SetAudioEvent(EventArray[EventTotal]);
     EventTotal++;
 
 	//accept loop
@@ -97,6 +107,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		{
 			//write operation completed
 			srvNetork.OnDataSent();
+		}
+		else if((Index - WSA_WAIT_EVENT_0) == 2)
+		{
+			//write operation completed
+			srvNetork.OnSndEvent();
 		}
 	  }
 	  // client disconnected close socket

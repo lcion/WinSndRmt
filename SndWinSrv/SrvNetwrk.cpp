@@ -100,8 +100,22 @@ HRESULT CSrvNetwrk::Accept()
 
 CSrvNetwrk::~CSrvNetwrk()
 {
-    closesocket(AcceptSocket);
-    closesocket(ListenSocket);
+	if(ReadOverlapped.hEvent){
+		WSACloseEvent(ReadOverlapped.hEvent);
+		ReadOverlapped.hEvent = NULL;
+	}
+	if(WriteOverlapped.hEvent){
+		WSACloseEvent(WriteOverlapped.hEvent);
+		WriteOverlapped.hEvent = NULL;
+	}
+	if(AcceptSocket != INVALID_SOCKET){
+	    closesocket(AcceptSocket);
+		AcceptSocket = INVALID_SOCKET;
+	}
+	if(ListenSocket != INVALID_SOCKET){
+		closesocket(ListenSocket);
+		ListenSocket = INVALID_SOCKET;
+	}
 	WSACleanup();
 }
 
@@ -114,6 +128,11 @@ void CSrvNetwrk::SetReadEvent(HANDLE hEvent)
 void CSrvNetwrk::SetWriteEvent(HANDLE hEvent)
 {
 	WriteOverlapped.hEvent = hEvent;
+}
+
+void CSrvNetwrk::SetAudioEvent(HANDLE hEvent)
+{
+	audioEventH = hEvent;
 }
 
 void CSrvNetwrk::ReceiveAsync(){
@@ -189,4 +208,24 @@ void CSrvNetwrk::OnDataSent()
 	RecvBytes = 0;
 
 	ReceiveAsync();
+}
+
+//called from different thread from the audio events 
+void CSrvNetwrk::SendDataFromAudioEvents(int volume){
+	//if client is connected send data
+	if(AcceptSocket != INVALID_SOCKET){
+		InterlockedExchange((LONG *)&iVolume, (LONG )volume);
+		WSASetEvent(audioEventH);
+	}
+}
+
+void CSrvNetwrk::OnSndEvent(){
+		sprintf_s(buffer, "%d\n", iVolume);
+		DataBuf.len = strlen(buffer)+1;
+
+		int iResult =
+			WSASend(AcceptSocket, &DataBuf, 1, &RecvBytes, Flags, &WriteOverlapped, NULL);
+		if (iResult != 0) {
+			OutputDebugString("WSASend failed with error = \n");
+		}
 }

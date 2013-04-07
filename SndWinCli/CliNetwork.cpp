@@ -97,8 +97,23 @@ int CCliNetwork::Connect(char *ipAddress)
     // Connect to server.
     iResult = connect(ConnectSocket, (SOCKADDR *) & clientService, sizeof (clientService));
     if (iResult == SOCKET_ERROR) {
-		OutputDebugString("connect function failed with error: %ld\n");
-        //wprintf(L"connect function failed with error: %ld\n", WSAGetLastError());
+		char outTextBuff[MAX_PATH];
+		sprintf_s(outTextBuff,"connect function failed with error: %ld\n",WSAGetLastError());
+		OutputDebugString(outTextBuff);
+
+		LPVOID lpMsgBuf;
+		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+					NULL,
+					WSAGetLastError(),
+					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+					(LPTSTR) &lpMsgBuf,
+					0,
+					NULL 
+					);
+		OutputDebugString((char*)lpMsgBuf);
+		// Free the buffer.
+		LocalFree( lpMsgBuf );
+
         return 1;
     }
 	ReceiveVolume();

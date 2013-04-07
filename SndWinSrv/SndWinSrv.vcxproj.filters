@@ -30,6 +30,9 @@
     <ClInclude Include="SrvNetwrkInterface.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -38,5 +41,8 @@
     <Filter Include="Header">
       <UniqueIdentifier>{beff3ed2-415b-4008-a8f3-b4cfe84b7353}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SndWindSrv.rc" />
   </ItemGroup>
 </Project>

@@ -87,10 +87,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Epvolume.h" />
+    <ClInclude Include="Resource.h" />
     <ClInclude Include="SrvApp.h" />
     <ClInclude Include="SrvAudio.h" />
     <ClInclude Include="SrvNetwrk.h" />
     <ClInclude Include="SrvNetwrkInterface.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SndWindSrv.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

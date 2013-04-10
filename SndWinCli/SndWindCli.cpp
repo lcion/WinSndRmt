@@ -3,25 +3,31 @@
 #include "CliNetwork.h"
 #include <commctrl.h>
 #include "Resource.h"
+#include "IpAddrDlg.h"
 
 // Need to link with Ws2_32.lib
 #pragma comment(lib, "ws2_32.lib")
 
 #define MAX_VOL 100
 
-BOOL CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-int PharseCmdLineArgs(char *lpCmdLine, char **ipAddress, char **volValue){
+int PharseCmdLineArgs(HINSTANCE hInst, char *lpCmdLine, char **ipAddress){
 	int argn = 0;
 	char *next_token;
 	char *token = strtok_s(lpCmdLine, " ", &next_token);
 	while(token){
 		//use the token
 		if(argn == 0) *ipAddress = token;
-		else if(argn == 1) *volValue = token;
-		else if(argn == 2) break;
+		else if(argn == 1) break;
 		argn++;
 		token = strtok_s(NULL, " ", &next_token);
+	}
+	//get ip address from the user
+	if(argn < 1)
+	{
+		CIpAddrDlg myIpAddrDlg;
+		argn = myIpAddrDlg.GetIpAddrStrFromUser(hInst, ipAddress);
 	}
 	return argn;
 }
@@ -32,12 +38,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     HRESULT hr = S_OK;
 	DWORD Index = 0;
 	BOOL bResult = TRUE;
-	char *ipAddress, *volValue;
+	char *ipAddress;
 	CCliNetwork myNetwork;
 	gCliNetwork = &myNetwork;
 
 	//pharse the command line parameters expecting arguments ex: 192.168.1.12 10
-	if(PharseCmdLineArgs(lpCmdLine, &ipAddress, &volValue) < 2)return 1;
+	if(PharseCmdLineArgs(hInstance, lpCmdLine, &ipAddress) < 1)return 1;
 
 	if(myNetwork.Initialize()) return 1;
 
@@ -46,17 +52,17 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	OutputDebugString("Connected to server.\n");
 
 	InitCommonControls();
-    DialogBox(hInstance, "VOLUMECONTROL", NULL, (DLGPROC)DlgProc);
+    DialogBox(hInstance, "VOLUMECONTROL", NULL, (DLGPROC)VolDlgProc);
 
 	return 0;
 }
 
 //-----------------------------------------------------------
-// DlgProc -- Dialog box procedure
+// VolDlgProc -- Dialog box procedure
 //-----------------------------------------------------------
 HWND g_hDlg = NULL;
 
-BOOL CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     BOOL bMute = FALSE;
     float fVolume = 0.0f;

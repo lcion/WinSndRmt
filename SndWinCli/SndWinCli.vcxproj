@@ -81,10 +81,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CliNetwork.cpp" />
+    <ClCompile Include="IpAddrDlg.cpp" />
     <ClCompile Include="SndWindCli.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CliNetwork.h" />
+    <ClInclude Include="IpAddrDlg.h" />
     <ClInclude Include="Resource.h" />
   </ItemGroup>
   <ItemGroup>

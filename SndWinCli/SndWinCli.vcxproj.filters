@@ -17,12 +17,18 @@
     <ClCompile Include="CliNetwork.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="IpAddrDlg.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CliNetwork.h">
       <Filter>Header</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="IpAddrDlg.h">
       <Filter>Header</Filter>
     </ClInclude>
   </ItemGroup>

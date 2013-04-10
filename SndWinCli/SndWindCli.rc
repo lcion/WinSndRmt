@@ -5,7 +5,7 @@
 #include "commctrl.h"
 
 //
-// Dialog box
+// Volume Dialog box
 //
 VOLUMECONTROL DIALOGEX 0, 0, 160, 60
 STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU | DS_SETFONT
@@ -20,6 +20,25 @@ BEGIN
                BS_AUTOCHECKBOX | WS_TABSTOP,20,40,70,12
 END
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Ip Address Dialog
+//
+
+IDD_IP_ADDR_DLG DIALOGEX 0, 0, 128, 49
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Enter IP Address"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,7,28,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,71,28,50,14
+    COMBOBOX        IDC_IPADDR_COMBO,7,7,114,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
 VS_VERSION_INFO VERSIONINFO
  FILEVERSION 1,0,0,0
  PRODUCTVERSION 1,0,0,0

@@ -3,6 +3,7 @@
 
 
 INT_PTR CALLBACK OnIPAddressMsg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+TCHAR comboResult[60];
 
 CIpAddrDlg::CIpAddrDlg(void)
 {
@@ -16,6 +17,9 @@ CIpAddrDlg::~CIpAddrDlg(void)
 int CIpAddrDlg::GetIpAddrStrFromUser(HINSTANCE hInst, char **ipAddress)
 {
 	DialogBox(hInst, MAKEINTRESOURCE(IDD_IP_ADDR_DLG), NULL, OnIPAddressMsg);
+	*ipAddress = comboResult;
+	if(strlen(comboResult) > 0)
+		return 1;
 	return 0;
 }
 
@@ -48,9 +52,10 @@ INT_PTR CALLBACK OnIPAddressMsg(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 			if (LOWORD(wParam) == IDOK)
 			{
 				HWND hWndCombo = GetDlgItem(  hDlg, IDC_IPADDR_COMBO);
-				TCHAR comboResult[60];
 				GetWindowText(hWndCombo, comboResult, 60);
 				OutputDebugString(comboResult);
+			}else{
+			strcpy_s(comboResult, TEXT(""));
 			}
 			EndDialog(hDlg, LOWORD(wParam));
 			return (INT_PTR)TRUE;

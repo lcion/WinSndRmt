@@ -101,7 +101,7 @@ int CCliNetwork::Connect(char *ipAddress)
 		sprintf_s(outTextBuff,"connect function failed with error: %ld\n",WSAGetLastError());
 		OutputDebugString(outTextBuff);
 
-		LPVOID lpMsgBuf;
+		LPTSTR lpMsgBuf;
 		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 					NULL,
 					WSAGetLastError(),
@@ -111,6 +111,7 @@ int CCliNetwork::Connect(char *ipAddress)
 					NULL 
 					);
 		OutputDebugString((char*)lpMsgBuf);
+		MessageBox(NULL,lpMsgBuf, outTextBuff, MB_ICONERROR);
 		// Free the buffer.
 		LocalFree( lpMsgBuf );
 

@@ -32,7 +32,7 @@ FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,7,28,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,71,28,50,14
-    COMBOBOX        IDC_IPADDR_COMBO,7,7,114,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_IPADDR_COMBO,7,7,114,30,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
 END
 
 /////////////////////////////////////////////////////////////////////////////

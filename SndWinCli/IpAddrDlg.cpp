@@ -1,9 +1,11 @@
 #include "IpAddrDlg.h"
 #include "resource.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-
+#define IPSTRLEN 60
 INT_PTR CALLBACK OnIPAddressMsg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
-TCHAR comboResult[60];
+TCHAR comboResult[IPSTRLEN];
 
 CIpAddrDlg::CIpAddrDlg(void)
 {
@@ -23,6 +25,54 @@ int CIpAddrDlg::GetIpAddrStrFromUser(HINSTANCE hInst, char **ipAddress)
 	return 0;
 }
 
+#include <list>
+#include <fstream>
+using namespace std;
+
+void ReadIPsFromFile(list<string> &ipList){
+	ifstream src;
+	src.open("addrList.txt");
+	if(src.is_open() == FALSE)
+		return;
+	char linestr[60];
+	do{
+		src.getline(linestr,60);
+		if(strlen(linestr)>0)
+			ipList.push_back(linestr);
+	}while(!src.eof());
+
+	src.close();
+}
+
+void WriteIPsToFile(char *linestr){
+	ofstream dest;
+	list<string> ipList;
+	list<string>::iterator it;
+	ReadIPsFromFile(ipList);
+
+	//check if the string is already on top of the list
+	it = ipList.begin();
+	if(it != ipList.end())
+		if(strcmp(linestr, (*it).c_str())==0)
+			return;
+
+	for(it = ipList.begin(); it != ipList.end(); it++ ){
+		if(strcmp(linestr, (*it).c_str())==0)
+			break;
+	}
+	if(it != ipList.end())
+		ipList.erase(it);
+
+	dest.open("addrList.txt");
+	if(dest.is_open() == FALSE)
+		return;
+	dest << linestr << endl;
+	for(it = ipList.begin(); it != ipList.end(); it++ )
+		dest << (*it).c_str() << endl;
+
+	dest.close();
+}
+
 // Message handler for IP Address dialog.
 INT_PTR CALLBACK OnIPAddressMsg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -32,15 +82,15 @@ INT_PTR CALLBACK OnIPAddressMsg(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 	case WM_INITDIALOG:
 		//load list from file and populate combo box
 		{
-			TCHAR comboTxt[] = TEXT("192.168.0.1");
-			TCHAR comboTxt1[] = TEXT("192.168.0.2");
+			list<string> ipList;
+			ReadIPsFromFile(ipList);
 			HWND hWndCombo = GetDlgItem(  hDlg, IDC_IPADDR_COMBO);
-			SendMessage(hWndCombo, CB_ADDSTRING, 0, (LPARAM)comboTxt);
-			SendMessage(hWndCombo, CB_ADDSTRING, 0, (LPARAM)comboTxt1);
+			for(list<string>::iterator it = ipList.begin(); it != ipList.end(); it++ )
+				SendMessage(hWndCombo, CB_ADDSTRING, 0, (LPARAM)(*it).c_str());
 
 			// Send the CB_SETCURSEL message to display an initial item 
 			//  in the selection field
- 			SendMessage(hWndCombo, CB_SETCURSEL, (WPARAM)1, (LPARAM)0);
+ 			SendMessage(hWndCombo, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
 		}
 
 		return (INT_PTR)TRUE;
@@ -52,8 +102,9 @@ INT_PTR CALLBACK OnIPAddressMsg(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 			if (LOWORD(wParam) == IDOK)
 			{
 				HWND hWndCombo = GetDlgItem(  hDlg, IDC_IPADDR_COMBO);
-				GetWindowText(hWndCombo, comboResult, 60);
+				GetWindowText(hWndCombo, comboResult, IPSTRLEN);
 				OutputDebugString(comboResult);
+				WriteIPsToFile(comboResult);
 			}else{
 			strcpy_s(comboResult, TEXT(""));
 			}

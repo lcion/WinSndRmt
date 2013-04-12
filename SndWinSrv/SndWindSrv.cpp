@@ -79,6 +79,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	  hr = srvNetork.Accept();
 	  if(FAILED(hr)) return -1;
 
+	  volAudio.PostVolValToClient();
 	  srvNetork.ReceiveAsync();
 
       //-----------------------------------------

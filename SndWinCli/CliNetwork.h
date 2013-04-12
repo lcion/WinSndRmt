@@ -20,6 +20,7 @@ private:
 	void OnDataReceived();
 	void OnDataSent();
 	void ReceiveVolume();
+	void UpdateDialog();
 
 	SOCKET ConnectSocket;
 	WSAOVERLAPPED ReadOverlapped;

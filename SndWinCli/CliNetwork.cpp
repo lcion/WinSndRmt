@@ -1,4 +1,7 @@
 #include "CliNetwork.h"
+#include "resource.h"
+#include "commctrl.h"
+extern HWND g_hDlg;
 
 CCliNetwork::CCliNetwork(void): ConnectSocket(INVALID_SOCKET), RecvBytes(0), Flags(0)
 {
@@ -161,6 +164,7 @@ void CCliNetwork::SendVolume(int vol)
     if (iResult != 0) {
 		OutputDebugString("WSASend failed with error = \n");
         //wprintf(L"WSASend failed with error = %d\n", WSAGetLastError());
+
     }
 }
 
@@ -201,7 +205,26 @@ void CCliNetwork::OnDataReceived(){
     }
 	sprintf_s(outTextBuff, "The data received from server OK %d, %d\n", BytesTransferred, DataBuf.len);
 	OutputDebugString(outTextBuff);
+	UpdateDialog();
 	ReceiveVolume();
+}
+
+void CCliNetwork::UpdateDialog(){
+    if (g_hDlg != NULL)
+    {
+        //PostMessage(GetDlgItem(g_hDlg, IDC_CHECK_MUTE), BM_SETCHECK,
+        //            (pNotify->bMuted) ? BST_CHECKED : BST_UNCHECKED, 0);
+		char data[20];
+		int volume = 0;
+		strncpy_s(data, DataBuf.buf, 20);
+		volume = atoi(data);
+		if(volume<0)volume=0;
+		if(volume>100)volume=0;
+		OutputDebugString(DataBuf.buf);
+        PostMessage(GetDlgItem(g_hDlg, IDC_SLIDER_VOLUME),
+                    TBM_SETPOS, TRUE,
+                    LPARAM(volume));
+    }
 }
 
 void CCliNetwork::OnDataSent(){

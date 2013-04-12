@@ -1,6 +1,7 @@
 //used to handle the audio part of the application
 #include <stdio.h>
 #include "SrvAudio.h"
+#include "SrvNetwrkInterface.h"
 
 GUID g_guidMyContext = GUID_NULL;
 
@@ -38,6 +39,7 @@ HRESULT CSrvAudio::Initialize(void *ntwrkCls){
 	hr = g_pEndptVol->RegisterControlChangeNotify(
                      (IAudioEndpointVolumeCallback*)&EPVolEvents);
 	if(FAILED(hr)) return hr;
+	pNetwrkClass = ntwrkCls;
 	EPVolEvents.setNtwrkRef(ntwrkCls);
 	return hr;
 }
@@ -64,8 +66,18 @@ CSrvAudio::~CSrvAudio()
     CoUninitialize();
 }
 
+//read master volume and send it to the client just connected
+void CSrvAudio::PostVolValToClient()
+{
+	float fVolume = 0.0f;
+	g_pEndptVol->GetMasterVolumeLevelScalar(&fVolume);
+	if(pNetwrkClass){
+		CSrvNetwrkInterface *srvNetwrk = (CSrvNetwrkInterface*)pNetwrkClass;
+		srvNetwrk->SendDataFromAudioEvents((int)(MAX_VOL*fVolume + 0.5));
+	}
+}
+
 //class CSrvNetwrk;
-#include "SrvNetwrkInterface.h"
 void CAudioEndpointVolumeCallback::sndVolumeOnNetwork(int volume){
 	if(ntwrkClsRef){
 		CSrvNetwrkInterface *srvNetwrk = (CSrvNetwrkInterface*)ntwrkClsRef;

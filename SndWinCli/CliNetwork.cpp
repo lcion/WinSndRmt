@@ -205,25 +205,48 @@ void CCliNetwork::OnDataReceived(){
     }
 	sprintf_s(outTextBuff, "The data received from server OK %d, %d\n", BytesTransferred, DataBuf.len);
 	OutputDebugString(outTextBuff);
-	UpdateDialog();
+	UpdateDialog(BytesTransferred);
 	ReceiveVolume();
 }
 
-void CCliNetwork::UpdateDialog(){
+void CCliNetwork::UpdateDialog(DWORD BytesTransferred){
     if (g_hDlg != NULL)
     {
         //PostMessage(GetDlgItem(g_hDlg, IDC_CHECK_MUTE), BM_SETCHECK,
         //            (pNotify->bMuted) ? BST_CHECKED : BST_UNCHECKED, 0);
 		char data[20];
 		int volume = 0;
-		strncpy_s(data, DataBuf.buf, 20);
+		// we are only interested in the last value,
+		// drop all other prev. values arived in the same package
+		// -1 is because the data len is BytesTransferred and is 0 based
+		char *endRecBytes = DataBuf.buf + BytesTransferred - 1;
+		int i;
+		for(i = BytesTransferred-1; i > 0 && *endRecBytes !=0; i-- )endRecBytes--;
+		if(i == 0){
+			OutputDebugString("Failed to find end buffer\n");
+			return;
+		}
+		char *startRecBytes = endRecBytes-1; i--;
+		for(; i > 0 && *startRecBytes != 0; i-- )startRecBytes--;
+		if(i == 0){
+			OutputDebugString("Failed to find start any other buffer\n");
+		}else startRecBytes++;
+		char debugStr[200];
+		int lastPackLen = endRecBytes-startRecBytes+1;
+		if(startRecBytes<DataBuf.buf || (lastPackLen) > 20) {
+			OutputDebugString("Buffer validation failed\n");
+			return;
+		}
+		sprintf_s(debugStr, "buff %s len[%d] off[%d]", startRecBytes, lastPackLen,  startRecBytes-DataBuf.buf);
+		OutputDebugString(debugStr);
+
+		strncpy_s(data, startRecBytes, lastPackLen);
+
 		volume = atoi(data);
 		if(volume<0)volume=0;
 		if(volume>100)volume=0;
-		OutputDebugString(DataBuf.buf);
-        PostMessage(GetDlgItem(g_hDlg, IDC_SLIDER_VOLUME),
-                    TBM_SETPOS, TRUE,
-                    LPARAM(volume));
+		OutputDebugString(data);
+        PostMessage(GetDlgItem(g_hDlg, IDC_SLIDER_VOLUME), TBM_SETPOS, TRUE, LPARAM(volume));
     }
 }
 

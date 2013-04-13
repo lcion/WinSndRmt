@@ -55,7 +55,7 @@ void WriteIPsToFile(char *linestr){
 	if(it != ipList.end())
 		if(strcmp(linestr, (*it).c_str())==0)
 			return;
-
+	//check if the string is down in the list remove it
 	for(it = ipList.begin(); it != ipList.end(); it++ ){
 		if(strcmp(linestr, (*it).c_str())==0)
 			break;
@@ -66,7 +66,10 @@ void WriteIPsToFile(char *linestr){
 	dest.open("addrList.txt");
 	if(dest.is_open() == FALSE)
 		return;
+
+	//write the new connection on top
 	dest << linestr << endl;
+	//write all other history
 	for(it = ipList.begin(); it != ipList.end(); it++ )
 		dest << (*it).c_str() << endl;
 

@@ -6,4 +6,5 @@
 #define IDC_STATIC_MAXVOL      1004
 
 #define IDD_IP_ADDR_DLG        129
+#define IDD_VOL_CONTROL_DLG    130
 #define IDC_IPADDR_COMBO	   1005

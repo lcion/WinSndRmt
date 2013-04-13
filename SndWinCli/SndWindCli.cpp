@@ -33,26 +33,28 @@ int PharseCmdLineArgs(HINSTANCE hInst, char *lpCmdLine, char **ipAddress){
 }
 
 CCliNetwork *gCliNetwork;
+char *gIpAddress;
+HWND g_hDlg = NULL;
+
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     HRESULT hr = S_OK;
 	DWORD Index = 0;
 	BOOL bResult = TRUE;
-	char *ipAddress;
 	CCliNetwork myNetwork;
 	gCliNetwork = &myNetwork;
 
 	//pharse the command line parameters expecting arguments ex: 192.168.1.12 10
-	if(PharseCmdLineArgs(hInstance, lpCmdLine, &ipAddress) < 1)return 1;
+	if(PharseCmdLineArgs(hInstance, lpCmdLine, &gIpAddress) < 1)return 1;
 
 	if(myNetwork.Initialize()) return 1;
 
-	if(myNetwork.Connect(ipAddress)) return 1;
+	if(myNetwork.Connect(gIpAddress)) return 1;
     //wprintf(L"Connected to server.\n");
 	OutputDebugString("Connected to server.\n");
 
 	InitCommonControls();
-    DialogBox(hInstance, "VOLUMECONTROL", NULL, (DLGPROC)VolDlgProc);
+    DialogBox(hInstance, MAKEINTRESOURCE(IDD_VOL_CONTROL_DLG), NULL, (DLGPROC)VolDlgProc);
 
 	return 0;
 }
@@ -60,8 +62,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 //-----------------------------------------------------------
 // VolDlgProc -- Dialog box procedure
 //-----------------------------------------------------------
-HWND g_hDlg = NULL;
-
 BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     BOOL bMute = FALSE;
@@ -73,6 +73,12 @@ BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     {
     case WM_INITDIALOG:
         g_hDlg = hDlg;
+		gIpAddress;
+		{ //set the title of the main window dialog
+			char dialogTitle[100];
+			sprintf_s(dialogTitle, "%s %s", "Audio Remote Volume", gIpAddress);
+			SetWindowText(hDlg, dialogTitle);
+		}
         SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_SETRANGEMIN, FALSE, 0);
         SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_SETRANGEMAX, FALSE, MAX_VOL);
         //hr = g_pEndptVol->GetMute(&bMute);

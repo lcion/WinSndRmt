@@ -21,7 +21,7 @@ public:
 	int OnDataReceived();
 	void OnDataSent();
 	void CloseClientSocket();
-	void SendDataFromAudioEvents(int volume);
+	void SendDataFromAudioEvents(int volume, BOOL bMute);
 	void OnSndEvent();
 	void SetAudioEvent(HANDLE hEvent);
 
@@ -40,5 +40,6 @@ private:
 	CSrvAudio &volAudio;
 	CSrvApp &myAppLogic;
 	int iVolume;
+	BOOL mbMute;
 	HANDLE audioEventH;
 };

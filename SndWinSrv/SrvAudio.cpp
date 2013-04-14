@@ -70,17 +70,19 @@ CSrvAudio::~CSrvAudio()
 void CSrvAudio::PostVolValToClient()
 {
 	float fVolume = 0.0f;
+	BOOL bMute;
 	g_pEndptVol->GetMasterVolumeLevelScalar(&fVolume);
+	g_pEndptVol->GetMute(&bMute);
 	if(pNetwrkClass){
 		CSrvNetwrkInterface *srvNetwrk = (CSrvNetwrkInterface*)pNetwrkClass;
-		srvNetwrk->SendDataFromAudioEvents((int)(MAX_VOL*fVolume + 0.5));
+		srvNetwrk->SendDataFromAudioEvents((int)(MAX_VOL*fVolume + 0.5), bMute);
 	}
 }
 
 //class CSrvNetwrk;
-void CAudioEndpointVolumeCallback::sndVolumeOnNetwork(int volume){
+void CAudioEndpointVolumeCallback::sndVolumeOnNetwork(int volume, BOOL bMute){
 	if(ntwrkClsRef){
 		CSrvNetwrkInterface *srvNetwrk = (CSrvNetwrkInterface*)ntwrkClsRef;
-		srvNetwrk->SendDataFromAudioEvents(volume);
+		srvNetwrk->SendDataFromAudioEvents(volume, bMute);
 	}
 }

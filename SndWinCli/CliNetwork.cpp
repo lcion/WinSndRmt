@@ -212,8 +212,6 @@ void CCliNetwork::OnDataReceived(){
 void CCliNetwork::UpdateDialog(DWORD BytesTransferred){
     if (g_hDlg != NULL)
     {
-        //PostMessage(GetDlgItem(g_hDlg, IDC_CHECK_MUTE), BM_SETCHECK,
-        //            (pNotify->bMuted) ? BST_CHECKED : BST_UNCHECKED, 0);
 		char data[20];
 		int volume = 0;
 		// we are only interested in the last value,
@@ -247,6 +245,16 @@ void CCliNetwork::UpdateDialog(DWORD BytesTransferred){
 		if(volume>100)volume=0;
 		OutputDebugString(data);
         PostMessage(GetDlgItem(g_hDlg, IDC_SLIDER_VOLUME), TBM_SETPOS, TRUE, LPARAM(volume));
+		//pik up the mute if is set
+		if(data[lastPackLen-3] == 'u'){
+			OutputDebugString("unmute\n");
+			PostMessage(GetDlgItem(g_hDlg, IDC_CHECK_MUTE), BM_SETCHECK,
+						BST_UNCHECKED, 0);
+		}else if(data[lastPackLen-3] == 'm'){
+			OutputDebugString("mute\n");
+			PostMessage(GetDlgItem(g_hDlg, IDC_CHECK_MUTE), BM_SETCHECK,
+						BST_CHECKED, 0);
+		}
     }
 }
 

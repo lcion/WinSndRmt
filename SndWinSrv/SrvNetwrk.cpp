@@ -211,16 +211,17 @@ void CSrvNetwrk::OnDataSent()
 }
 
 //called from different thread from the audio events 
-void CSrvNetwrk::SendDataFromAudioEvents(int volume){
+void CSrvNetwrk::SendDataFromAudioEvents(int volume, BOOL bMute){
 	//if client is connected send data
 	if(AcceptSocket != INVALID_SOCKET){
 		InterlockedExchange((LONG *)&iVolume, (LONG )volume);
+		InterlockedExchange((LONG *)&mbMute, (LONG )bMute);
 		WSASetEvent(audioEventH);
 	}
 }
 
 void CSrvNetwrk::OnSndEvent(){
-		sprintf_s(buffer, "%d\n", iVolume);
+		sprintf_s(buffer, "%d%s\n", iVolume, mbMute?"m":"u");
 		DataBuf.len = strlen(buffer)+1;
 
 		int iResult =

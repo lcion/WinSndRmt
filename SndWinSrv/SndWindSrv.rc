@@ -9,8 +9,8 @@
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,0
- PRODUCTVERSION 1,0,0,0
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x9L
@@ -27,14 +27,14 @@ BEGIN
         BEGIN
             VALUE "Comments", "Lucian Ion"
             VALUE "CompanyName", "LcIon"
-            VALUE "FileDescription", "Remote Snd Server"
-            VALUE "FileVersion", "1, 0, 0, 0"
+            VALUE "FileDescription", "Remote Volume Control Server"
+            VALUE "FileVersion", "1, 0, 0, 1"
             VALUE "InternalName", "SndWinSrv.exe"
             VALUE "LegalCopyright", "Copyright (c) LcIon,  All rights reserved."
             VALUE "OriginalFilename", "SndWinSrv.exe"
             VALUE "PrivateBuild", "LcIon"
             VALUE "ProductName", "Remote Snd"
-            VALUE "ProductVersion", "1, 0, 0, 0"
+            VALUE "ProductVersion", "1, 0, 0, 1"
         END
     END
     BLOCK "VarFileInfo"

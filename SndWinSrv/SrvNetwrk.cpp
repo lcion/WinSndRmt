@@ -169,7 +169,7 @@ int CSrvNetwrk::OnDataReceived(){
 		OutputDebugString(outTextBuff);
 		return -1;
 	}
-	sprintf_s(outTextBuff, "The data received, send it back %d, %d\n", BytesTransferred, DataBuf.len);
+	sprintf_s(outTextBuff, "The data received bytes[%d], bufferLen[%d]\n", BytesTransferred, DataBuf.len);
 	OutputDebugString(outTextBuff);
 	DataBuf.len = BytesTransferred;
 	BOOL bMute = FALSE;
@@ -179,14 +179,8 @@ int CSrvNetwrk::OnDataReceived(){
 		if(FAILED(hr)) return -1;
 		volAudio.SetMute(bMute);
 	}
-	//-----------------------------------------
-	// If data has been received, echo the received data
-	// from DataBuf back to the client
-	/*iResult =
-		WSASend(AcceptSocket, &DataBuf, 1, &RecvBytes, Flags, &WriteOverlapped, NULL);
-	if (iResult != 0) {
-		OutputDebugString("WSASend failed with error = \n");
-	}*/
+
+	//setup async read to receive more data
 	ReceiveAsync();
 	return 0;
 }
@@ -209,8 +203,6 @@ void CSrvNetwrk::OnDataSent()
 	DataBuf.len = DATA_BUFSIZE;
 	DataBuf.buf = buffer;
 	RecvBytes = 0;
-
-	ReceiveAsync();
 }
 
 //called from different thread from the audio events 

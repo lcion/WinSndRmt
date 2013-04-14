@@ -152,12 +152,12 @@ void CCliNetwork::DoTimerProc()
 }
 
 //send new value for volume
-void CCliNetwork::SendVolume(int vol)
+void CCliNetwork::SendVolume(int vol, BOOL mute)
 {
 	// send some data
     //-----------------------------------------
     // set the volume on the server to 50%
-	sprintf_s(buffer, "%d\n", vol);
+	sprintf_s(buffer, "%d%s\n", vol, mute?"m":"u");
 	DataBuf.len = strlen(buffer)+1;
     int iResult =
         WSASend(ConnectSocket, &DataBuf, 1, &RecvBytes, Flags, &WriteOverlapped, NULL);

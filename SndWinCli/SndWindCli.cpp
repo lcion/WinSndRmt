@@ -115,7 +115,7 @@ BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             //ERROR_CANCEL(hr)
             nVolume = SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_GETPOS, 0, 0);
 			OutputDebugString("Send new Volume to server.\n");
-			gCliNetwork->SendVolume(nVolume);
+			gCliNetwork->SendVolume(nVolume, FALSE);
             //fVolume = (float)nVolume/MAX_VOL;
             //hr = g_pEndptVol->SetMasterVolumeLevelScalar(fVolume, &g_guidMyContext);
             //ERROR_CANCEL(hr)
@@ -128,8 +128,11 @@ BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         {
         case IDC_CHECK_MUTE:
             // The user selected the Mute check box in the dialog box.
+            nVolume = SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_GETPOS, 0, 0);
             nChecked = SendDlgItemMessage(hDlg, IDC_CHECK_MUTE, BM_GETCHECK, 0, 0);
             bMute = (BST_CHECKED == nChecked);
+			gCliNetwork->SendVolume(nVolume, bMute);
+
             //hr = g_pEndptVol->SetMute(bMute, &g_guidMyContext);
             //ERROR_CANCEL(hr)
             return TRUE;

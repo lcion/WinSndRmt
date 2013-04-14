@@ -8,6 +8,7 @@ public:
 	~CSrvAudio();
 	HRESULT Initialize(void *ntwrkCls);
 	HRESULT SetMasterVolumeLevel(int vol);
+	HRESULT SetMute(BOOL mute);
 	void PostVolValToClient();
 
 private:

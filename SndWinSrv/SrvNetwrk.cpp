@@ -172,19 +172,22 @@ int CSrvNetwrk::OnDataReceived(){
 	sprintf_s(outTextBuff, "The data received, send it back %d, %d\n", BytesTransferred, DataBuf.len);
 	OutputDebugString(outTextBuff);
 	DataBuf.len = BytesTransferred;
-	int vol = myAppLogic.ProcessClient(DataBuf.buf, DataBuf.len);
+	BOOL bMute = FALSE;
+	int vol = myAppLogic.ProcessClient(DataBuf.buf, DataBuf.len, bMute);
 	if(vol > -1){
 		hr = volAudio.SetMasterVolumeLevel(vol);
 		if(FAILED(hr)) return -1;
+		volAudio.SetMute(bMute);
 	}
 	//-----------------------------------------
 	// If data has been received, echo the received data
 	// from DataBuf back to the client
-	iResult =
+	/*iResult =
 		WSASend(AcceptSocket, &DataBuf, 1, &RecvBytes, Flags, &WriteOverlapped, NULL);
 	if (iResult != 0) {
 		OutputDebugString("WSASend failed with error = \n");
-	}
+	}*/
+	ReceiveAsync();
 	return 0;
 }
 

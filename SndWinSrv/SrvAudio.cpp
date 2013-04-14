@@ -51,7 +51,11 @@ HRESULT CSrvAudio::SetMasterVolumeLevel(int vol){
 
 	return hr;
 }
-
+HRESULT CSrvAudio::SetMute(BOOL mute){
+	HRESULT hr = S_OK;
+	hr = g_pEndptVol->SetMute(mute, &g_guidMyContext);
+	return hr;
+}
 CSrvAudio::~CSrvAudio()
 {
     if (pEnumerator != NULL)

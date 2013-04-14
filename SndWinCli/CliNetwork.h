@@ -14,7 +14,7 @@ public:
 	int Initialize();
 	int Connect(char *ipAddress);
 	void DoTimerProc();
-	void SendVolume(int vol);
+	void SendVolume(int vol, BOOL mute);
 
 private:
 	void OnDataReceived();

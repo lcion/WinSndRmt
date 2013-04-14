@@ -14,7 +14,7 @@ CSrvApp::~CSrvApp(void)
 }
 
 
-int CSrvApp::ProcessClient(char* buffer, unsigned long &len)
+int CSrvApp::ProcessClient(char* buffer, unsigned long &len, int &bMute)
 {
 	if(len > 5){
 		sprintf_s(buffer, 100, "too long\n");
@@ -38,6 +38,13 @@ int CSrvApp::ProcessClient(char* buffer, unsigned long &len)
 		len = strlen(buffer) + 1;
 		return -1;
 	}
+	//pik up the mute if is set
+	if(buffer[srLen-2] == 'u'){
+		bMute = 0;
+	}else if(buffer[srLen-2] == 'm'){
+		bMute = 1;
+	}
+
 
 	return vol;
 }

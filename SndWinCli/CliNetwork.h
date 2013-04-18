@@ -12,7 +12,7 @@ public:
 	~CCliNetwork(void);
 
 	int Initialize();
-	int Connect(char *ipAddress);
+	int Connect(char *ipAddress, int port);
 	void DoTimerProc();
 	void SendVolume(int vol, BOOL mute);
 

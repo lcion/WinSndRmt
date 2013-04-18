@@ -2,6 +2,7 @@
 
 #include "CliNetwork.h"
 #include <commctrl.h>
+#include <stdlib.h>
 #include "Resource.h"
 #include "IpAddrDlg.h"
 
@@ -12,14 +13,21 @@
 
 BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-int PharseCmdLineArgs(HINSTANCE hInst, char *lpCmdLine, char **ipAddress){
+int PharseCmdLineArgs(HINSTANCE hInst, char *lpCmdLine, char **ipAddress, int *port){
 	int argn = 0;
 	char *next_token;
 	char *token = strtok_s(lpCmdLine, " ", &next_token);
 	while(token){
 		//use the token
 		if(argn == 0) *ipAddress = token;
-		else if(argn == 1) break;
+		else if(argn == 1){
+			if(isdigit(token[0])){
+				int portNo = atoi(token);
+				if(portNo > 1000)
+					*port = portNo;
+			}
+		}
+		else if(argn == 2) break;
 		argn++;
 		token = strtok_s(NULL, " ", &next_token);
 	}
@@ -43,17 +51,18 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	BOOL bResult = TRUE;
 	CCliNetwork myNetwork;
 	gCliNetwork = &myNetwork;
+	int port = 27015;
 
-	//pharse the command line parameters expecting arguments ex: 192.168.1.12 10
-	if(PharseCmdLineArgs(hInstance, lpCmdLine, &gIpAddress) < 1)return 1;
+	InitCommonControls();
+	//pharse the command line parameters expecting arguments ex: 192.168.0.12 10234
+	if(PharseCmdLineArgs(hInstance, lpCmdLine, &gIpAddress, &port) < 1)return 1;
 
 	if(myNetwork.Initialize()) return 1;
 
-	if(myNetwork.Connect(gIpAddress)) return 1;
+	if(myNetwork.Connect(gIpAddress, port)) return 1;
     //wprintf(L"Connected to server.\n");
 	OutputDebugString("Connected to server.\n");
 
-	InitCommonControls();
     DialogBox(hInstance, MAKEINTRESOURCE(IDD_VOL_CONTROL_DLG), NULL, (DLGPROC)VolDlgProc);
 
 	return 0;

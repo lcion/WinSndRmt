@@ -85,7 +85,7 @@ int CCliNetwork::Initialize()
 	return 0;
 }
 
-int CCliNetwork::Connect(char *ipAddress)
+int CCliNetwork::Connect(char *ipAddress, int port)
 {
 	int iResult;
     //----------------------
@@ -94,7 +94,7 @@ int CCliNetwork::Connect(char *ipAddress)
     sockaddr_in clientService;
     clientService.sin_family = AF_INET;
     clientService.sin_addr.s_addr = inet_addr(ipAddress);
-    clientService.sin_port = htons(27015);
+    clientService.sin_port = htons(port);
 
     //----------------------
     // Connect to server.

@@ -18,7 +18,7 @@ CSrvNetwrk::CSrvNetwrk(CSrvAudio &cSrvAudio, CSrvApp &cSrvApp)
     ZeroMemory(&WriteOverlapped, sizeof (WSAOVERLAPPED));
 }
 
-HRESULT CSrvNetwrk::Initialize(char *hostName){
+HRESULT CSrvNetwrk::Initialize(char *hostName, int port){
 	HRESULT hr = S_OK;
 	int iResult = 0;
 
@@ -33,11 +33,11 @@ HRESULT CSrvNetwrk::Initialize(char *hostName){
     ListenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (ListenSocket == INVALID_SOCKET) return -1;
 
-	u_short port = 27015;
+	u_short uPort = port;
     char *ip;
     sockaddr_in service;
     service.sin_family = AF_INET;
-    service.sin_port = htons(port);
+    service.sin_port = htons(uPort);
     hostent *thisHost;
 
     thisHost = gethostbyname(hostName);
@@ -66,7 +66,7 @@ HRESULT CSrvNetwrk::Initialize(char *hostName){
         OutputDebugString("listen failed with error = \n");
         return -1;
     }
-    sprintf_s(outTextBuff, "Listening on ip %s port %d\n", ip, port);
+    sprintf_s(outTextBuff, "Listening on ip %s port %d\n", ip, uPort);
 	OutputDebugString(outTextBuff);
 
     DataBuf.len = DATA_BUFSIZE;

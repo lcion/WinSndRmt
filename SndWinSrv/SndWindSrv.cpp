@@ -8,14 +8,21 @@
 #include "SrvNetwrk.h"
 #include "SrvAudio.h"
 
-int PharseCmdLineArgs(char *lpCmdLine, char **ipAddress){
+int PharseCmdLineArgs(char *lpCmdLine, char **ipAddress, int *port){
 	int argn = 0;
 	char *next_token;
 	char *token = strtok_s(lpCmdLine, " ", &next_token);
 	while(token){
 		//use the token
 		if(argn == 0) *ipAddress = token;
-		else if(argn == 1) break;
+		else if(argn == 1){
+			if(isdigit(token[0])){
+				int portNo = atoi(token);
+				if(portNo > 1000)
+					*port = portNo;
+			}
+		}
+		else if(argn == 2) break;
 		argn++;
 		token = strtok_s(NULL, " ", &next_token);
 	}
@@ -48,12 +55,13 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         return 0;
     }
 	char *ipAddress = "";
-	PharseCmdLineArgs(lpCmdLine, &ipAddress);
+	int port = 27015;
+	PharseCmdLineArgs(lpCmdLine, &ipAddress, &port);
 
 	hr = volAudio.Initialize(&srvNetork);
 	if(FAILED(hr)) return -1;
 
-	hr = srvNetork.Initialize(ipAddress);
+	hr = srvNetork.Initialize(ipAddress, port);
 	if(FAILED(hr)) return -1;
 
 	//-----------------------------------------

@@ -13,7 +13,7 @@ class CSrvNetwrk : public CSrvNetwrkInterface
 public:
 	CSrvNetwrk(CSrvAudio &cSrvAudio, CSrvApp &cSrvApp);
 	~CSrvNetwrk();
-	HRESULT Initialize();
+	HRESULT Initialize(char *hostName);
 	HRESULT Accept();
 	void SetReadEvent(HANDLE hEvent);
 	void SetWriteEvent(HANDLE hEvent);

@@ -14,9 +14,11 @@ CSrvNetwrk::CSrvNetwrk(CSrvAudio &cSrvAudio, CSrvApp &cSrvApp)
     BytesTransferred = 0;
 
 	ZeroMemory( &wsaData, sizeof(wsaData) );
+	ZeroMemory(&ReadOverlapped, sizeof (WSAOVERLAPPED));
+    ZeroMemory(&WriteOverlapped, sizeof (WSAOVERLAPPED));
 }
 
-HRESULT CSrvNetwrk::Initialize(){
+HRESULT CSrvNetwrk::Initialize(char *hostName){
 	HRESULT hr = S_OK;
 	int iResult = 0;
 
@@ -38,7 +40,7 @@ HRESULT CSrvNetwrk::Initialize(){
     service.sin_port = htons(port);
     hostent *thisHost;
 
-    thisHost = gethostbyname("");
+    thisHost = gethostbyname(hostName);
     if (thisHost == NULL) {
         OutputDebugString("gethostbyname failed with error = \n");
         return -1;
@@ -64,11 +66,8 @@ HRESULT CSrvNetwrk::Initialize(){
         OutputDebugString("listen failed with error = \n");
         return -1;
     }
-    sprintf_s(outTextBuff, "Listening on port %d\n", port);
+    sprintf_s(outTextBuff, "Listening on ip %s port %d\n", ip, port);
 	OutputDebugString(outTextBuff);
-
-	ZeroMemory(&ReadOverlapped, sizeof (WSAOVERLAPPED));
-    ZeroMemory(&WriteOverlapped, sizeof (WSAOVERLAPPED));
 
     DataBuf.len = DATA_BUFSIZE;
     DataBuf.buf = buffer;

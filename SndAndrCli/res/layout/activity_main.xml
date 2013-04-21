@@ -20,8 +20,25 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView1"
-        android:text="@string/button1"
-        android:onClick="sendMessage"
-         />
-
+        android:onClick="onLuciBtn"
+        android:text="@string/luciBtn" />
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button1"
+        android:layout_alignBottom="@+id/button1"
+        android:layout_toRightOf="@+id/button1"
+        android:onClick="onAlexBtn"
+        android:text="@string/alexBtn" />
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button2"
+        android:layout_alignBottom="@+id/button2"
+        android:layout_toRightOf="@+id/button2"
+        android:onClick="onAndreiBtn"
+        android:text="@string/andreiBtn" />
+    
 </RelativeLayout>

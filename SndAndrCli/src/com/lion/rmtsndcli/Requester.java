@@ -8,13 +8,88 @@ public class Requester{
 	OutputStream out;
 	InputStream inpStream;
 	String message;
-	Requester(){}
-	
-	void run()
-	{
+	String hostName;
+	Requester(String hostName){
+		this.hostName = hostName;
+	}
+
+	public int connect(){
 		try{
 			//1. creating a socket to connect to the server
-			requestSocket = new Socket("192.168.1.12", 27015);
+			requestSocket = new Socket();
+			requestSocket.connect(new InetSocketAddress(hostName, 27015), 5000);
+			System.out.println("Connected to localhost in port 27015");
+			//2. get Input and Output streams
+			out = requestSocket.getOutputStream();
+			out.flush();
+			inpStream = requestSocket.getInputStream();
+		}
+		catch(UnknownHostException unknownHost){
+			System.err.println("You are trying to connect to an unknown host!");
+			return 1;
+		}
+		catch(IOException ioException){
+			ioException.printStackTrace();
+			return 1;
+		}
+		System.out.println("connected");
+		return 0;
+	}
+	
+	public String read(){
+		String result = "Read bytes";
+		int bytesAvailable = 0;
+			if(inpStream != null){
+			try {
+				bytesAvailable = inpStream.available();
+				if(bytesAvailable > 0){
+					byte b[] = new byte[100];
+					inpStream.read(b);
+					System.out.println("server>" + b.toString());
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("read exception>" + e);
+			}
+		}
+		return result;
+	}
+	
+	void close(){
+		try{
+			if(inpStream != null){
+				inpStream.close();
+				inpStream = null;
+			}
+
+			if(out != null){
+				out.close();
+				out = null;
+			}
+			
+			if(requestSocket != null){
+				requestSocket.close();
+				requestSocket = null;
+			}
+		}
+		catch(IOException ioException){
+			ioException.printStackTrace();
+			System.out.println("close exception>" + ioException);
+		}
+	}
+	
+	public int write20u(){
+		sendMessage("20u\n");
+		return 0;
+	}
+	
+	String run()
+	{
+		String returnString = "Result Ok";
+		try{
+			//1. creating a socket to connect to the server
+			requestSocket = new Socket();
+			requestSocket.connect(new InetSocketAddress(hostName, 27015), 5000);
 			System.out.println("Connected to localhost in port 27015");
 			//2. get Input and Output streams
 			out = requestSocket.getOutputStream();
@@ -35,9 +110,11 @@ public class Requester{
 		}
 		catch(UnknownHostException unknownHost){
 			System.err.println("You are trying to connect to an unknown host!");
+			returnString = "UnknownHostException";
 		}
 		catch(IOException ioException){
 			ioException.printStackTrace();
+			returnString = "ioException1";
 		}
 		//4: Closing connection
 		try{
@@ -52,16 +129,16 @@ public class Requester{
 			}
 			
 			if(requestSocket != null){
-				requestSocket.shutdownInput();
-				requestSocket.shutdownOutput();
 				requestSocket.close();
 				requestSocket = null;
 			}
 		}
 		catch(IOException ioException){
 			ioException.printStackTrace();
+			returnString = "ioException";
 		}
 		System.out.println("run exit");
+		return returnString;
 	}
 	
 	void sendMessage(String msg)

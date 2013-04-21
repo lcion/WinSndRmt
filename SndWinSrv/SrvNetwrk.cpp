@@ -168,7 +168,7 @@ int CSrvNetwrk::OnDataReceived(){
 		OutputDebugString(outTextBuff);
 		return -1;
 	}
-	sprintf_s(outTextBuff, "The data received bytes[%d], bufferLen[%d]\n", BytesTransferred, DataBuf.len);
+	sprintf_s(outTextBuff, "The data received bytes[%d], bufferLen[%d], data[%s]\n", BytesTransferred, DataBuf.len, DataBuf.buf);
 	OutputDebugString(outTextBuff);
 	DataBuf.len = BytesTransferred;
 	BOOL bMute = FALSE;

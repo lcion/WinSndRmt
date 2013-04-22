@@ -24,11 +24,13 @@ public class ClientActivity extends Activity {
 		textView = (TextView)findViewById(R.id.textViewStatus);
 	    textView.setText(message);
 
+		textViewS = (TextView)findViewById(R.id.textViewAStatus);
+
 	    // Set the text view as the activity layout
 	    //setContentView(textView);
 	    //create networking
     	//send message to the network 
-		client = new Requester("192.168.1.12");
+		client = new Requester(message);
 		client.connect();
 		
 	    //create timer
@@ -40,29 +42,38 @@ public class ClientActivity extends Activity {
 	public Handler handler;
 	
 	private TextView textView;
+	private TextView textViewS;
 	private UITimer timer;
 	Requester client;
+	String lastRead;
 	private Runnable runMethod = new Runnable()
 	    {
 	        public void run()
 	        {
 	            // read from network
-	        	System.out.println("timer event in my class");
-	        	client.read();
+	        	//System.out.println("timer event in my class");
+	        	String result = client.read();
+	        	if(result.compareTo("Fail") != 0){
+	        		if(lastRead == null || result.compareTo(lastRead) !=0 ){
+	        			textViewS.setText(result);
+	        			lastRead = result;
+	        		}
+	        	}
 	        }
 	    };
-
+	
 	@Override
-	public void onBackPressed(){
+	public void onStop(){
 		timer.stop();
 		//cleanup the networking
 		client.close();
 		//call super
-		super.onBackPressed();
+		super.onStop();
 	}
 	
     public void onSend20Btn(View view) {
-    	client.write20u();
+    	if(client.write20u() == 0)
+    		textViewS.setText("20u");
     }
     
 	@Override

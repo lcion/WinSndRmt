@@ -24,4 +24,11 @@
         android:text="@string/snd20Btn"
         android:onClick="onSend20Btn" />
 
+    <TextView
+        android:id="@+id/textViewAStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/send20"
+        android:layout_below="@+id/send20"
+        android:textSize="20sp" />
 </RelativeLayout>

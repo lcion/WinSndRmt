@@ -2,6 +2,7 @@ package com.lion.rmtsndcli;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.Charset;
 
 public class Requester{
 	Socket requestSocket;
@@ -37,7 +38,7 @@ public class Requester{
 	}
 	
 	public String read(){
-		String result = "Read bytes";
+		String result = "Fail";
 		int bytesAvailable = 0;
 			if(inpStream != null){
 			try {
@@ -45,7 +46,10 @@ public class Requester{
 				if(bytesAvailable > 0){
 					byte b[] = new byte[100];
 					inpStream.read(b);
-					System.out.println("server>" + b.toString());
+					String receivedBytes = new String(b, 0, bytesAvailable, Charset.defaultCharset());
+					System.out.println("server> " + receivedBytes + " " + bytesAvailable);
+					if(receivedBytes.length() > 2)
+						result = receivedBytes.substring(0, receivedBytes.length()-2);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -79,8 +83,7 @@ public class Requester{
 	}
 	
 	public int write20u(){
-		sendMessage("20u\n");
-		return 0;
+		return sendMessage("20u\n");
 	}
 	
 	String run()
@@ -141,7 +144,7 @@ public class Requester{
 		return returnString;
 	}
 	
-	void sendMessage(String msg)
+	int sendMessage(String msg)
 	{
 		try{
 			byte b[], buffer[] = new byte[msg.length()+1];
@@ -156,6 +159,8 @@ public class Requester{
 		}
 		catch(IOException ioException){
 			ioException.printStackTrace();
+			return 1;
 		}
+		return 0;
 	}
 }

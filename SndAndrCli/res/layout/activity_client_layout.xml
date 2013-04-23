@@ -24,11 +24,30 @@
         android:text="@string/snd20Btn"
         android:onClick="onSend20Btn" />
 
+    <CheckBox
+        android:id="@+id/checkBoxMute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/send20"
+        android:layout_toRightOf="@+id/send20"
+        android:text="@string/mute"
+        android:onClick="onMuteChkBox" />
+
+    <SeekBar
+        android:id="@+id/seekBarVol"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/send20"
+        android:max="100"
+        android:onClick="onSeekBarVol" />
+
     <TextView
         android:id="@+id/textViewAStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/send20"
-        android:layout_below="@+id/send20"
+        android:layout_below="@+id/seekBarVol"
+        android:text="@string/hello_world"
         android:textSize="20sp" />
+    
 </RelativeLayout>

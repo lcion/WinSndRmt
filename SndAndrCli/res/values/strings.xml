@@ -9,5 +9,6 @@
     <string name="andreiBtn">AndreiPc</string>
     <string name="title_activity_client">ClientActivityTitle</string>
     <string name="snd20Btn">Send20u</string>
+    <string name="mute">Mute</string>
 
 </resources>

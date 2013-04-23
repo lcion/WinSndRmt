@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class ClientActivity extends Activity {
@@ -25,6 +27,9 @@ public class ClientActivity extends Activity {
 	    textView.setText(message);
 
 		textViewS = (TextView)findViewById(R.id.textViewAStatus);
+		
+		volSeekBar = (SeekBar)findViewById(R.id.seekBarVol);
+		muteCheckBox = (CheckBox)findViewById(R.id.checkBoxMute);
 
 	    // Set the text view as the activity layout
 	    //setContentView(textView);
@@ -43,6 +48,8 @@ public class ClientActivity extends Activity {
 	
 	private TextView textView;
 	private TextView textViewS;
+	private SeekBar volSeekBar;
+	private CheckBox muteCheckBox;
 	private UITimer timer;
 	Requester client;
 	String lastRead;
@@ -70,6 +77,20 @@ public class ClientActivity extends Activity {
 		//call super
 		super.onStop();
 	}
+	public void onSeekBarVol(View view) {
+		int prog = volSeekBar.getProgress();
+    	if(muteCheckBox.isChecked())
+    		textViewS.setText(""+prog+"m");
+    	else
+    		textViewS.setText("u"+prog+"u");
+    }
+	
+	public void onMuteChkBox(View view) {
+    	if(muteCheckBox.isChecked())
+    		textViewS.setText("20m");
+    	else
+    		textViewS.setText("20u");
+    }
 	
     public void onSend20Btn(View view) {
     	if(client.write20u() == 0)

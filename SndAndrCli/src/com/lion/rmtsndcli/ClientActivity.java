@@ -86,11 +86,41 @@ public class ClientActivity extends Activity {
 	        	String result = client.read();
 	        	if(result.compareTo("Fail") != 0){
 	        		if(lastRead == null || result.compareTo(lastRead) !=0 ){
-	        			textViewS.setText(result);
 	        			lastRead = result;
+	        			updateUIFromServer();
 	        		}
 	        	}
 	        }
+
+			private void updateUIFromServer() {
+				// find the end of string '\n'
+				int lastbn = lastRead.lastIndexOf('\n', lastRead.length()-1);
+				// go back to the previous '\n'
+				String lastSeq;
+				if(lastbn>0)
+					lastSeq = lastRead.substring(lastbn+2, lastRead.length());
+				else
+					lastSeq = lastRead;
+				// extract no and char m or u
+				int lstSeqLen = lastSeq.length();
+				String strProg =  lastSeq.substring(0, lstSeqLen-1);
+				textViewS.setText(lastSeq);
+				System.out.println("updateUIFromServer>" + lastSeq + "< " + lastbn + " " + strProg + " " + lastSeq.substring(lstSeqLen-1, lstSeqLen));
+
+				// set slider to value
+				volSeekBar.setProgress(Integer.parseInt(strProg));
+				// set mute or un-mute
+				if(lastSeq.substring(lstSeqLen-1, lstSeqLen).compareTo("u")==0){
+					if(muteCheckBox.isChecked()){
+						muteCheckBox.setChecked(false);
+					}
+				}
+				else{
+					if(muteCheckBox.isChecked() == false){
+						muteCheckBox.setChecked(true);
+					}
+				}
+			}
 	    };
 	
 	@Override

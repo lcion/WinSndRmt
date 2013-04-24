@@ -39,8 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/send20"
-        android:max="100"
-        android:onClick="onSeekBarVol" />
+        android:max="100" />
 
     <TextView
         android:id="@+id/textViewAStatus"

@@ -82,10 +82,6 @@ public class Requester{
 		}
 	}
 	
-	public int write20u(){
-		return sendMessage("20u\n");
-	}
-	
 	String run()
 	{
 		String returnString = "Result Ok";
@@ -144,7 +140,7 @@ public class Requester{
 		return returnString;
 	}
 	
-	int sendMessage(String msg)
+	public int sendMessage(String msg)
 	{
 		try{
 			byte b[], buffer[] = new byte[msg.length()+1];

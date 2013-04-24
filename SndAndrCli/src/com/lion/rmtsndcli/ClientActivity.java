@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class ClientActivity extends Activity {
@@ -28,8 +29,31 @@ public class ClientActivity extends Activity {
 
 		textViewS = (TextView)findViewById(R.id.textViewAStatus);
 		
-		volSeekBar = (SeekBar)findViewById(R.id.seekBarVol);
 		muteCheckBox = (CheckBox)findViewById(R.id.checkBoxMute);
+		volSeekBar = (SeekBar)findViewById(R.id.seekBarVol);
+		volSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				// get the position, get the mute, send message to server
+				int prog = volSeekBar.getProgress();
+		    	if(muteCheckBox.isChecked())
+		    		onSendStr(prog+"m");
+		    	else
+		    		onSendStr(prog+"u");
+			}
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				// I have no interest at the moment to process this
+			}
+			
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				// I have no interest at the moment to process this
+			}
+		});
 
 	    // Set the text view as the activity layout
 	    //setContentView(textView);
@@ -77,24 +101,23 @@ public class ClientActivity extends Activity {
 		//call super
 		super.onStop();
 	}
-	public void onSeekBarVol(View view) {
-		int prog = volSeekBar.getProgress();
-    	if(muteCheckBox.isChecked())
-    		textViewS.setText(""+prog+"m");
-    	else
-    		textViewS.setText("u"+prog+"u");
-    }
 	
 	public void onMuteChkBox(View view) {
+		int prog = volSeekBar.getProgress();
     	if(muteCheckBox.isChecked())
-    		textViewS.setText("20m");
+    		onSendStr(prog+"m");
     	else
-    		textViewS.setText("20u");
+    		onSendStr(prog+"u");
     }
 	
     public void onSend20Btn(View view) {
-    	if(client.write20u() == 0)
-    		textViewS.setText("20u");
+    	onSendStr("20u");
+    	volSeekBar.setProgress(20);
+    }
+    
+    public void onSendStr(String str) {
+    	if(client.sendMessage(str+"\n") == 0)
+    		textViewS.setText(str);
     }
     
 	@Override

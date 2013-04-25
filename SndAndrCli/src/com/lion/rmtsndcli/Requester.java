@@ -44,10 +44,15 @@ public class Requester{
 			try {
 				bytesAvailable = inpStream.available();
 				if(bytesAvailable > 0){
-					byte b[] = new byte[100];
+					byte b[] = new byte[64];
+					while(bytesAvailable > 40){
+						inpStream.read(b, 0, 30);
+						bytesAvailable -= 30;
+						System.out.println("server read drop 30>");
+					}
 					inpStream.read(b);
 					String receivedBytes = new String(b, 0, bytesAvailable, Charset.defaultCharset());
-					System.out.println("server> " + receivedBytes + " " + bytesAvailable);
+					System.out.println("server> " + receivedBytes + " A" + bytesAvailable);
 					if(receivedBytes.length() > 2)
 						result = receivedBytes.substring(0, receivedBytes.length()-2);
 				}

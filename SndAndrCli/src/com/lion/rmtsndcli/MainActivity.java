@@ -10,11 +10,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas.VertexMode;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 public class MainActivity extends Activity {
@@ -37,9 +39,10 @@ public class MainActivity extends Activity {
 	      listNames.add(namesValues[i]);
 	    }
 	    listIps = new ArrayList<String>();
-	    for (int i = 0; i < ipValues.length; ++i) {
-	    	listIps.add(ipValues[i]);
-		    }
+	    //for (int i = 0; i < ipValues.length; ++i) {
+	    for (String valStr : ipValues) {
+	    	listIps.add(valStr);
+		}
 	    
 	    adapter = new StableArrayAdapter(this,
 	        android.R.layout.simple_list_item_1, listNames);
@@ -109,21 +112,28 @@ public class MainActivity extends Activity {
     	AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
     	alert.setTitle("Add new PC");
-    	alert.setMessage("IP Address:");
+    	alert.setMessage("Name, IP Address:");
 
     	// Set an EditText view to get user input 
-    	final EditText input = new EditText(this);
-    	alert.setView(input);
+    	final LinearLayout linlay = new LinearLayout(this);
+    	linlay.setOrientation(1); //vertical
+    	final EditText nameInp = new EditText(this);
+    	nameInp.setSingleLine();
+    	final EditText adrInp = new EditText(this);
+    	adrInp.setSingleLine();
+    	linlay.addView(nameInp);
+    	linlay.addView(adrInp);
+    	alert.setView(linlay);
 
     	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
     	public void onClick(DialogInterface dialog, int whichButton) {
-    		String value = input.getText().toString();
+    		String namesValue = nameInp.getText().toString();
+    		String ipValue = adrInp.getText().toString();
     	  	// Do something with value!
-	      	listNames.add(value);
-	      	listIps.add(value);
+	      	listNames.add(namesValue);
+	      	listIps.add(ipValue);
 	      	adapter.updateMap(listNames);
 	      	adapter.notifyDataSetChanged();
-
     	  }
     	});
 

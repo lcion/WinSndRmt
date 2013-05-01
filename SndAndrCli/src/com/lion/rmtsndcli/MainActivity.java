@@ -1,5 +1,8 @@
 package com.lion.rmtsndcli;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +13,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Canvas.VertexMode;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,17 +34,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 		listView = (ListView)findViewById(R.id.listView1);
-		String[] namesValues = new String[] { "Luci PC", "Alex PC", "Andrei PC"};
-		String[] ipValues = new String[] { "192.168.1.12", "192.168.1.13", "192.168.1.11"};
 		listNames = new ArrayList<String>();
-	    for (int i = 0; i < namesValues.length; ++i) {
-	      listNames.add(namesValues[i]);
-	    }
 	    listIps = new ArrayList<String>();
-	    //for (int i = 0; i < ipValues.length; ++i) {
-	    for (String valStr : ipValues) {
-	    	listIps.add(valStr);
-		}
+
+	    readDataFromFile();
 	    
 	    adapter = new StableArrayAdapter(this,
 	        android.R.layout.simple_list_item_1, listNames);
@@ -65,6 +60,7 @@ public class MainActivity extends Activity {
 		        String item = (String) parent.getItemAtPosition(position);
 		    	listNames.remove(item);
 				listIps.remove(position);
+				writeDataToFile();
 		    	adapter.updateMap(listNames);
 	            adapter.notifyDataSetChanged();
 				return true;
@@ -72,7 +68,40 @@ public class MainActivity extends Activity {
 		});
     }
 
-    private class StableArrayAdapter extends ArrayAdapter<String> {
+    private void readDataFromFile() {
+		// write to "addrList.txt";
+    	String filename = "addrList.txt";
+    	String string = "";
+    	FileInputStream inputStream;
+
+    	try {
+    		inputStream = openFileInput(filename);
+    		//inputStream.write(string.getBytes());
+    		byte buffer[] = new byte[64];
+    		int bytesAvailable = 0;
+    		while((bytesAvailable = inputStream.read(buffer)) > 0){
+    			string += new String(buffer, 0, bytesAvailable, Charset.defaultCharset());
+    		}
+    		inputStream.close();
+    	} catch (Exception e) {
+    	  e.printStackTrace();
+    	}
+    	//process string
+    	while(string.length() > 0){
+    		//find first pc
+    		int sep = string.indexOf(',');
+    		if(sep<0)break;
+    		int eol = string.indexOf('\n');
+    		if(eol<0 || eol<sep)break;
+    		String name = string.substring(0, sep);
+    		listNames.add(name);
+    		String ip = string.substring(sep+1, eol);
+    		listIps.add(ip);
+    		string = string.substring(eol+1);
+    	}
+	}
+
+	private class StableArrayAdapter extends ArrayAdapter<String> {
 
         HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
 
@@ -132,6 +161,7 @@ public class MainActivity extends Activity {
     	  	// Do something with value!
 	      	listNames.add(namesValue);
 	      	listIps.add(ipValue);
+	      	writeDataToFile();
 	      	adapter.updateMap(listNames);
 	      	adapter.notifyDataSetChanged();
     	  }
@@ -147,7 +177,29 @@ public class MainActivity extends Activity {
     	return 0;
     }
     
-    public void startClientActivity(String message) {
+    protected void writeDataToFile() {
+		// write to "addrList.txt";
+    	String filename = "addrList.txt";
+    	String string = "";
+    	FileOutputStream outputStream;
+    	for(int i = 0; i < listNames.size() ; i++)
+    	{
+    		string += listNames.get(i);
+    		string += ",";
+    		string += listIps.get(i);
+    		string += "\n";
+    	}
+
+    	try {
+    	  outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+    	  outputStream.write(string.getBytes());
+    	  outputStream.close();
+    	} catch (Exception e) {
+    	  e.printStackTrace();
+    	}
+	}
+
+	public void startClientActivity(String message) {
         // create new activity
     	Intent intent = new Intent(this, ClientActivity.class);
     	intent.putExtra(EXTRA_MESSAGE, message);

@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
 	private ArrayList<String> listNames;
 	private ArrayList<String> listIps;
 	private StableArrayAdapter adapter;
+	MainActivity mainActPtr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class MainActivity extends Activity {
 		listView = (ListView)findViewById(R.id.listView1);
 		listNames = new ArrayList<String>();
 	    listIps = new ArrayList<String>();
+	    mainActPtr = this;
 
 	    readDataFromFile();
 	    
@@ -57,12 +59,32 @@ public class MainActivity extends Activity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
 					int position, long id) {
-		        String item = (String) parent.getItemAtPosition(position);
-		    	listNames.remove(item);
-				listIps.remove(position);
-				writeDataToFile();
-		    	adapter.updateMap(listNames);
-	            adapter.notifyDataSetChanged();
+				
+				final int positionInList = position;
+		    	AlertDialog.Builder alert = new AlertDialog.Builder(mainActPtr);
+
+		    	alert.setTitle("Delete");
+		        String item = (String) parent.getItemAtPosition(positionInList);
+		    	alert.setMessage(item);
+
+		    	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		    	public void onClick(DialogInterface dialog, int whichButton) {
+			    	listNames.remove(positionInList);
+					listIps.remove(positionInList);
+					writeDataToFile();
+			    	adapter.updateMap(listNames);
+		            adapter.notifyDataSetChanged();
+		    	  }
+		    	});
+		    	
+		    	alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		      	  public void onClick(DialogInterface dialog, int whichButton) {
+		      	    // Canceled.
+		      	  }
+		      	});
+
+		    	alert.show();
+								
 				return true;
 			}
 		});

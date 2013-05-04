@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -60,12 +61,20 @@ public class ClientActivity extends Activity {
 	    //create networking
     	//send message to the network 
 		client = new Requester(message);
-		client.connect();
-		
-	    //create timer
-	    handler = new Handler();
-	    timer = new UITimer(handler, runMethod, 1000);
-        timer.start();
+		if(client.connect()!=0){
+			//update status to failed to connect
+			textViewS.setText("Failed to connect!");
+			//disable controls
+			volSeekBar.setEnabled(false);
+			muteCheckBox.setEnabled(false);
+			Button send20Btn = (Button)findViewById(R.id.send20);
+			send20Btn.setEnabled(false);
+		}else{
+		    //create timer
+		    handler = new Handler();
+		    timer = new UITimer(handler, runMethod, 1000);
+	        timer.start();
+		}
 	}
 
 	public Handler handler;
@@ -125,8 +134,10 @@ public class ClientActivity extends Activity {
 	
 	@Override
 	public void onStop(){
+		if(timer != null)
 		timer.stop();
 		//cleanup the networking
+		if(client != null)
 		client.close();
 		//call super
 		super.onStop();

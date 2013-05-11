@@ -1,5 +1,8 @@
 // Resource.h -- Control identifiers
 
+//application icon
+#define IDI_SNDWINCLI          100
+
 #define IDC_SLIDER_VOLUME      1001
 #define IDC_CHECK_MUTE         1002
 #define IDC_STATIC_MINVOL      1003

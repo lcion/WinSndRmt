@@ -43,12 +43,14 @@ int PharseCmdLineArgs(HINSTANCE hInst, char *lpCmdLine, char **ipAddress, int *p
 CCliNetwork *gCliNetwork;
 char *gIpAddress;
 HWND g_hDlg = NULL;
+HINSTANCE g_hInst;
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     HRESULT hr = S_OK;
 	DWORD Index = 0;
 	BOOL bResult = TRUE;
+	g_hInst = hInstance;
 	CCliNetwork myNetwork;
 	gCliNetwork = &myNetwork;
 	int port = 27015;
@@ -82,7 +84,14 @@ BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     {
     case WM_INITDIALOG:
         g_hDlg = hDlg;
-		gIpAddress;
+		{//setup dialog icon
+			HICON hIconSmall =(HICON)LoadImage(g_hInst, MAKEINTRESOURCE(IDI_SNDWINCLI), IMAGE_ICON,16, 16, 0);
+			HICON hIconLarge =(HICON)LoadImage(g_hInst, MAKEINTRESOURCE(IDI_SNDWINCLI), IMAGE_ICON,256, 256, 0); // Big for task bar, small loaded otherwise.
+
+			SendMessage(hDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIconSmall) ;
+			SendMessage(hDlg, WM_SETICON, ICON_BIG, (LPARAM)hIconLarge) ;
+		}
+
 		{ //set the title of the main window dialog
 			char dialogTitle[100];
 			sprintf_s(dialogTitle, "%s %s", "Audio Remote Volume", gIpAddress);

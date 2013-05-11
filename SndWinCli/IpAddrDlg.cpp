@@ -6,6 +6,7 @@
 #define IPSTRLEN 60
 INT_PTR CALLBACK OnIPAddressMsg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 TCHAR comboResult[IPSTRLEN];
+extern HINSTANCE g_hInst;
 
 CIpAddrDlg::CIpAddrDlg(void)
 {
@@ -83,6 +84,14 @@ INT_PTR CALLBACK OnIPAddressMsg(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 	switch (message)
 	{
 	case WM_INITDIALOG:
+		{//setup dialog icon
+			HICON hIconSmall =(HICON)LoadImage(g_hInst, MAKEINTRESOURCE(IDI_SNDWINCLI), IMAGE_ICON,16, 16, 0);
+			HICON hIconLarge =(HICON)LoadImage(g_hInst, MAKEINTRESOURCE(IDI_SNDWINCLI), IMAGE_ICON,256, 256, 0); // Big for task bar, small loaded otherwise.
+
+			SendMessage(hDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIconSmall) ;
+			SendMessage(hDlg, WM_SETICON, ICON_BIG, (LPARAM)hIconLarge) ;
+		}
+
 		//load list from file and populate combo box
 		{
 			list<string> ipList;

@@ -35,4 +35,7 @@
   <ItemGroup>
     <ResourceCompile Include="SndWindCli.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="remoteVol.ico" />
+  </ItemGroup>
 </Project>

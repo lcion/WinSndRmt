@@ -4,6 +4,10 @@
 #include "windows.h"
 #include "commctrl.h"
 
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_SNDWINSRV        ICON                    "remoteVol.ico"
+
 //
 // Version
 //

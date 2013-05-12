@@ -14,16 +14,14 @@ public:
 	CSrvNetwrk(CSrvAudio &cSrvAudio, CSrvApp &cSrvApp);
 	~CSrvNetwrk();
 	HRESULT Initialize(char *hostName, int port);
+	HRESULT CreateEvents(WSAEVENT *EventArray, DWORD &EventTotal);
 	HRESULT Accept();
-	void SetReadEvent(HANDLE hEvent);
-	void SetWriteEvent(HANDLE hEvent);
 	void ReceiveAsync();
 	int OnDataReceived();
 	void OnDataSent();
 	void CloseClientSocket();
 	void SendDataFromAudioEvents(int volume, BOOL bMute);
 	void OnSndEvent();
-	void SetAudioEvent(HANDLE hEvent);
 
 private:
 	WSADATA wsaData;
@@ -42,4 +40,9 @@ private:
 	int iVolume;
 	BOOL mbMute;
 	HANDLE audioEventH;
+
+	void SetReadEvent(HANDLE hEvent);
+	void SetWriteEvent(HANDLE hEvent);
+	void SetAudioEvent(HANDLE hEvent);
+
 };

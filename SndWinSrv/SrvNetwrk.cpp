@@ -5,7 +5,7 @@
 #include "SrvNetwrk.h"
 
 CSrvNetwrk::CSrvNetwrk(CSrvAudio &cSrvAudio, CSrvApp &cSrvApp)
-	: volAudio(cSrvAudio), myAppLogic(cSrvApp)
+	: volAudio(cSrvAudio), myAppLogic(cSrvApp), audioEventH(NULL)
 {
 	ListenSocket = INVALID_SOCKET;
     AcceptSocket = INVALID_SOCKET;
@@ -99,6 +99,7 @@ HRESULT CSrvNetwrk::Accept()
 
 CSrvNetwrk::~CSrvNetwrk()
 {
+	//close events
 	if(ReadOverlapped.hEvent){
 		WSACloseEvent(ReadOverlapped.hEvent);
 		ReadOverlapped.hEvent = NULL;
@@ -107,6 +108,12 @@ CSrvNetwrk::~CSrvNetwrk()
 		WSACloseEvent(WriteOverlapped.hEvent);
 		WriteOverlapped.hEvent = NULL;
 	}
+	if(audioEventH){
+		WSACloseEvent(audioEventH);
+		audioEventH = NULL;
+	}
+
+	//close sockets
 	if(AcceptSocket != INVALID_SOCKET){
 	    closesocket(AcceptSocket);
 		AcceptSocket = INVALID_SOCKET;
@@ -118,6 +125,43 @@ CSrvNetwrk::~CSrvNetwrk()
 	WSACleanup();
 }
 
+HRESULT CSrvNetwrk::CreateEvents(WSAEVENT *EventArray, DWORD &EventTotal){
+	//-----------------------------------------
+    // Create an event handle and setup an overlapped structure for read.
+    EventArray[EventTotal] = WSACreateEvent();
+    if (EventArray[EventTotal] == WSA_INVALID_EVENT) {
+        OutputDebugString("WSACreateEvent failed with error\n");
+        return 1;
+    }
+
+	SetReadEvent(EventArray[EventTotal]);
+
+    EventTotal++;
+
+    //-----------------------------------------
+    // Create an event handle and setup an overlapped structure for write.
+    EventArray[EventTotal] = WSACreateEvent();
+    if (EventArray[EventTotal] == WSA_INVALID_EVENT) {
+        OutputDebugString("WSACreateEvent failed with error\n");
+        return 1;
+    }
+
+    //WriteOverlapped.hEvent = EventArray[EventTotal];
+	SetWriteEvent(EventArray[EventTotal]);
+
+    EventTotal++;
+
+	//-----------------------------------------
+    // Create an event handle for the audio events
+    EventArray[EventTotal] = WSACreateEvent();
+    if (EventArray[EventTotal] == WSA_INVALID_EVENT) {
+        OutputDebugString("WSACreateEvent failed with error\n");
+        return 1;
+    }
+	SetAudioEvent(EventArray[EventTotal]);
+    EventTotal++;
+	return 0;
+}
 
 void CSrvNetwrk::SetReadEvent(HANDLE hEvent)
 {

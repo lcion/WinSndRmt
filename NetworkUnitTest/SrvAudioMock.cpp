@@ -15,6 +15,7 @@ CSrvAudio
 {
 }
 GUID g_guidMyContext = GUID_NULL;
+HWND g_hDlg = NULL;
 
 HRESULT CSrvAudio::SetMute(BOOL mute){
 	HRESULT hr = S_OK;

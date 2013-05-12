@@ -64,40 +64,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	hr = srvNetork.Initialize(ipAddress, port);
 	if(FAILED(hr)) return -1;
 
-	//-----------------------------------------
-    // Create an event handle and setup an overlapped structure for read.
-    EventArray[EventTotal] = WSACreateEvent();
-    if (EventArray[EventTotal] == WSA_INVALID_EVENT) {
-        OutputDebugString("WSACreateEvent failed with error\n");
-        return 1;
-    }
-
-	srvNetork.SetReadEvent(EventArray[EventTotal]);
-
-    EventTotal++;
-
-    //-----------------------------------------
-    // Create an event handle and setup an overlapped structure for write.
-    EventArray[EventTotal] = WSACreateEvent();
-    if (EventArray[EventTotal] == WSA_INVALID_EVENT) {
-        OutputDebugString("WSACreateEvent failed with error\n");
-        return 1;
-    }
-
-    //WriteOverlapped.hEvent = EventArray[EventTotal];
-	srvNetork.SetWriteEvent(EventArray[EventTotal]);
-
-    EventTotal++;
-
-	    //-----------------------------------------
-    // Create an event handle for the audio events
-    EventArray[EventTotal] = WSACreateEvent();
-    if (EventArray[EventTotal] == WSA_INVALID_EVENT) {
-        OutputDebugString("WSACreateEvent failed with error\n");
-        return 1;
-    }
-	srvNetork.SetAudioEvent(EventArray[EventTotal]);
-    EventTotal++;
+	hr = srvNetork.CreateEvents(EventArray, EventTotal);
+	if(FAILED(hr)) return -1;
 
 	//accept loop
 	while (1) {

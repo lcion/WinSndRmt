@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SndWinSrv", "SndWinSrv\SndW
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SndWinCli", "SndWinCli\SndWinCli.vcxproj", "{3844138E-14A1-427B-8B37-16316401E38D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkUnitTest", "NetworkUnitTest\NetworkUnitTest.vcxproj", "{A210B399-933E-4786-812C-B700B5074428}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{3844138E-14A1-427B-8B37-16316401E38D}.Debug|Win32.Build.0 = Debug|Win32
 		{3844138E-14A1-427B-8B37-16316401E38D}.Release|Win32.ActiveCfg = Release|Win32
 		{3844138E-14A1-427B-8B37-16316401E38D}.Release|Win32.Build.0 = Release|Win32
+		{A210B399-933E-4786-812C-B700B5074428}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A210B399-933E-4786-812C-B700B5074428}.Debug|Win32.Build.0 = Debug|Win32
+		{A210B399-933E-4786-812C-B700B5074428}.Release|Win32.ActiveCfg = Release|Win32
+		{A210B399-933E-4786-812C-B700B5074428}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

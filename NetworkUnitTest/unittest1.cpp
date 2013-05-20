@@ -76,7 +76,16 @@ namespace NetworkUnitTest
 			WSAEVENT EventArray[WSA_MAXIMUM_WAIT_EVENTS];
 			DWORD EventTotal = 0;
 			Assert::AreEqual(S_OK, mySrvNetwork.CreateEvents(EventArray, EventTotal));
+			mySrvNetwork.SendDataFromAudioEvents(20,FALSE);
+			DWORD waitRes = WaitForMultipleObjects(EventTotal, EventArray, FALSE, 20);
+			Assert::AreEqual(waitRes, (DWORD)2);
+			WSAResetEvent(EventArray[waitRes]);
 
+			mySrvNetwork.OnSndEvent();
+			waitRes = WaitForMultipleObjects(EventTotal, EventArray, FALSE, 2000);
+			Assert::AreEqual(waitRes, (DWORD)1);
+
+			myCliNetwork.DoTimerProc();
 			Logger::WriteMessage("In TestComunicationData");
 		}
 	};

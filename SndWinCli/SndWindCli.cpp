@@ -6,9 +6,6 @@
 #include "Resource.h"
 #include "IpAddrDlg.h"
 
-// Need to link with Ws2_32.lib
-#pragma comment(lib, "ws2_32.lib")
-
 #define MAX_VOL 100
 
 BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -62,7 +59,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	if(myNetwork.Initialize()) return 1;
 
 	if(myNetwork.Connect(gIpAddress, port)) return 1;
-    //wprintf(L"Connected to server.\n");
 	OutputDebugString("Connected to server.\n");
 
     DialogBox(hInstance, MAKEINTRESOURCE(IDD_VOL_CONTROL_DLG), NULL, (DLGPROC)VolDlgProc);
@@ -99,12 +95,8 @@ BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 		}
         SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_SETRANGEMIN, FALSE, 0);
         SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_SETRANGEMAX, FALSE, MAX_VOL);
-        //hr = g_pEndptVol->GetMute(&bMute);
-        //ERROR_CANCEL(hr)
         SendDlgItemMessage(hDlg, IDC_CHECK_MUTE, BM_SETCHECK,
                            bMute ? BST_CHECKED : BST_UNCHECKED, 0);
-        //hr = g_pEndptVol->GetMasterVolumeLevelScalar(&fVolume);
-        //ERROR_CANCEL(hr)
         nVolume = (int)(MAX_VOL*fVolume + 0.5);
         SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_SETPOS, TRUE, nVolume);
 
@@ -113,7 +105,6 @@ BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         return TRUE;
 
     case WM_TIMER:
-		//OutputDebugString("On Timer\n");
 		gCliNetwork->DoTimerProc();
 		break;
     case WM_HSCROLL:
@@ -129,14 +120,9 @@ BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         case SB_LEFT:
             // The user moved the volume slider in the dialog box.
             SendDlgItemMessage(hDlg, IDC_CHECK_MUTE, BM_SETCHECK, BST_UNCHECKED, 0);
-            //hr = g_pEndptVol->SetMute(FALSE, &g_guidMyContext);
-            //ERROR_CANCEL(hr)
             nVolume = SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_GETPOS, 0, 0);
 			OutputDebugString("Send new Volume to server.\n");
 			gCliNetwork->SendVolume(nVolume, FALSE);
-            //fVolume = (float)nVolume/MAX_VOL;
-            //hr = g_pEndptVol->SetMasterVolumeLevelScalar(fVolume, &g_guidMyContext);
-            //ERROR_CANCEL(hr)
             return TRUE;
         }
         break;
@@ -151,8 +137,6 @@ BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             bMute = (BST_CHECKED == nChecked);
 			gCliNetwork->SendVolume(nVolume, bMute);
 
-            //hr = g_pEndptVol->SetMute(bMute, &g_guidMyContext);
-            //ERROR_CANCEL(hr)
             return TRUE;
         case IDCANCEL:
 			KillTimer(hDlg, 0);

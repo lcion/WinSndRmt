@@ -12,3 +12,5 @@ Step 2: when any other computer is too noisy just connect with the client and ad
 Use visual studio express 2012 for windows Desktop to build the windows server and test client.
 The project is a C++ client server application running in Windows using async networking and win32 libraries.
 The application was originally designed for remote controlling the sound volume.
+
+NEW: Android client so one can control the volume from a phone application. The android client was developed using Java and Eclipse IDE.

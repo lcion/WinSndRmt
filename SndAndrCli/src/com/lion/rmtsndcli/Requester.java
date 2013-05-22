@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.Charset;
 
+import android.os.StrictMode;
+
 public class Requester{
 	Socket requestSocket;
 	OutputStream out;
@@ -12,6 +14,11 @@ public class Requester{
 	String hostName;
 	Requester(String hostName){
 		this.hostName = hostName;
+		if (android.os.Build.VERSION.SDK_INT > 9) {
+			StrictMode.ThreadPolicy policy = 
+			        new StrictMode.ThreadPolicy.Builder().permitAll().build();
+			StrictMode.setThreadPolicy(policy);
+		}
 	}
 
 	public int connect(){

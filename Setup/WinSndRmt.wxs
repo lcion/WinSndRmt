@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+
+  <Product Name='Remote Volume 1.0' Id='28E209EE-6713-4F76-BFBC-5FB9A1935981' UpgradeCode='A16AF464-76E5-4574-BAE3-750D11CAA600'
+    Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='Lucian Ion Ltd.'>
+
+    <Package Id='*' Keywords='Installer' Description="WinSndRmt 1.0 Installer"
+      Comments='WinSndRmt is a registered trademark of Lucian Ion Ltd.' Manufacturer='Lucian Ion Ltd.'
+      InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+
+	  <Media Id='1' Cabinet='Sample.cab' EmbedCab='yes' DiskPrompt='CD-ROM #1' />
+      <Property Id='DiskPrompt' Value="Lucian's WnSndRmt 1.0 Installation [1]" />
+
+	  <Directory Id='TARGETDIR' Name='SourceDir'>
+	  <Directory Id='ProgramFilesFolder' Name='PFiles'>
+        <Directory Id='LucianIon' Name='LucianIon'>
+          <Directory Id='INSTALLDIR' Name='WinSndRmt'>
+
+		       <Component Id='WinSndRmtCli' Guid='2478FE09-8A7A-42C6-9D93-FCD5CF338AFB'>
+		         <File Id='WinSndRmtCliEXE' Name='SndWinCli.exe' DiskId='1' Source='SndWinCli.exe' KeyPath='yes'>
+
+			           <Shortcut Id="startmenuWinSndRmtCli" Directory="ProgramMenuDir" Name="Remote Volume"
+                      WorkingDirectory='INSTALLDIR' Icon="SndWinCli.exe" IconIndex="0" Advertise="yes" />
+                 <Shortcut Id="desktopWinSndRmt" Directory="DesktopFolder" Name="Remote Volume"
+                      WorkingDirectory='INSTALLDIR' Icon="SndWinCli.exe" IconIndex="0" Advertise="yes" />
+             </File>
+           </Component>
+            <Component Id='WinSndRmtSrv' Guid='532514E2-B24A-4288-B9D3-DC9439BB0F58'>
+              <File Id='WinSndRmtSrvEXE' Name='SndWinSrv.exe' DiskId='1' Source='SndWinSrv.exe' KeyPath='yes'>
+                <Shortcut Id="startmenuWinSndRmtSrv" Directory="ProgramMenuDir" Name="Volume Server"
+                     WorkingDirectory='INSTALLDIR' Icon="SndWinCli.exe" IconIndex="0" Advertise="yes" />
+
+              </File>
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
+
+	  <Directory Id="ProgramMenuFolder" Name="Programs">
+        <Directory Id="ProgramMenuDir" Name="WinSndRmt">
+          <Component Id="ProgramMenuDir" Guid="1BB16221-3BDF-4A3B-9C9D-C90B0E356123">
+            <RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+            <RegistryValue Root='HKCU' Key='Software\LucianIon\WinSndRmt' Type='string' Value='' KeyPath='yes' />
+          </Component>
+        </Directory>
+      </Directory>
+
+      <Directory Id="DesktopFolder" Name="Desktop" />
+    </Directory>
+    
+    <!-- add server to the startup -->
+    <DirectoryRef Id="TARGETDIR">
+      <Component Id="RegistryEntries" Guid="446A69F7-0AC3-4AC1-A3C2-9DE6362EE972">
+        <RegistryKey Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Run">
+          <RegistryValue Type="string" Name="WindSndSrv" Value="[INSTALLDIR]SndWinSrv.exe" KeyPath="yes"/>
+        </RegistryKey>
+      </Component>
+    </DirectoryRef>
+    
+    <Feature Id='Complete' Level='1'>
+      <ComponentRef Id='WinSndRmtCli' />
+      <ComponentRef Id='WinSndRmtSrv' />
+      <ComponentRef Id='ProgramMenuDir' />
+      <ComponentRef Id='RegistryEntries' />
+    </Feature>
+
+	  <Icon Id="SndWinCli.exe" SourceFile="SndWinCli.exe" />
+
+  </Product>
+</Wix>
+

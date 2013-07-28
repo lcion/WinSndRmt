@@ -3,4 +3,5 @@ copy ..\bin\Release\*.exe .
 candle WinSndRmt.wxs
 light WinSndRmt.wixobj
 del *.exe *.wixpdb *.wixobj
+move WinSndRmt.msi ..\bin\Release\
 pause

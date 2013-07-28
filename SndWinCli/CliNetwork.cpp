@@ -101,7 +101,7 @@ int CCliNetwork::Connect(char *ipAddress, int port)
     iResult = connect(ConnectSocket, (SOCKADDR *) & clientService, sizeof (clientService));
     if (iResult == SOCKET_ERROR) {
 		char outTextBuff[MAX_PATH];
-		sprintf_s(outTextBuff,"connect function failed with error: %ld\n",WSAGetLastError());
+		sprintf_s(outTextBuff,"connect to %s failed with error: %ld\n", ipAddress, WSAGetLastError());
 		OutputDebugString(outTextBuff);
 
 		LPTSTR lpMsgBuf;

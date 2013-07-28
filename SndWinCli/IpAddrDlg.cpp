@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define IPSTRLEN 60
+#define IPSTRLEN 80
 INT_PTR CALLBACK OnIPAddressMsg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 TCHAR comboResult[IPSTRLEN];
 extern HINSTANCE g_hInst;
@@ -20,8 +20,12 @@ CIpAddrDlg::~CIpAddrDlg(void)
 int CIpAddrDlg::GetIpAddrStrFromUser(HINSTANCE hInst, char **ipAddress)
 {
 	DialogBox(hInst, MAKEINTRESOURCE(IDD_IP_ADDR_DLG), NULL, OnIPAddressMsg);
-	*ipAddress = comboResult;
-	if(strlen(comboResult) > 0)
+	TCHAR *ptr = strchr(comboResult, ',');
+	if(ptr)
+		*ipAddress = ptr+1;
+	else
+		*ipAddress = comboResult;
+	if(strlen(*ipAddress) > 0)
 		return 1;
 	return 0;
 }

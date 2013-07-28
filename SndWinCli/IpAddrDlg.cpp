@@ -28,11 +28,26 @@ int CIpAddrDlg::GetIpAddrStrFromUser(HINSTANCE hInst, char **ipAddress)
 
 #include <list>
 #include <fstream>
+#include <Shlobj.h>
+#include <Shlwapi.h>
+
 using namespace std;
 
 void ReadIPsFromFile(list<string> &ipList){
 	ifstream src;
-	src.open("addrList.txt");
+	TCHAR szPath[MAX_PATH];
+
+	if(FAILED(SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA|CSIDL_FLAG_CREATE, 
+                             NULL, 0, szPath))) return;
+
+	PathAppend(szPath, TEXT("LucianIon"));
+	if(!PathFileExists(szPath)) CreateDirectory(szPath, NULL);
+	PathAppend(szPath, TEXT("WinSndRmt"));
+	if(!PathFileExists(szPath)) CreateDirectory(szPath, NULL);
+	PathAppend(szPath, TEXT("addrList.txt"));
+	if(!PathFileExists(szPath)) return;
+
+	src.open(szPath);
 	if(src.is_open() == FALSE)
 		return;
 	char linestr[60];
@@ -64,7 +79,17 @@ void WriteIPsToFile(char *linestr){
 	if(it != ipList.end())
 		ipList.erase(it);
 
-	dest.open("addrList.txt");
+	TCHAR szPath[MAX_PATH];
+	if(FAILED(SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA|CSIDL_FLAG_CREATE, 
+                             NULL, 0, szPath))) return;
+
+	PathAppend(szPath, TEXT("LucianIon"));
+	if(!PathFileExists(szPath)) CreateDirectory(szPath, NULL);
+	PathAppend(szPath, TEXT("WinSndRmt"));
+	if(!PathFileExists(szPath)) CreateDirectory(szPath, NULL);
+	PathAppend(szPath, TEXT("addrList.txt"));
+
+	dest.open(szPath);
 	if(dest.is_open() == FALSE)
 		return;
 

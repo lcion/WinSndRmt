@@ -88,13 +88,46 @@ int CCliNetwork::Initialize()
 int CCliNetwork::Connect(char *ipAddress, int port)
 {
 	int iResult;
+	struct addrinfo *result = NULL;
+	struct addrinfo *ptr = NULL;
+	struct sockaddr_in  *sockaddr_ipv4 = NULL;
+
+	struct addrinfo hints;
+	char portStr[80];
+	sprintf_s(portStr, "%d", port);
+
+	//--------------------------------
+	// Setup the hints address info structure
+	// which is passed to the getaddrinfo() function
+	ZeroMemory( &hints, sizeof(hints) );
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_protocol = IPPROTO_TCP;
+
+	iResult = getaddrinfo(ipAddress, portStr, &hints, &result);
+	if(iResult != 0){
+		OutputDebugString("Failed to getaddrinfo\n");
+		return 1;
+	}
+
+	for(ptr=result; ptr != NULL ;ptr=ptr->ai_next) {
+		switch (ptr->ai_family) {
+			case AF_INET:
+				sockaddr_ipv4 = (struct sockaddr_in *) ptr->ai_addr;
+				break;
+		}
+	}
+	if(sockaddr_ipv4 == NULL){
+		OutputDebugString("Failed to get ipv4 struct\n");
+		return 1;
+	}
+
     //----------------------
     // The sockaddr_in structure specifies the address family,
     // IP address, and port of the server to be connected to.
     sockaddr_in clientService;
-    clientService.sin_family = AF_INET;
-    clientService.sin_addr.s_addr = inet_addr(ipAddress);
-    clientService.sin_port = htons(port);
+	memcpy_s(&clientService, sizeof(sockaddr_in), sockaddr_ipv4, sizeof(sockaddr_in));
+	freeaddrinfo(result);
 
     //----------------------
     // Connect to server.

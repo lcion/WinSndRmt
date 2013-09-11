@@ -14,7 +14,9 @@ public:
 	int Initialize();
 	int Connect(char *ipAddress, int port);
 	void DoTimerProc();
-	void SendVolume(int vol, BOOL mute);
+	void SendVolume(int vol);
+	void SendMute(BOOL mute);
+	void SendLockCmd();
 
 private:
 	void OnDataReceived();
@@ -31,6 +33,12 @@ private:
 	DWORD EventTotal;
 	DWORD RecvBytes;
 	DWORD Flags;
-
+	enum _func_enum {
+		RMT_LOGIN,
+		RMT_VOLUME,
+		RMT_MUTE,
+		RMT_LOCK,
+		RMT_LOGOUT
+	} func_enum;
 };
 

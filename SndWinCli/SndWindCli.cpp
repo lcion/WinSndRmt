@@ -122,7 +122,7 @@ BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             SendDlgItemMessage(hDlg, IDC_CHECK_MUTE, BM_SETCHECK, BST_UNCHECKED, 0);
             nVolume = SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_GETPOS, 0, 0);
 			OutputDebugString("Send new Volume to server.\n");
-			gCliNetwork->SendVolume(nVolume, FALSE);
+			gCliNetwork->SendVolume(nVolume);
             return TRUE;
         }
         break;
@@ -132,12 +132,15 @@ BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         {
         case IDC_CHECK_MUTE:
             // The user selected the Mute check box in the dialog box.
-            nVolume = SendDlgItemMessage(hDlg, IDC_SLIDER_VOLUME, TBM_GETPOS, 0, 0);
             nChecked = SendDlgItemMessage(hDlg, IDC_CHECK_MUTE, BM_GETCHECK, 0, 0);
             bMute = (BST_CHECKED == nChecked);
-			gCliNetwork->SendVolume(nVolume, bMute);
+			gCliNetwork->SendMute(bMute);
 
             return TRUE;
+		case ID_BUTON_LOCK:
+			gCliNetwork->SendLockCmd();
+			//LockWorkStation();
+			return TRUE;
         case IDCANCEL:
 			KillTimer(hDlg, 0);
             EndDialog(hDlg, TRUE);

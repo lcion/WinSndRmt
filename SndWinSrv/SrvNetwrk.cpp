@@ -93,6 +93,8 @@ HRESULT CSrvNetwrk::Accept()
         OutputDebugString("accept failed with error = \n");
         return -1;
     }
+	iVolume[1]=101;
+	mbMute[1]=101;
     OutputDebugString("Client Accepted...\n");
 	return hr;
 }
@@ -215,12 +217,19 @@ int CSrvNetwrk::OnDataReceived(){
 	sprintf_s(outTextBuff, "The data received bytes[%d], bufferLen[%d], data[%s]\n", BytesTransferred, DataBuf.len, DataBuf.buf);
 	OutputDebugString(outTextBuff);
 	DataBuf.len = BytesTransferred;
-	BOOL bMute = FALSE;
-	int vol = myAppLogic.ProcessClient(DataBuf.buf, DataBuf.len, bMute);
-	if(vol > -1){
-		hr = volAudio.SetMasterVolumeLevel(vol);
+	int cliResult[5] = {0,0,0,0,0};
+	//process buffer sent by the client
+	myAppLogic.ProcessClient(DataBuf.buf, DataBuf.len, &cliResult[0]);
+	//execute the commands received
+	if(cliResult[0] == 1){// we have volume set command
+		hr = volAudio.SetMasterVolumeLevel(cliResult[1]);
 		if(FAILED(hr)) return -1;
-		volAudio.SetMute(bMute);
+	}
+	if(cliResult[2] == 1){// we have volume set command
+		volAudio.SetMute(cliResult[3]);
+	}
+	if(cliResult[4] == 1){// we have volume set command
+		LockWorkStation();
 	}
 
 	//setup async read to receive more data
@@ -252,19 +261,34 @@ void CSrvNetwrk::OnDataSent()
 void CSrvNetwrk::SendDataFromAudioEvents(int volume, BOOL bMute){
 	//if client is connected send data
 	if(AcceptSocket != INVALID_SOCKET){
-		InterlockedExchange((LONG *)&iVolume, (LONG )volume);
-		InterlockedExchange((LONG *)&mbMute, (LONG )bMute);
+		InterlockedExchange((LONG *)&iVolume[0], (LONG )volume);
+		InterlockedExchange((LONG *)&mbMute[0], (LONG )bMute);
 		WSASetEvent(audioEventH);
 	}
 }
 
 void CSrvNetwrk::OnSndEvent(){
-		sprintf_s(buffer, "%d%s\n", iVolume, mbMute?"m":"u");
-		DataBuf.len = strlen(buffer)+1;
+	DataBuf.len = 0;
+	if(iVolume[1] != iVolume[0]){
+		iVolume[1] = iVolume[0];
+		buffer[0] = 4;			// size of package for client
+		buffer[1] = RMT_VOLUME;	// function
+		buffer[2] = iVolume[0];	// arg0
+		buffer[3] = 0;			// arg1
+		DataBuf.len += 4;
+	}
+	if(mbMute[1] != mbMute[0]){
+		mbMute[1] = mbMute[0];
+		buffer[DataBuf.len+0] = 4;			// size of package for client
+		buffer[DataBuf.len+1] = RMT_MUTE;	// function
+		buffer[DataBuf.len+2] = mbMute[0];	// arg0
+		buffer[DataBuf.len+3] = 0;			// arg1
+		DataBuf.len += 4;
+	}
 
-		int iResult =
-			WSASend(AcceptSocket, &DataBuf, 1, &RecvBytes, Flags, &WriteOverlapped, NULL);
-		if (iResult != 0) {
-			OutputDebugString("WSASend failed with error = \n");
-		}
+	int iResult =
+		WSASend(AcceptSocket, &DataBuf, 1, &RecvBytes, Flags, &WriteOverlapped, NULL);
+	if (iResult != 0) {
+		OutputDebugString("WSASend failed with error = \n");
+	}
 }

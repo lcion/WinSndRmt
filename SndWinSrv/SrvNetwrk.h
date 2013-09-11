@@ -37,8 +37,8 @@ private:
 	char outTextBuff[512];
 	CSrvAudio &volAudio;
 	CSrvApp &myAppLogic;
-	int iVolume;
-	BOOL mbMute;
+	int iVolume[2];
+	BOOL mbMute[2];
 	HANDLE audioEventH;
 
 	void SetReadEvent(HANDLE hEvent);

@@ -185,19 +185,58 @@ void CCliNetwork::DoTimerProc()
 }
 
 //send new value for volume
-void CCliNetwork::SendVolume(int vol, BOOL mute)
+void CCliNetwork::SendVolume(int vol)
 {
 	// send some data
     //-----------------------------------------
     // set the volume on the server to 50%
-	sprintf_s(buffer, "%d%s\n", vol, mute?"m":"u");
-	DataBuf.len = strlen(buffer)+1;
+	//sprintf_s(buffer, "%d%s\n", vol, mute?"m":"u");
+	//DataBuf.len = strlen(buffer)+1;
+	buffer[0] = 4;			// size of package for client
+	buffer[1] = RMT_VOLUME;	// function
+	buffer[2] = vol;		// arg0
+	buffer[3] = 0;			// arg1
+	DataBuf.len = 4;		// size to send for sender
     int iResult =
         WSASend(ConnectSocket, &DataBuf, 1, &RecvBytes, Flags, &WriteOverlapped, NULL);
     if (iResult != 0) {
-		OutputDebugString("WSASend failed with error = \n");
         //wprintf(L"WSASend failed with error = %d\n", WSAGetLastError());
+		OutputDebugString("WSASend failed with error = \n");
+    }
+}
 
+//send new value for mute
+void CCliNetwork::SendMute(BOOL mute)
+{
+	// send some data
+    //-----------------------------------------
+    // set the volume on the server to 50%
+	//sprintf_s(buffer, "%d%s\n", vol, mute?"m":"u");
+	//DataBuf.len = strlen(buffer)+1;
+	buffer[0] = 4;			// size of package for client
+	buffer[1] = RMT_MUTE;	// function
+	buffer[2] = mute;		// arg0
+	buffer[3] = 0;			// arg1
+	DataBuf.len = 4;		// size to send for sender
+    int iResult =
+        WSASend(ConnectSocket, &DataBuf, 1, &RecvBytes, Flags, &WriteOverlapped, NULL);
+    if (iResult != 0) {
+        //wprintf(L"WSASend failed with error = %d\n", WSAGetLastError());
+		OutputDebugString("WSASend failed with error = \n");
+    }
+}
+
+void CCliNetwork::SendLockCmd()
+{
+	buffer[0] = 4;			// size of package for client
+	buffer[1] = RMT_LOCK;	// function
+	buffer[2] = 0;			// arg0
+	buffer[3] = 0;			// arg1
+	DataBuf.len = 4;		// size to send for sender
+    int iResult = WSASend(ConnectSocket, &DataBuf, 1, &RecvBytes, Flags, &WriteOverlapped, NULL);
+    if (iResult != 0) {
+        //wprintf(L"WSASend failed with error = %d\n", WSAGetLastError());
+		OutputDebugString("WSASend failed with error = \n");
     }
 }
 
@@ -245,49 +284,42 @@ void CCliNetwork::OnDataReceived(){
 void CCliNetwork::UpdateDialog(DWORD BytesTransferred){
     if (g_hDlg != NULL)
     {
-		char data[20];
-		int volume = 0;
-		// we are only interested in the last value,
-		// drop all other prev. values arived in the same package
-		// -1 is because the data len is BytesTransferred and is 0 based
-		char *endRecBytes = DataBuf.buf + BytesTransferred - 1;
-		int i;
-		for(i = BytesTransferred-1; i > 0 && *endRecBytes !=0; i-- )endRecBytes--;
-		if(i == 0){
-			OutputDebugString("Failed to find end buffer\n");
-			return;
-		}
-		char *startRecBytes = endRecBytes-1; i--;
-		for(; i > 0 && *startRecBytes != 0; i-- )startRecBytes--;
-		if(i == 0){
-			OutputDebugString("Failed to find start any other buffer\n");
-		}else startRecBytes++;
-		char debugStr[200];
-		int lastPackLen = endRecBytes-startRecBytes+1;
-		if(startRecBytes<DataBuf.buf || (lastPackLen) > 20) {
-			OutputDebugString("Buffer validation failed\n");
-			return;
-		}
-		sprintf_s(debugStr, "buff %s len[%d] off[%d]", startRecBytes, lastPackLen,  startRecBytes-DataBuf.buf);
-		OutputDebugString(debugStr);
+		int volume[2] = {0,0};
+		int mute[2] = {0,0};
+		int lockCmd = 0;
+		int pkgSize = 0;
 
-		strncpy_s(data, startRecBytes, lastPackLen);
-
-		volume = atoi(data);
-		if(volume<0)volume=0;
-		if(volume>100)volume=0;
-		OutputDebugString(data);
-        PostMessage(GetDlgItem(g_hDlg, IDC_SLIDER_VOLUME), TBM_SETPOS, TRUE, LPARAM(volume));
-		//pik up the mute if is set
-		if(data[lastPackLen-3] == 'u'){
-			OutputDebugString("unmute\n");
-			PostMessage(GetDlgItem(g_hDlg, IDC_CHECK_MUTE), BM_SETCHECK,
-						BST_UNCHECKED, 0);
-		}else if(data[lastPackLen-3] == 'm'){
-			OutputDebugString("mute\n");
-			PostMessage(GetDlgItem(g_hDlg, IDC_CHECK_MUTE), BM_SETCHECK,
-						BST_CHECKED, 0);
+		//process received buffer and store the actions
+		char *recBytesPtr = DataBuf.buf;
+		for(DWORD i = 0; i < BytesTransferred-1; i += pkgSize){
+			pkgSize = recBytesPtr[0];
+			if(pkgSize < 3) break;
+			int function = recBytesPtr[1];
+			switch(function){
+			case RMT_VOLUME:
+				volume[0] = 1;
+				volume[1] = recBytesPtr[2];
+				break;
+			case RMT_MUTE:
+				mute[0] = 1;
+				mute[1] = recBytesPtr[2];
+				break;
+			case RMT_LOCK:
+				lockCmd = 1;
+				break;
+			default:
+				break;
+			}
+			recBytesPtr += pkgSize;
 		}
+		//execute the actions required
+		if(volume[0] == 1)
+			PostMessage(GetDlgItem(g_hDlg, IDC_SLIDER_VOLUME), TBM_SETPOS, TRUE, LPARAM(volume[1]));
+		if(mute[0] == 1)
+			PostMessage(GetDlgItem(g_hDlg, IDC_CHECK_MUTE), BM_SETCHECK, mute[1]==0?BST_UNCHECKED:BST_CHECKED, 0);
+		//server does not send lock command
+		//if(lockCmd == 1)
+			//LockWorkStation();
     }
 }
 

@@ -77,6 +77,7 @@ void CSrvAudio::PostVolValToClient()
 	BOOL bMute;
 	g_pEndptVol->GetMasterVolumeLevelScalar(&fVolume);
 	g_pEndptVol->GetMute(&bMute);
+
 	if(pNetwrkClass){
 		CSrvNetwrkInterface *srvNetwrk = (CSrvNetwrkInterface*)pNetwrkClass;
 		srvNetwrk->SendDataFromAudioEvents((int)(MAX_VOL*fVolume + 0.5), bMute);

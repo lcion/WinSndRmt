@@ -38,10 +38,12 @@ public class ClientActivity extends Activity {
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				// get the position, get the mute, send message to server
 				int prog = volSeekBar.getProgress();
-		    	if(muteCheckBox.isChecked())
-		    		onSendStr(prog+"m");
-		    	else
-		    		onSendStr(prog+"u");
+		    	byte buffer[] = new byte[4];
+		    	buffer[0] = 4;			// package size
+		    	buffer[1] = 1;			// RMT_VOLUME
+		    	buffer[2] = (byte) prog;// value
+		    	buffer[3] = 0;			// reserved
+		    	client.sendBytes(buffer);
 			}
 			
 			@Override
@@ -85,50 +87,25 @@ public class ClientActivity extends Activity {
 	private CheckBox muteCheckBox;
 	private UITimer timer;
 	Requester client;
-	String lastRead;
 	private Runnable runMethod = new Runnable()
 	    {
 	        public void run()
 	        {
 	            // read from network
 	        	//System.out.println("timer event in my class");
-	        	String result = client.read();
-	        	if(result.compareTo("Fail") != 0){
-	        		if(lastRead == null || result.compareTo(lastRead) !=0 ){
-	        			lastRead = result;
-	        			updateUIFromServer();
-	        		}
+	        	int result[] = new int[4];
+	        	if(client.read(result) == true){
+	        		updateUIFromServer(result);
+	        		if(!textViewS.getText().equals("Connected."))
+	        			textViewS.setText("Connected.");
 	        	}
 	        }
 
-			private void updateUIFromServer() {
-				// find the end of string '\n'
-				int lastbn = lastRead.lastIndexOf('\n', lastRead.length()-1);
-				// go back to the previous '\n'
-				String lastSeq;
-				if(lastbn>0)
-					lastSeq = lastRead.substring(lastbn+2, lastRead.length());
-				else
-					lastSeq = lastRead;
-				// extract no and char m or u
-				int lstSeqLen = lastSeq.length();
-				String strProg =  lastSeq.substring(0, lstSeqLen-1);
-				textViewS.setText(lastSeq);
-				System.out.println("updateUIFromServer>" + lastSeq + "< " + lastbn + " " + strProg + " " + lastSeq.substring(lstSeqLen-1, lstSeqLen));
-
-				// set slider to value
-				volSeekBar.setProgress(Integer.parseInt(strProg));
-				// set mute or un-mute
-				if(lastSeq.substring(lstSeqLen-1, lstSeqLen).compareTo("u")==0){
-					if(muteCheckBox.isChecked()){
-						muteCheckBox.setChecked(false);
-					}
-				}
-				else{
-					if(muteCheckBox.isChecked() == false){
-						muteCheckBox.setChecked(true);
-					}
-				}
+			private void updateUIFromServer(int result[]) {
+				if(result[0] != 0)
+					volSeekBar.setProgress(result[1]);
+				if(result[2] != 0)
+					muteCheckBox.setChecked(result[3] == 1);
 			}
 	    };
 	
@@ -144,21 +121,31 @@ public class ClientActivity extends Activity {
 	}
 	
 	public void onMuteChkBox(View view) {
-		int prog = volSeekBar.getProgress();
+    	byte buffer[] = new byte[4];
+    	buffer[0] = 4;  // package size
+    	buffer[1] = 2;  // RMT_MUTE
+    	buffer[2] = 0;  // value = unmute
+    	buffer[3] = 0;  // reserved
     	if(muteCheckBox.isChecked())
-    		onSendStr(prog+"m");
-    	else
-    		onSendStr(prog+"u");
+    		buffer[2] = 1;  // value = mute
+    		
+    	client.sendBytes(buffer);
     }
 	
     public void onSend20Btn(View view) {
-    	onSendStr("20u");
-    	volSeekBar.setProgress(20);
+    	//onSendStr("20u");
+    	byte buffer[] = new byte[4];
+    	buffer[0] = 4;  // package size
+    	buffer[1] = 1;  // RMT_VOLUME
+    	buffer[2] = 20; // value
+    	buffer[3] = 0;  // reserved
+    	if(client.sendBytes(buffer) == 0)
+    		volSeekBar.setProgress(20);
     }
     
-    public void onSendStr(String str) {
-    	if(client.sendMessage(str+"\n") == 0)
-    		textViewS.setText(str);
+    public void onSendStrObsolete(String str) {
+    	//if(client.sendMessage(str+"\n") == 0)
+    	//	textViewS.setText(str);
     }
     
 	@Override

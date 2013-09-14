@@ -8,8 +8,8 @@ import android.os.StrictMode;
 
 public class Requester{
 	Socket requestSocket;
-	OutputStream out;
-	InputStream inpStream;
+	OutputStream sockOut;
+	InputStream sockIn;
 	String message;
 	String hostName;
 	Requester(String hostName){
@@ -28,9 +28,9 @@ public class Requester{
 			requestSocket.connect(new InetSocketAddress(hostName, 27015), 5000);
 			System.out.println("Connected to localhost in port 27015");
 			//2. get Input and Output streams
-			out = requestSocket.getOutputStream();
-			out.flush();
-			inpStream = requestSocket.getInputStream();
+			sockOut = requestSocket.getOutputStream();
+			sockOut.flush();
+			sockIn = requestSocket.getInputStream();
 		}
 		catch(UnknownHostException unknownHost){
 			System.err.println("You are trying to connect to an unknown host!");
@@ -44,43 +44,57 @@ public class Requester{
 		return 0;
 	}
 	
-	public String read(){
-		String result = "Fail";
+	public boolean read(int result[]){
+		result[0]=0; result[2]=0;
+		//String result = "Fail";
 		int bytesAvailable = 0;
-			if(inpStream != null){
+			if(sockIn != null){
 			try {
-				bytesAvailable = inpStream.available();
+				bytesAvailable = sockIn.available();
 				if(bytesAvailable > 0){
 					byte b[] = new byte[64];
-					while(bytesAvailable > 40){
-						inpStream.read(b, 0, 30);
-						bytesAvailable -= 30;
+					while(bytesAvailable > 52){
+						sockIn.read(b, 0, 40);
+						bytesAvailable -= 40;
 						System.out.println("server read drop 30>");
 					}
-					inpStream.read(b);
-					String receivedBytes = new String(b, 0, bytesAvailable, Charset.defaultCharset());
-					System.out.println("server> " + receivedBytes + " A" + bytesAvailable);
-					if(receivedBytes.length() > 2)
-						result = receivedBytes.substring(0, receivedBytes.length()-2);
+					int lastRead = sockIn.read(b);
+					int pkgSize = 0;
+					for(int i = 0; i < lastRead; i += pkgSize){
+						pkgSize = b[0];
+						if(pkgSize < 3) break;
+						int function = b[1];
+						switch(function){
+						case 1: //RMT_VOLUME
+							result[0] = 1;
+							result[1] = b[2];
+							break;
+						case 2: //RMT_MUTE
+							result[2] = 1;
+							result[3] = b[2];
+							break;
+						}
+					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.out.println("read exception>" + e);
+				return false;
 			}
 		}
-		return result;
+		return true;
 	}
 	
 	void close(){
 		try{
-			if(inpStream != null){
-				inpStream.close();
-				inpStream = null;
+			if(sockIn != null){
+				sockIn.close();
+				sockIn = null;
 			}
 
-			if(out != null){
-				out.close();
-				out = null;
+			if(sockOut != null){
+				sockOut.close();
+				sockOut = null;
 			}
 			
 			if(requestSocket != null){
@@ -103,20 +117,20 @@ public class Requester{
 			requestSocket.connect(new InetSocketAddress(hostName, 27015), 5000);
 			System.out.println("Connected to localhost in port 27015");
 			//2. get Input and Output streams
-			out = requestSocket.getOutputStream();
-			out.flush();
-			inpStream = requestSocket.getInputStream();
-			int bytesAvailable = inpStream.available();
+			sockOut = requestSocket.getOutputStream();
+			sockOut.flush();
+			sockIn = requestSocket.getInputStream();
+			int bytesAvailable = sockIn.available();
 			if(bytesAvailable > 0){
 				byte b[] = new byte[100];
-				inpStream.read(b);
+				sockIn.read(b);
 				System.out.println("server>" + b.toString());
 			}
 			//3: Communicating with the server
 			//do{
-				sendMessage("20u\n");
+				//sendMessage("20u\n");
 			//}while(!message.equals("20u\n"));
-			bytesAvailable = inpStream.available();
+			bytesAvailable = sockIn.available();
 			System.out.println("inpBytesAvaliable" + bytesAvailable);
 		}
 		catch(UnknownHostException unknownHost){
@@ -129,14 +143,14 @@ public class Requester{
 		}
 		//4: Closing connection
 		try{
-			if(inpStream != null){
-				inpStream.close();
-				inpStream = null;
+			if(sockIn != null){
+				sockIn.close();
+				sockIn = null;
 			}
 
-			if(out != null){
-				out.close();
-				out = null;
+			if(sockOut != null){
+				sockOut.close();
+				sockOut = null;
 			}
 			
 			if(requestSocket != null){
@@ -152,7 +166,20 @@ public class Requester{
 		return returnString;
 	}
 	
-	public int sendMessage(String msg)
+	public int sendBytes(byte buffer[])
+	{
+		try{
+			sockOut.write(buffer);
+			sockOut.flush();
+		}
+		catch(IOException ioException){
+			ioException.printStackTrace();
+			return 1;
+		}
+		return 0;
+	}
+
+	public int sendMessageObsolete(String msg)
 	{
 		try{
 			byte b[], buffer[] = new byte[msg.length()+1];
@@ -161,8 +188,8 @@ public class Requester{
 			buffer[msg.length()] = 0;
 			System.out.println("client>" + buffer);
 			
-			out.write(buffer);
-			out.flush();
+			sockOut.write(buffer);
+			sockOut.flush();
 			System.out.println("client>" + msg);
 		}
 		catch(IOException ioException){

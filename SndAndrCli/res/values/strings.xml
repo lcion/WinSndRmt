@@ -9,7 +9,7 @@
     <string name="alexBtn">Alex Pc</string>
     <string name="andreiBtn">AndreiPc</string>
     <string name="title_activity_client">Connected to server</string>
-    <string name="snd20Btn">Send20u</string>
+    <string name="snd20Btn">Lock PC</string>
     <string name="mute">Mute</string>
     <string name="contentDescription">Remote Volume Control</string>
     

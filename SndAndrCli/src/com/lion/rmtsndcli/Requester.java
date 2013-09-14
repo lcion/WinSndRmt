@@ -178,24 +178,4 @@ public class Requester{
 		}
 		return 0;
 	}
-
-	public int sendMessageObsolete(String msg)
-	{
-		try{
-			byte b[], buffer[] = new byte[msg.length()+1];
-			b = msg.getBytes();
-			for(int i = 0; i < msg.length(); i++) buffer[i] = b[i];
-			buffer[msg.length()] = 0;
-			System.out.println("client>" + buffer);
-			
-			sockOut.write(buffer);
-			sockOut.flush();
-			System.out.println("client>" + msg);
-		}
-		catch(IOException ioException){
-			ioException.printStackTrace();
-			return 1;
-		}
-		return 0;
-	}
 }

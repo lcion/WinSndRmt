@@ -133,21 +133,14 @@ public class ClientActivity extends Activity {
     }
 	
     public void onSend20Btn(View view) {
-    	//onSendStr("20u");
     	byte buffer[] = new byte[4];
     	buffer[0] = 4;  // package size
-    	buffer[1] = 1;  // RMT_VOLUME
-    	buffer[2] = 20; // value
+    	buffer[1] = 3;  // RMT_LOCK
+    	buffer[2] = 1;  // value
     	buffer[3] = 0;  // reserved
-    	if(client.sendBytes(buffer) == 0)
-    		volSeekBar.setProgress(20);
+    	client.sendBytes(buffer);
     }
-    
-    public void onSendStrObsolete(String str) {
-    	//if(client.sendMessage(str+"\n") == 0)
-    	//	textViewS.setText(str);
-    }
-    
+        
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

@@ -22,7 +22,7 @@
         android:layout_alignLeft="@+id/textViewStatus"
         android:layout_below="@+id/textViewStatus"
         android:text="@string/snd20Btn"
-        android:onClick="onSend20Btn" />
+        android:onClick="onLockPcBtn" />
 
     <CheckBox
         android:id="@+id/checkBoxMute"

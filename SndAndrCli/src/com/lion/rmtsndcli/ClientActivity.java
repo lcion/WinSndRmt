@@ -132,7 +132,7 @@ public class ClientActivity extends Activity {
     	client.sendBytes(buffer);
     }
 	
-    public void onSend20Btn(View view) {
+    public void onLockPcBtn(View view) {
     	byte buffer[] = new byte[4];
     	buffer[0] = 4;  // package size
     	buffer[1] = 3;  // RMT_LOCK

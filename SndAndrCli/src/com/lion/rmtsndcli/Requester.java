@@ -61,17 +61,17 @@ public class Requester{
 					int lastRead = sockIn.read(b);
 					int pkgSize = 0;
 					for(int i = 0; i < lastRead; i += pkgSize){
-						pkgSize = b[0];
+						pkgSize = b[i];
 						if(pkgSize < 3) break;
-						int function = b[1];
+						int function = b[i+1];
 						switch(function){
 						case 1: //RMT_VOLUME
 							result[0] = 1;
-							result[1] = b[2];
+							result[1] = b[i+2];
 							break;
 						case 2: //RMT_MUTE
 							result[2] = 1;
-							result[3] = b[2];
+							result[3] = b[i+2];
 							break;
 						}
 					}

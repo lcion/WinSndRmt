@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -16,10 +17,10 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 public class MainActivity extends Activity {
 
@@ -27,7 +28,8 @@ public class MainActivity extends Activity {
 	private ListView listView;
 	private ArrayList<String> listNames;
 	private ArrayList<String> listIps;
-	private StableArrayAdapter adapter;
+	private SimpleAdapter adapter;
+	private List<Map<String, String>> data;
 	MainActivity mainActPtr;
 
     @Override
@@ -41,8 +43,18 @@ public class MainActivity extends Activity {
 
 	    readDataFromFile();
 	    
-	    adapter = new StableArrayAdapter(this,
-	        android.R.layout.simple_list_item_1, listNames);
+	    data = new ArrayList<Map<String, String>>();
+	    int i = 0;
+	    for (String itemName : listNames) {
+	        Map<String, String> datum = new HashMap<String, String>(2);
+	        datum.put("name", itemName);
+	        datum.put("ip", listIps.get(i++));
+	        data.add(datum);
+	    }
+	    adapter = new SimpleAdapter(this, data, android.R.layout.simple_list_item_2,
+                new String[] {"name", "ip"},
+                new int[] {android.R.id.text1,
+                           android.R.id.text2});
 	    listView.setAdapter(adapter);
 
 	    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -64,15 +76,16 @@ public class MainActivity extends Activity {
 		    	AlertDialog.Builder alert = new AlertDialog.Builder(mainActPtr);
 
 		    	alert.setTitle("Delete");
-		        String item = (String) parent.getItemAtPosition(positionInList);
-		    	alert.setMessage(item);
+		    	Object item = parent.getItemAtPosition(positionInList);
+		    	if(item instanceof String )
+		    		alert.setMessage((String)item);
 
 		    	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 		    	public void onClick(DialogInterface dialog, int whichButton) {
 			    	listNames.remove(positionInList);
 					listIps.remove(positionInList);
 					writeDataToFile();
-			    	adapter.updateMap(listNames);
+					data.remove(positionInList);
 		            adapter.notifyDataSetChanged();
 		    	  }
 		    	});
@@ -123,37 +136,6 @@ public class MainActivity extends Activity {
     	}
 	}
 
-	private class StableArrayAdapter extends ArrayAdapter<String> {
-
-        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
-
-        public StableArrayAdapter(Context context, int textViewResourceId,
-            List<String> objects) {
-          super(context, textViewResourceId, objects);
-          for (int i = 0; i < objects.size(); ++i) {
-            mIdMap.put(objects.get(i), i);
-          }
-        }
-
-        @Override
-        public long getItemId(int position) {
-          String item = getItem(position);
-          return mIdMap.get(item);
-        }
-
-        public void updateMap(List<String> objects){
-        	mIdMap.clear();
-            for (int i = 0; i < objects.size(); ++i) {
-                mIdMap.put(objects.get(i), i);
-              }
-        }
-
-        @Override
-        public boolean hasStableIds() {
-          return true;
-        }
-
-      }
     /** Called when the user clicks the Send button */
     public void onAddNewPCBtn(View view) {
     	getNameIpFromUser();
@@ -184,7 +166,11 @@ public class MainActivity extends Activity {
 	      	listNames.add(namesValue);
 	      	listIps.add(ipValue);
 	      	writeDataToFile();
-	      	adapter.updateMap(listNames);
+	      	//update the ui list
+	      	Map<String, String> datum = new HashMap<String, String>(2);
+	        datum.put("name", namesValue);
+	        datum.put("ip", ipValue);
+	        data.add(datum);
 	      	adapter.notifyDataSetChanged();
     	  }
     	});

@@ -2,7 +2,6 @@ package com.lion.rmtsndcli;
 
 import java.io.*;
 import java.net.*;
-import java.nio.charset.Charset;
 
 import android.os.StrictMode;
 

@@ -26,8 +26,8 @@ public class MainActivity extends Activity {
 
 	public final static String EXTRA_MESSAGE = "com.lion.rmtsndcli.MESSAGE";
 	private ListView listView;
-	private ArrayList<String> listNames;
-	private ArrayList<String> listIps;
+	//private ArrayList<String> listNames;
+	//private ArrayList<String> listIps;
 	private SimpleAdapter adapter;
 	private List<Map<String, String>> data;
 	MainActivity mainActPtr;
@@ -37,20 +37,21 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 		listView = (ListView)findViewById(R.id.listView1);
-		listNames = new ArrayList<String>();
-	    listIps = new ArrayList<String>();
+		//listNames = new ArrayList<String>();
+	    //listIps = new ArrayList<String>();
+	    data = new ArrayList<Map<String, String>>();
 	    mainActPtr = this;
 
 	    readDataFromFile();
 	    
-	    data = new ArrayList<Map<String, String>>();
-	    int i = 0;
-	    for (String itemName : listNames) {
+	    
+	    //int i = 0;
+	    /*for (String itemName : listNames) {
 	        Map<String, String> datum = new HashMap<String, String>(2);
 	        datum.put("name", itemName);
 	        datum.put("ip", listIps.get(i++));
 	        data.add(datum);
-	    }
+	    }*/
 	    adapter = new SimpleAdapter(this, data, android.R.layout.simple_list_item_2,
                 new String[] {"name", "ip"},
                 new int[] {android.R.id.text1,
@@ -62,7 +63,9 @@ public class MainActivity extends Activity {
 	      @Override
 	      public void onItemClick(AdapterView<?> parent, final View view,
 	          int position, long id) {
-	        String message = listIps.get(position);
+	        //String message = listIps.get(position);
+	    	Map<String, String> datum = data.get(position);//new HashMap<String, String>(2);
+	    	String message = datum.get("ip");
 	        startClientActivity(message);
 	      }
 	    });
@@ -77,15 +80,15 @@ public class MainActivity extends Activity {
 
 		    	alert.setTitle("Delete");
 		    	Object item = parent.getItemAtPosition(positionInList);
-		    	if(item instanceof String )
-		    		alert.setMessage((String)item);
+		    	if(item instanceof HashMap){
+		    		HashMap<String, String> datum = (HashMap<String,String>)item;
+		    		alert.setMessage(datum.get("name"));
+		    	}
 
 		    	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 		    	public void onClick(DialogInterface dialog, int whichButton) {
-			    	listNames.remove(positionInList);
-					listIps.remove(positionInList);
-					writeDataToFile();
 					data.remove(positionInList);
+					writeDataToFile();
 		            adapter.notifyDataSetChanged();
 		    	  }
 		    	});
@@ -129,9 +132,13 @@ public class MainActivity extends Activity {
     		int eol = string.indexOf('\n');
     		if(eol<0 || eol<sep)break;
     		String name = string.substring(0, sep);
-    		listNames.add(name);
+    		//listNames.add(name);
     		String ip = string.substring(sep+1, eol);
-    		listIps.add(ip);
+    		//listIps.add(ip);
+    		Map<String, String> datum = new HashMap<String, String>(2);
+    		datum.put("name", name);
+    		datum.put("ip", ip);
+    		data.add(datum);
     		string = string.substring(eol+1);
     	}
 	}
@@ -163,14 +170,13 @@ public class MainActivity extends Activity {
     		String namesValue = nameInp.getText().toString();
     		String ipValue = adrInp.getText().toString();
     	  	// Do something with value!
-	      	listNames.add(namesValue);
-	      	listIps.add(ipValue);
-	      	writeDataToFile();
-	      	//update the ui list
+	      	// update the ui list
 	      	Map<String, String> datum = new HashMap<String, String>(2);
 	        datum.put("name", namesValue);
 	        datum.put("ip", ipValue);
 	        data.add(datum);
+	        // save to file
+	      	writeDataToFile();
 	      	adapter.notifyDataSetChanged();
     	  }
     	});
@@ -190,11 +196,13 @@ public class MainActivity extends Activity {
     	String filename = "addrList.txt";
     	String string = "";
     	FileOutputStream outputStream;
-    	for(int i = 0; i < listNames.size() ; i++)
+    	for(int i = 0; i < data.size() ; i++)
     	{
-    		string += listNames.get(i);
+    		string += data.get(i).get("name");
+    		//string += listNames.get(i);
     		string += ",";
-    		string += listIps.get(i);
+    		string += data.get(i).get("ip");
+    		//string += listIps.get(i);
     		string += "\n";
     	}
 

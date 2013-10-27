@@ -26,8 +26,6 @@ public class MainActivity extends Activity {
 
 	public final static String EXTRA_MESSAGE = "com.lion.rmtsndcli.MESSAGE";
 	private ListView listView;
-	//private ArrayList<String> listNames;
-	//private ArrayList<String> listIps;
 	private SimpleAdapter adapter;
 	private List<Map<String, String>> data;
 	MainActivity mainActPtr;
@@ -37,21 +35,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 		listView = (ListView)findViewById(R.id.listView1);
-		//listNames = new ArrayList<String>();
-	    //listIps = new ArrayList<String>();
 	    data = new ArrayList<Map<String, String>>();
 	    mainActPtr = this;
 
+	    //read saved data from file into data
 	    readDataFromFile();
 	    
-	    
-	    //int i = 0;
-	    /*for (String itemName : listNames) {
-	        Map<String, String> datum = new HashMap<String, String>(2);
-	        datum.put("name", itemName);
-	        datum.put("ip", listIps.get(i++));
-	        data.add(datum);
-	    }*/
 	    adapter = new SimpleAdapter(this, data, android.R.layout.simple_list_item_2,
                 new String[] {"name", "ip"},
                 new int[] {android.R.id.text1,
@@ -61,10 +50,9 @@ public class MainActivity extends Activity {
 	    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 	      @Override
-	      public void onItemClick(AdapterView<?> parent, final View view,
-	          int position, long id) {
-	        //String message = listIps.get(position);
-	    	Map<String, String> datum = data.get(position);//new HashMap<String, String>(2);
+	      public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+
+	    	Map<String, String> datum = data.get(position);
 	    	String message = datum.get("ip");
 	        startClientActivity(message);
 	      }
@@ -78,14 +66,14 @@ public class MainActivity extends Activity {
 				final int positionInList = position;
 		    	AlertDialog.Builder alert = new AlertDialog.Builder(mainActPtr);
 
-		    	alert.setTitle("Delete");
-		    	Object item = parent.getItemAtPosition(positionInList);
+		    	alert.setTitle("Modify");
+		    	final Object item = parent.getItemAtPosition(positionInList);
 		    	if(item instanceof HashMap){
 		    		HashMap<String, String> datum = (HashMap<String,String>)item;
 		    		alert.setMessage(datum.get("name"));
 		    	}
 
-		    	alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		    	alert.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 		    	public void onClick(DialogInterface dialog, int whichButton) {
 					data.remove(positionInList);
 					writeDataToFile();
@@ -93,9 +81,14 @@ public class MainActivity extends Activity {
 		    	  }
 		    	});
 		    	
-		    	alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		    	alert.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
 		      	  public void onClick(DialogInterface dialog, int whichButton) {
-		      	    // Canceled.
+		      	    // edit.
+					data.remove(positionInList);
+			    	HashMap<String, String> datum = (HashMap<String,String>)item;
+		      		String name = datum.get("name");
+		      		String ip = datum.get("ip");
+		      		getNameIpFromUser(name, ip);
 		      	  }
 		      	});
 
@@ -132,9 +125,7 @@ public class MainActivity extends Activity {
     		int eol = string.indexOf('\n');
     		if(eol<0 || eol<sep)break;
     		String name = string.substring(0, sep);
-    		//listNames.add(name);
     		String ip = string.substring(sep+1, eol);
-    		//listIps.add(ip);
     		Map<String, String> datum = new HashMap<String, String>(2);
     		datum.put("name", name);
     		datum.put("ip", ip);
@@ -145,10 +136,10 @@ public class MainActivity extends Activity {
 
     /** Called when the user clicks the Send button */
     public void onAddNewPCBtn(View view) {
-    	getNameIpFromUser();
+    	getNameIpFromUser("","");
     }
     
-    private int getNameIpFromUser(){
+    private int getNameIpFromUser(String name, String ip){
     	AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
     	alert.setTitle("Add new PC");
@@ -159,8 +150,10 @@ public class MainActivity extends Activity {
     	linlay.setOrientation(1); //vertical
     	final EditText nameInp = new EditText(this);
     	nameInp.setSingleLine();
+    	nameInp.setText(name);
     	final EditText adrInp = new EditText(this);
     	adrInp.setSingleLine();
+    	adrInp.setText(ip);
     	linlay.addView(nameInp);
     	linlay.addView(adrInp);
     	alert.setView(linlay);
@@ -175,7 +168,7 @@ public class MainActivity extends Activity {
 	        datum.put("name", namesValue);
 	        datum.put("ip", ipValue);
 	        data.add(datum);
-	        // save to file
+	        // save updated data to file
 	      	writeDataToFile();
 	      	adapter.notifyDataSetChanged();
     	  }
@@ -199,10 +192,8 @@ public class MainActivity extends Activity {
     	for(int i = 0; i < data.size() ; i++)
     	{
     		string += data.get(i).get("name");
-    		//string += listNames.get(i);
     		string += ",";
     		string += data.get(i).get("ip");
-    		//string += listIps.get(i);
     		string += "\n";
     	}
 

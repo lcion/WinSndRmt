@@ -1,5 +1,7 @@
 package com.lion.rmtsndcli;
 
+import java.util.concurrent.LinkedBlockingQueue;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
@@ -14,6 +16,15 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class ClientActivity extends Activity {
+	private Handler handler;
+	private TextView textView;
+	private TextView textViewS;
+	private SeekBar volSeekBar;
+	private CheckBox muteCheckBox;
+	private UITimer timer;
+	private NetwrkThread netThread;
+	private LinkedBlockingQueue<DataUnit> ntwrkQ;
+	private LinkedBlockingQueue<DataUnit> uikQ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +34,6 @@ public class ClientActivity extends Activity {
 		String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 		
 	    // Create the text view
-	    //textView = new TextView(this);
-	    //textView.setTextSize(40);
 		textView = (TextView)findViewById(R.id.textViewStatus);
 	    textView.setText(message);
 
@@ -43,7 +52,7 @@ public class ClientActivity extends Activity {
 		    	buffer[1] = 1;			// RMT_VOLUME
 		    	buffer[2] = (byte) prog;// value
 		    	buffer[3] = 0;			// reserved
-		    	client.sendBytes(buffer);
+		    	sendBytes(buffer);
 			}
 			
 			@Override
@@ -62,60 +71,69 @@ public class ClientActivity extends Activity {
 	    //setContentView(textView);
 	    //create networking
     	//send message to the network 
-		client = new Requester(message);
-		if(client.connect()!=0){
-			//update status to failed to connect
-			textViewS.setText("Failed to connect!");
-			//disable controls
-			volSeekBar.setEnabled(false);
-			muteCheckBox.setEnabled(false);
-			Button send20Btn = (Button)findViewById(R.id.send20);
-			send20Btn.setEnabled(false);
-		}else{
-		    //create timer
-		    handler = new Handler();
-		    timer = new UITimer(handler, runMethod, 1000);
-	        timer.start();
-		}
+		//update status to failed to connect
+		textViewS.setText("Connecting...");
+		//disable controls
+		volSeekBar.setEnabled(false);
+		muteCheckBox.setEnabled(false);
+		Button send20Btn = (Button)findViewById(R.id.send20);
+		send20Btn.setEnabled(false);
+
+	    //create timer
+	    handler = new Handler();
+	    createTimerRunMethod();
+	    timer = new UITimer(handler, runMethod, 1000);
+        timer.start();
+        ntwrkQ = new LinkedBlockingQueue<DataUnit>();
+        uikQ = new LinkedBlockingQueue<DataUnit>();
+        netThread = new NetwrkThread(ntwrkQ, uikQ, message);
+        netThread.setRunning(true);
+        netThread.start();
 	}
 
-	public Handler handler;
-	
-	private TextView textView;
-	private TextView textViewS;
-	private SeekBar volSeekBar;
-	private CheckBox muteCheckBox;
-	private UITimer timer;
-	Requester client;
-	private Runnable runMethod = new Runnable()
-	    {
+	private Runnable runMethod;
+	private void createTimerRunMethod(){
+		runMethod = new Runnable(){
 	        public void run()
 	        {
 	            // read from network
-	        	//System.out.println("timer event in my class");
-	        	int result[] = new int[4];
-	        	if(client.read(result) == true){
-	        		updateUIFromServer(result);
-	        		if(!textViewS.getText().equals("Connected."))
-	        			textViewS.setText("Connected.");
+	        	// System.out.println("timer event in my class");
+	        	DataUnit data = ntwrkQ.poll();
+	        	while(data != null){
+					System.out.println("DataUnit from network received");
+					if(data.type == 0)
+						updateConnectionStatus(data.data[0]);
+					else if(data.type == 1)
+						volSeekBar.setProgress(data.data[0]);
+					else if(data.type == 2)
+						muteCheckBox.setChecked(data.data[0] == 1);
+					data = ntwrkQ.poll();
 	        	}
 	        }
 
-			private void updateUIFromServer(int result[]) {
-				if(result[0] != 0)
-					volSeekBar.setProgress(result[1]);
-				if(result[2] != 0)
-					muteCheckBox.setChecked(result[3] == 1);
+			private void updateConnectionStatus(byte b) {
+				if(b==0)
+					textViewS.setText("Failed to connect!");
+				else
+				{
+					textViewS.setText("Connected.");
+					//disable controls
+					volSeekBar.setEnabled(true);
+					muteCheckBox.setEnabled(true);
+					Button send20Btn = (Button)findViewById(R.id.send20);
+					send20Btn.setEnabled(true);
+				}
 			}
 	    };
+	}
 	
 	@Override
 	public void onStop(){
 		if(timer != null)
-		timer.stop();
-		//cleanup the networking
-		if(client != null)
-		client.close();
+			timer.stop();
+		if(netThread!=null)
+			netThread.setRunning(false);
+		netThread = null;
 		//call super
 		super.onStop();
 	}
@@ -128,19 +146,28 @@ public class ClientActivity extends Activity {
     	buffer[3] = 0;  // reserved
     	if(muteCheckBox.isChecked())
     		buffer[2] = 1;  // value = mute
-    		
-    	client.sendBytes(buffer);
+
+    	//client.sendBytes(buffer);
+    	sendBytes(buffer);
     }
 	
-    public void onLockPcBtn(View view) {
+    private void sendBytes(byte[] buffer) {
+    	try {
+			uikQ.put(new DataUnit(0, buffer));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void onLockPcBtn(View view) {
     	byte buffer[] = new byte[4];
     	buffer[0] = 4;  // package size
     	buffer[1] = 3;  // RMT_LOCK
     	buffer[2] = 1;  // value
     	buffer[3] = 0;  // reserved
-    	client.sendBytes(buffer);
+    	sendBytes(buffer);
     }
-        
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

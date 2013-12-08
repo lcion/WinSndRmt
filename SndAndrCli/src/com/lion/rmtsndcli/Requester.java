@@ -3,8 +3,6 @@ package com.lion.rmtsndcli;
 import java.io.*;
 import java.net.*;
 
-import android.os.StrictMode;
-
 public class Requester{
 	Socket requestSocket;
 	OutputStream sockOut;
@@ -13,11 +11,12 @@ public class Requester{
 	String hostName;
 	Requester(String hostName){
 		this.hostName = hostName;
-		if (android.os.Build.VERSION.SDK_INT > 9) {
-			StrictMode.ThreadPolicy policy = 
-			        new StrictMode.ThreadPolicy.Builder().permitAll().build();
-			StrictMode.setThreadPolicy(policy);
-		}
+		// not needed anymore - networking is in a separate thread now
+		//if (android.os.Build.VERSION.SDK_INT > 9) {
+		//	StrictMode.ThreadPolicy policy = 
+		//	        new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		//	StrictMode.setThreadPolicy(policy);
+		//}
 	}
 
 	public int connect(){
@@ -25,7 +24,7 @@ public class Requester{
 			//1. creating a socket to connect to the server
 			requestSocket = new Socket();
 			requestSocket.connect(new InetSocketAddress(hostName, 27015), 5000);
-			System.out.println("Connected to localhost in port 27015");
+			//System.out.println("Connected to localhost in port 27015");
 			//2. get Input and Output streams
 			sockOut = requestSocket.getOutputStream();
 			sockOut.flush();

@@ -13,4 +13,6 @@ Use visual studio express 2012 for windows Desktop to build the windows server a
 The project is a C++ client server application running in Windows using async networking and win32 libraries.
 The application was originally designed for remote controlling the sound volume.
 
-NEW: Android client so one can control the volume from a phone application. The android client was developed using Java and Eclipse IDE.
+Android client so one can control the volume from a phone application. The android client was developed using Java and Eclipse IDE.
+
+17/02/2014 add remote add pause and play function for media player

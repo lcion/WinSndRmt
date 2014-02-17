@@ -167,6 +167,15 @@ public class ClientActivity extends Activity {
     	buffer[3] = 0;  // reserved
     	sendBytes(buffer);
     }
+	
+	public void onPauseBtn(View view) {
+    	byte buffer[] = new byte[4];
+    	buffer[0] = 4;  // package size
+    	buffer[1] = 4;  // RMT_CTRLP
+    	buffer[2] = 1;  // value
+    	buffer[3] = 0;  // reserved
+    	sendBytes(buffer);
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

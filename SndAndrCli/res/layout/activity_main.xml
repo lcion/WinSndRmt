@@ -10,7 +10,7 @@
     tools:context=".MainActivity" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/chOneTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -18,21 +18,21 @@
         android:text="@string/top_main_string" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/btnAddPC"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/chOneTextView"
         android:onClick="onAddNewPCBtn"
         android:text="@string/onAddNewPCBtn" />
 
     <ListView
-        android:id="@+id/listView1"
+        android:id="@+id/pcListView"
         android:layout_width="match_parent"
         android:layout_height="161dp"
-        android:layout_alignLeft="@+id/button1"
+        android:layout_alignLeft="@+id/btnAddPC"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/button1" />
+        android:layout_below="@+id/btnAddPC" />
 
 </RelativeLayout>

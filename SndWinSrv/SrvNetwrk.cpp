@@ -217,7 +217,7 @@ int CSrvNetwrk::OnDataReceived(){
 	sprintf_s(outTextBuff, "The data received bytes[%d], bufferLen[%d], data[%s]\n", BytesTransferred, DataBuf.len, DataBuf.buf);
 	OutputDebugString(outTextBuff);
 	DataBuf.len = BytesTransferred;
-	int cliResult[5] = {0,0,0,0,0};
+	int cliResult[7] = { 0, 0, 0, 0, 0, 0, 0 };
 	//process buffer sent by the client
 	myAppLogic.ProcessClient(DataBuf.buf, DataBuf.len, &cliResult[0]);
 	//execute the commands received
@@ -228,8 +228,27 @@ int CSrvNetwrk::OnDataReceived(){
 	if(cliResult[2] == 1){// we have volume set command
 		volAudio.SetMute(cliResult[3]);
 	}
-	if(cliResult[4] == 1){// we have volume set command
+	if (cliResult[4] == 1){// we have volume set command
 		LockWorkStation();
+	}
+	if (cliResult[5] == 1){// we have ctrl+p to pause media player
+		INPUT keyEvent = { 0 };
+		keyEvent.ki.wVk = VK_CONTROL; // control
+		keyEvent.ki.wScan = 0;
+		keyEvent.type = INPUT_KEYBOARD;
+		SendInput(1, &keyEvent, sizeof(keyEvent));
+
+		//send 'P' key
+		keyEvent.ki.wVk = 80; // 'P'=80
+		SendInput(1, &keyEvent, sizeof(keyEvent));
+
+		// Release the 'P' key
+		keyEvent.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
+		SendInput(1, &keyEvent, sizeof(INPUT));
+
+		// Release the "ctrl" key
+		keyEvent.ki.wVk = VK_CONTROL; // ctrl up
+		SendInput(1, &keyEvent, sizeof(INPUT));
 	}
 
 	//setup async read to receive more data

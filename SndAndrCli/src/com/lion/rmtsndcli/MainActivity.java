@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-		listView = (ListView)findViewById(R.id.listView1);
+		listView = (ListView)findViewById(R.id.pcListView);
 	    data = new ArrayList<Map<String, String>>();
 	    mainActPtr = this;
 

@@ -13,5 +13,7 @@ enum _func_enum {
 	RMT_VOLUME,
 	RMT_MUTE,
 	RMT_LOCK,
+	RMT_CTRLP,
+	RMT_SLEEP,
 	RMT_LOGOUT
 };

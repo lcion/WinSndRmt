@@ -48,5 +48,14 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textViewAStatus"
         android:max="100" />
+
+    <Button
+        android:id="@+id/btnPause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/seekBarVol"
+        android:layout_below="@+id/textViewStatus"
+        android:onClick="onPauseBtn"
+        android:text="@string/pauseBtn" />
     
 </RelativeLayout>

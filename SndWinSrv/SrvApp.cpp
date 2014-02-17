@@ -35,6 +35,12 @@ int CSrvApp::ProcessClient(char* buffer, unsigned long &len, int *cliResult)
 		case RMT_LOCK:
 			cliResult[4] = 1;
 			break;
+		case RMT_CTRLP:
+			cliResult[5] = 1;
+			break;
+		case RMT_SLEEP:
+			cliResult[6] = 1;
+			break;
 		default:
 			break;
 		}

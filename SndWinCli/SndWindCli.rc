@@ -21,8 +21,9 @@ BEGIN
                TBS_BOTH | TBS_NOTICKS | TBS_TOOLTIPS | WS_TABSTOP,10,20,140,12
     CONTROL    "Mute",IDC_CHECK_MUTE,"Button",
                BS_AUTOCHECKBOX | WS_TABSTOP,20,40,30,12
-    PUSHBUTTON "Lock",ID_BUTON_LOCK,110,40,40,12
-END
+	PUSHBUTTON "Pause", ID_BUTON_PAUSE, 60, 40, 40, 12
+	PUSHBUTTON "Lock", ID_BUTON_LOCK, 110, 40, 40, 12
+	END
 
 /////////////////////////////////////////////////////////////////////////////
 //

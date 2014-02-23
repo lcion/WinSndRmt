@@ -240,6 +240,20 @@ void CCliNetwork::SendLockCmd()
     }
 }
 
+void CCliNetwork::SendPauseCmd()
+{
+	buffer[0] = 4;			// size of package for client
+	buffer[1] = RMT_PAUSE;	// function
+	buffer[2] = 0;			// arg0
+	buffer[3] = 0;			// arg1
+	DataBuf.len = 4;		// size to send for sender
+	int iResult = WSASend(ConnectSocket, &DataBuf, 1, &RecvBytes, Flags, &WriteOverlapped, NULL);
+	if (iResult != 0) {
+		//wprintf(L"WSASend failed with error = %d\n", WSAGetLastError());
+		OutputDebugString("WSASend failed with error = \n");
+	}
+}
+
 //setup async read
 void CCliNetwork::ReceiveVolume()
 {

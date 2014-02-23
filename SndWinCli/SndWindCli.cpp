@@ -139,9 +139,11 @@ BOOL CALLBACK VolDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             return TRUE;
 		case ID_BUTON_LOCK:
 			gCliNetwork->SendLockCmd();
-			//LockWorkStation();
 			return TRUE;
-        case IDCANCEL:
+		case ID_BUTON_PAUSE:
+			gCliNetwork->SendPauseCmd();
+			return TRUE;
+		case IDCANCEL:
 			KillTimer(hDlg, 0);
             EndDialog(hDlg, TRUE);
             return TRUE;

@@ -17,6 +17,7 @@ public:
 	void SendVolume(int vol);
 	void SendMute(BOOL mute);
 	void SendLockCmd();
+	void SendPauseCmd();
 
 private:
 	void OnDataReceived();
@@ -38,6 +39,7 @@ private:
 		RMT_VOLUME,
 		RMT_MUTE,
 		RMT_LOCK,
+		RMT_PAUSE,
 		RMT_LOGOUT
 	} func_enum;
 };

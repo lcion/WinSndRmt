@@ -12,6 +12,6 @@
     <string name="snd20Btn">Lock PC</string>
     <string name="mute">Mute</string>
     <string name="contentDescription">Remote Volume Control</string>
-    <string name="pauseBtn">Pause</string>
+    <string name="pauseBtn">Pause/Play\nMedia</string>
     
 </resources>

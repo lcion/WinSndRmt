@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
 
-  <Product Name='Remote Volume 1.1' Id='28E209EE-6713-4F76-BFBC-5FB9A1935981' UpgradeCode='A16AF464-76E5-4574-BAE3-750D11CAA600'
-    Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='Lucian Ion Ltd.'>
+  <Product Name='Remote Volume 1.1.1' Id='28E209EE-6713-4F76-BFBC-5FB9A1935981' UpgradeCode='A16AF464-76E5-4574-BAE3-750D11CAA600'
+    Language='1033' Codepage='1252' Version='1.1.1' Manufacturer='Lucian Ion Ltd.'>
 
-    <Package Id='*' Keywords='Installer' Description="WinSndRmt 1.1 Installer"
+    <Package Id='*' Keywords='Installer' Description="WinSndRmt 1.1.1 Installer"
       Comments='WinSndRmt is a registered trademark of Lucian Ion Ltd.' Manufacturer='Lucian Ion Ltd.'
       InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
 

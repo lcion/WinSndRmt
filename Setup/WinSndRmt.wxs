@@ -11,6 +11,7 @@
 	  <Media Id='1' Cabinet='Sample.cab' EmbedCab='yes' DiskPrompt='CD-ROM #1' />
       <Property Id='DiskPrompt' Value="Lucian's WnSndRmt 1.1 Installation [1]" />
 
+    <!-- add server and client to the program files -->
 	  <Directory Id='TARGETDIR' Name='SourceDir'>
 	  <Directory Id='ProgramFilesFolder' Name='PFiles'>
         <Directory Id='LucianIon' Name='LucianIon'>
@@ -36,6 +37,7 @@
         </Directory>
       </Directory>
 
+    <!-- add server to uninstall -->
 	  <Directory Id="ProgramMenuFolder" Name="Programs">
         <Directory Id="ProgramMenuDir" Name="WinSndRmt">
           <Component Id="ProgramMenuDir" Guid="1BB16221-3BDF-4A3B-9C9D-C90B0E356123">
@@ -55,13 +57,16 @@
           <RegistryValue Type="string" Name="WindSndSrv" Value="[INSTALLDIR]SndWinSrv.exe" KeyPath="yes"/>
         </RegistryKey>
       </Component>
+      <!-- add dependency to visual studio C++ runtime library -->
+      <Merge Id="VCRedist" SourceFile="c:\Program Files (x86)\Common Files\Merge Modules\Microsoft_VC120_CRT_x86.msm" DiskId="1" Language="0"/>
     </DirectoryRef>
-    
+        
     <Feature Id='Complete' Level='1'>
       <ComponentRef Id='WinSndRmtCli' />
       <ComponentRef Id='WinSndRmtSrv' />
       <ComponentRef Id='ProgramMenuDir' />
       <ComponentRef Id='RegistryEntries' />
+      <MergeRef Id="VCRedist"/>
     </Feature>
 
 	  <Icon Id="SndWinCli.exe" SourceFile="SndWinCli.exe" />

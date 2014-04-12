@@ -15,4 +15,4 @@ The application was originally designed for remote controlling the sound volume.
 
 Android client so one can control the volume from a phone application. The android client was developed using Java and Eclipse IDE.
 
-17/02/2014 add remote add pause and play function for media player
+17/02/2014 Do you use your laptop to play videos on TV via HDMI? Now the remote client can pause and play the pc media player!

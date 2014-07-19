@@ -54,7 +54,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     {
         return 0;
     }
-	char *ipAddress = "";
+	char *ipAddress = "0.0.0.0"; //all interfaces
 	int port = 27015;
 	PharseCmdLineArgs(lpCmdLine, &ipAddress, &port);
 

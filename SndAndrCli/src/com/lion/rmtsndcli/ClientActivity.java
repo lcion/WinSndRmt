@@ -20,18 +20,23 @@ public class ClientActivity extends Activity {
 	private TextView textView;
 	private TextView textViewS;
 	private SeekBar volSeekBar;
+	private Button send20Btn;
+	private Button touchPatBtn;
 	private CheckBox muteCheckBox;
+	//need to move to network class
 	private UITimer timer;
 	private NetwrkThread netThread;
-	private LinkedBlockingQueue<DataUnit> ntwrkQ;
-	private LinkedBlockingQueue<DataUnit> uikQ;
+	private LinkedBlockingQueue<DataUnit> recNtwrkQ;
+	private LinkedBlockingQueue<DataUnit> sndNtwrkQ;
+	private String message;
+	private Runnable runMethod;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_client_layout);
 		Intent intent = getIntent();
-		String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+		message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 		
 	    // Create the text view
 		textView = (TextView)findViewById(R.id.textViewStatus);
@@ -59,7 +64,7 @@ public class ClientActivity extends Activity {
 			public void onStartTrackingTouch(SeekBar seekBar) {
 				// I have no interest at the moment to process this
 			}
-			
+
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
@@ -76,29 +81,19 @@ public class ClientActivity extends Activity {
 		//disable controls
 		volSeekBar.setEnabled(false);
 		muteCheckBox.setEnabled(false);
-		Button send20Btn = (Button)findViewById(R.id.send20);
+		send20Btn = (Button)findViewById(R.id.send20);
+		touchPatBtn = (Button)findViewById(R.id.buttonTouch);
 		send20Btn.setEnabled(false);
-
-	    //create timer
-	    handler = new Handler();
-	    createTimerRunMethod();
-	    timer = new UITimer(handler, runMethod, 1000);
-        timer.start();
-        ntwrkQ = new LinkedBlockingQueue<DataUnit>();
-        uikQ = new LinkedBlockingQueue<DataUnit>();
-        netThread = new NetwrkThread(ntwrkQ, uikQ, message);
-        netThread.setRunning(true);
-        netThread.start();
+		touchPatBtn.setEnabled(false);
 	}
 
-	private Runnable runMethod;
 	private void createTimerRunMethod(){
 		runMethod = new Runnable(){
 	        public void run()
 	        {
 	            // read from network
 	        	// System.out.println("timer event in my class");
-	        	DataUnit data = ntwrkQ.poll();
+	        	DataUnit data = recNtwrkQ.poll();
 	        	while(data != null){
 					System.out.println("DataUnit from network received");
 					if(data.type == 0)
@@ -107,37 +102,54 @@ public class ClientActivity extends Activity {
 						volSeekBar.setProgress(data.data[0]);
 					else if(data.type == 2)
 						muteCheckBox.setChecked(data.data[0] == 1);
-					data = ntwrkQ.poll();
+					data = recNtwrkQ.poll();
 	        	}
 	        }
 
 			private void updateConnectionStatus(byte b) {
-				if(b==0)
+				if(b==0){
 					textViewS.setText("Failed to connect!");
-				else
+				}else
 				{
 					textViewS.setText("Connected.");
 					//disable controls
 					volSeekBar.setEnabled(true);
 					muteCheckBox.setEnabled(true);
-					Button send20Btn = (Button)findViewById(R.id.send20);
 					send20Btn.setEnabled(true);
+					touchPatBtn.setEnabled(true);
 				}
 			}
 	    };
 	}
-	
+
 	@Override
 	public void onStop(){
 		if(timer != null)
 			timer.stop();
+		timer = null;
+		handler = null;
 		if(netThread!=null)
 			netThread.setRunning(false);
 		netThread = null;
 		//call super
 		super.onStop();
 	}
-	
+
+	@Override
+	protected void onStart() {
+	    //create timer
+	    handler = new Handler();
+	    createTimerRunMethod();
+	    timer = new UITimer(handler, runMethod, 1000);
+        timer.start();
+        recNtwrkQ = new LinkedBlockingQueue<DataUnit>();
+        sndNtwrkQ = new LinkedBlockingQueue<DataUnit>();
+        netThread = new NetwrkThread(recNtwrkQ, sndNtwrkQ, message);
+        netThread.setRunning(true);
+        netThread.start();
+		super.onStart();
+	};
+
 	public void onMuteChkBox(View view) {
     	byte buffer[] = new byte[4];
     	buffer[0] = 4;  // package size
@@ -147,13 +159,12 @@ public class ClientActivity extends Activity {
     	if(muteCheckBox.isChecked())
     		buffer[2] = 1;  // value = mute
 
-    	//client.sendBytes(buffer);
     	sendBytes(buffer);
     }
-	
+
     private void sendBytes(byte[] buffer) {
     	try {
-			uikQ.put(new DataUnit(0, buffer));
+			sndNtwrkQ.put(new DataUnit(0, buffer));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -167,7 +178,7 @@ public class ClientActivity extends Activity {
     	buffer[3] = 0;  // reserved
     	sendBytes(buffer);
     }
-	
+
 	public void onPauseBtn(View view) {
     	byte buffer[] = new byte[4];
     	buffer[0] = 4;  // package size
@@ -176,6 +187,13 @@ public class ClientActivity extends Activity {
     	buffer[3] = 0;  // reserved
     	sendBytes(buffer);
     }
+
+	public void onTouchPadBtn(View view) {
+		//launch touch pad activity
+    	Intent intent = new Intent(this, TouchPad.class);
+    	intent.putExtra(MainActivity.EXTRA_MESSAGE, message);
+    	startActivity(intent);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -200,4 +218,5 @@ public class ClientActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 }

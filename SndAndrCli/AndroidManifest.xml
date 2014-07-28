@@ -35,6 +35,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.lion.rmtsndcli.MainActivity" />
         </activity>
-    </application>
+        <activity
+            android:name="com.lion.rmtsndcli.TouchPad"
+            android:label="@string/title_touch_pad" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.lion.rmtsndcli.ClientActivity" />
+        </activity>
+        </application>
 
 </manifest>

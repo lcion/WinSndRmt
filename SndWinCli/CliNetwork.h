@@ -40,6 +40,10 @@ private:
 		RMT_MUTE,
 		RMT_LOCK,
 		RMT_PAUSE,
+		RMT_SLEEP,
+		RMT_MOUSE_DOWN,
+		RMT_MOUSE_UP,
+		RMT_MOUSE_MOVE,
 		RMT_LOGOUT
 	} func_enum;
 };

@@ -57,5 +57,16 @@
         android:layout_below="@+id/textViewStatus"
         android:onClick="onPauseBtn"
         android:text="@string/pauseBtn" />
+
+    <Button
+        android:id="@+id/buttonTouch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/seekBarVol"
+        android:layout_alignRight="@+id/seekBarVol"
+        android:layout_below="@+id/seekBarVol"
+        android:layout_marginTop="36dp"
+        android:onClick="onTouchPadBtn"
+        android:text="@string/touchpadBtn" />
     
 </RelativeLayout>

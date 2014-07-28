@@ -13,5 +13,7 @@
     <string name="mute">Mute</string>
     <string name="contentDescription">Remote Volume Control</string>
     <string name="pauseBtn">Pause/Play\nMedia</string>
+    <string name="title_touch_pad">Touch Pad</string>
+    <string name="touchpadBtn">Touch Pad</string>
     
 </resources>

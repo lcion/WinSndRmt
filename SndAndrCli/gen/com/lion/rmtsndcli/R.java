@@ -24,20 +24,23 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080009;
-        public static final int btnAddPC=0x7f080007;
+        public static final int action_settings=0x7f08000b;
+        public static final int btnAddPC=0x7f080008;
         public static final int btnPause=0x7f080005;
-        public static final int chOneTextView=0x7f080006;
+        public static final int buttonTouch=0x7f080006;
+        public static final int chOneTextView=0x7f080007;
         public static final int checkBoxMute=0x7f080002;
-        public static final int pcListView=0x7f080008;
+        public static final int pcListView=0x7f080009;
         public static final int seekBarVol=0x7f080004;
         public static final int send20=0x7f080001;
         public static final int textViewAStatus=0x7f080003;
         public static final int textViewStatus=0x7f080000;
+        public static final int touchpad=0x7f08000a;
     }
     public static final class layout {
         public static final int activity_client_layout=0x7f030000;
         public static final int activity_main=0x7f030001;
+        public static final int activity_touch_pad=0x7f030002;
     }
     public static final class menu {
         public static final int client=0x7f070000;
@@ -55,7 +58,9 @@ public final class R {
         public static final int pauseBtn=0x7f05000b;
         public static final int snd20Btn=0x7f050008;
         public static final int title_activity_client=0x7f050007;
+        public static final int title_touch_pad=0x7f05000c;
         public static final int top_main_string=0x7f050002;
+        public static final int touchpadBtn=0x7f05000d;
     }
     public static final class style {
         /** 

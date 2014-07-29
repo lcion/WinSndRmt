@@ -100,28 +100,22 @@ public class TouchPad extends Activity {
 	}
     
 	private void sendMove(float dx, float dy){
-		byte value = 10;
-		if(dx > 0)
-			value = 90;
     	byte buffer[] = new byte[4];
     	buffer[0] = 4;			// package size
-    	buffer[1] = 8;			// RMT_MOUSE_MOVE
-    	buffer[2] = (byte)dx;		// value
-    	buffer[3] = (byte)dy;			// reserved
+    	buffer[1] = 7;			// RMT_MOUSE_MOVE
+    	buffer[2] = (byte)dx;	// value
+    	buffer[3] = (byte)dy;	// reserved
     	sendBytes(buffer);
 	}
 
 	private void sendClick(byte msBtn){
     	byte buffer[] = new byte[4];
     	buffer[0] = 4;      // package size
-    	buffer[1] = 6;      // RMT_MOUSE_DOWN
+    	buffer[1] = 6;      // RMT_MOUSE_DOWN_UP
     	buffer[2] = msBtn;  // mouse button
-    	buffer[3] = 0;      // mouse down/up
+    	buffer[3] = 0;      // reserved
     	sendBytes(buffer);
-    	
-    	buffer[1] = 7;      // RMT_MOUSE_UP
-    	sendBytes(buffer);
-	}
+   	}
 	
 	// Mouse listeners.
 	OnTouchListener touchListener = new OnTouchListener() {
@@ -230,7 +224,7 @@ public class TouchPad extends Activity {
 			System.out.println("Send Click");
 			/*if (button[0].isChecked()) 
 				button[0].toggle();*/
-			sendClick(0);
+			sendClick((byte)0);
 		}
 		
 		public boolean cancel(MotionEvent e) {

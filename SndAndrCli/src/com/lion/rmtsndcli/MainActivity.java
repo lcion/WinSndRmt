@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
 	private ListView listView;
 	private SimpleAdapter adapter;
 	private List<Map<String, String>> data;
-	MainActivity mainActPtr;
+	private MainActivity mainActPtr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

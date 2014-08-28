@@ -194,7 +194,7 @@ public class TouchPad extends Activity {
 				return false;
 				
 			int index = e.findPointerIndex(pointerId);
-			int Sensitivity = 3;
+			int Sensitivity = 1;
 
 			float X = e.getX(index);
 			float Y = e.getY(index);

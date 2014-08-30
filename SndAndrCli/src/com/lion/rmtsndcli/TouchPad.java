@@ -1,13 +1,10 @@
 package com.lion.rmtsndcli;
 
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -19,12 +16,6 @@ import android.widget.LinearLayout;
 public class TouchPad extends Activity {
 	private LinearLayout touchpad;
 	private String message;
-	private Handler handler;
-	private UITimer timer;
-	private NetwrkThread netThread;
-	private Runnable runMethod;
-	private LinkedBlockingQueue<DataUnit> recNtwrkQ;
-	private LinkedBlockingQueue<DataUnit> sndNtwrkQ;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -37,66 +28,39 @@ public class TouchPad extends Activity {
 
 	@Override
 	protected void onStart() {
-	    //create timer
-	    handler = new Handler();
-	    createTimerRunMethod();
-	    timer = new UITimer(handler, runMethod, 1000);
-        timer.start();
-        recNtwrkQ = new LinkedBlockingQueue<DataUnit>();
-        sndNtwrkQ = new LinkedBlockingQueue<DataUnit>();
-        netThread = new NetwrkThread(recNtwrkQ, sndNtwrkQ, message);
-        netThread.setRunning(true);
-        netThread.start();
+		NetwrkComm nwrkCls = NetwrkComm.getNetwrkCommCls();
+		nwrkCls.setNetworkEvent(new NetwrkEvent() {
+			@Override
+			public void OnSuccessConnect() {
+				touchpad.setBackgroundColor(Color.GREEN);
+			}
+			@Override
+			public void OnFailedConnect() {
+				touchpad.setBackgroundColor(Color.DKGRAY);
+			}
+			@Override
+			public void OnSetVolume(byte b) {
+				// nothing to do in here
+			}
+			@Override
+			public void OnSetMute(boolean b) {
+				// nothing to do in here
+			}
+		});
+		nwrkCls.Connect(message);
+
 		super.onStart();
 	};
 
 	@Override
 	public void onStop(){
-		if(timer != null)
-			timer.stop();
-		timer = null;
-		handler = null;
-		if(netThread!=null)
-			netThread.setRunning(false);
-		netThread = null;
 		//call super
 		super.onStop();
 	}
 	
-	private void createTimerRunMethod(){
-		runMethod = new Runnable(){
-	        public void run()
-	        {
-	            // read from network
-	        	// System.out.println("timer event in my class");
-	        	DataUnit data = recNtwrkQ.poll();
-	        	while(data != null){
-					System.out.println("DataUnit from network received");
-					if(data.type == 0)
-						updateConnectionStatus(data.data[0]);
-					data = recNtwrkQ.poll();
-	        	}
-	        }
-
-			private void updateConnectionStatus(byte b) {
-				if(b==0){
-					// failed to connect
-					touchpad.setBackgroundColor(Color.DKGRAY);
-				} else
-				{
-					//connected to the server
-					touchpad.setBackgroundColor(Color.GREEN);
-				}
-			}
-	    };
-	}
-
     private void sendBytes(byte[] buffer) {
-    	try {
-			sndNtwrkQ.put(new DataUnit(0, buffer));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		NetwrkComm nwrkCls = NetwrkComm.getNetwrkCommCls();
+		nwrkCls.sendBytes(buffer);
 	}
     
 	private void sendMove(float dx, float dy){

@@ -1,11 +1,9 @@
 package com.lion.rmtsndcli;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 import android.os.Bundle;
-import android.os.Handler;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,20 +14,13 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class ClientActivity extends Activity {
-	private Handler handler;
 	private TextView textView;
 	private TextView textViewS;
 	private SeekBar volSeekBar;
 	private Button send20Btn;
 	private Button touchPatBtn;
 	private CheckBox muteCheckBox;
-	//need to move to network class
-	private UITimer timer;
-	private NetwrkThread netThread;
-	private LinkedBlockingQueue<DataUnit> recNtwrkQ;
-	private LinkedBlockingQueue<DataUnit> sndNtwrkQ;
 	private String message;
-	private Runnable runMethod;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,66 +78,35 @@ public class ClientActivity extends Activity {
 		touchPatBtn.setEnabled(false);
 	}
 
-	private void createTimerRunMethod(){
-		runMethod = new Runnable(){
-	        public void run()
-	        {
-	            // read from network
-	        	// System.out.println("timer event in my class");
-	        	DataUnit data = recNtwrkQ.poll();
-	        	while(data != null){
-					System.out.println("DataUnit from network received");
-					if(data.type == 0)
-						updateConnectionStatus(data.data[0]);
-					else if(data.type == 1)
-						volSeekBar.setProgress(data.data[0]);
-					else if(data.type == 2)
-						muteCheckBox.setChecked(data.data[0] == 1);
-					data = recNtwrkQ.poll();
-	        	}
-	        }
-
-			private void updateConnectionStatus(byte b) {
-				if(b==0){
-					textViewS.setText("Failed to connect!");
-				}else
-				{
-					textViewS.setText("Connected.");
-					//disable controls
-					volSeekBar.setEnabled(true);
-					muteCheckBox.setEnabled(true);
-					send20Btn.setEnabled(true);
-					touchPatBtn.setEnabled(true);
-				}
-			}
-	    };
-	}
-
-	@Override
-	public void onStop(){
-		if(timer != null)
-			timer.stop();
-		timer = null;
-		handler = null;
-		if(netThread!=null)
-			netThread.setRunning(false);
-		netThread = null;
-		//call super
-		super.onStop();
-	}
-
 	@Override
 	protected void onStart() {
 	    //create timer
-	    handler = new Handler();
-	    createTimerRunMethod();
-	    timer = new UITimer(handler, runMethod, 1000);
-        timer.start();
-        recNtwrkQ = new LinkedBlockingQueue<DataUnit>();
-        sndNtwrkQ = new LinkedBlockingQueue<DataUnit>();
-        netThread = new NetwrkThread(recNtwrkQ, sndNtwrkQ, message);
-        netThread.setRunning(true);
-        netThread.start();
+		NetwrkComm nwrkCls = NetwrkComm.getNetwrkCommCls();
+		nwrkCls.setNetworkEvent(new NetwrkEvent() {
+			@Override
+			public void OnSuccessConnect() {
+				textViewS.setText("Connected.");
+				//enable controls
+				volSeekBar.setEnabled(true);
+				muteCheckBox.setEnabled(true);
+				send20Btn.setEnabled(true);
+				touchPatBtn.setEnabled(true);
+			}
+			@Override
+			public void OnFailedConnect() {
+				textViewS.setText("Failed to connect!");				
+			}
+			@Override
+			public void OnSetVolume(byte b) {
+				volSeekBar.setProgress(b);
+			}
+			@Override
+			public void OnSetMute(boolean b) {
+				muteCheckBox.setChecked(b);
+			}
+		});
+		nwrkCls.Connect(message);
+		
 		super.onStart();
 	};
 
@@ -163,11 +123,8 @@ public class ClientActivity extends Activity {
     }
 
     private void sendBytes(byte[] buffer) {
-    	try {
-			sndNtwrkQ.put(new DataUnit(0, buffer));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		NetwrkComm nwrkCls = NetwrkComm.getNetwrkCommCls();
+		nwrkCls.sendBytes(buffer);
 	}
 
 	public void onLockPcBtn(View view) {
@@ -218,5 +175,4 @@ public class ClientActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 }

@@ -9,10 +9,11 @@ With this solution you can control volume on any pc in the room from one single 
 Step 1: add the server to the stat-up on all the pc that might get too noisy.
 Step 2: when any other computer is too noisy just connect with the client and adjust the volume.
 
-Use visual studio express 2012 for windows Desktop to build the windows server and test client.
+Use visual studio express 2013 for windows Desktop to build the windows server and test client.
 The project is a C++ client server application running in Windows using async networking and win32 libraries.
 The application was originally designed for remote controlling the sound volume.
 
 Android client so one can control the volume from a phone application. The android client was developed using Java and Eclipse IDE.
 
 17/02/2014 Do you use your laptop to play videos on TV via HDMI? Now the remote client can pause and play the pc media player!
+30/08/2014 Add remote mouse on the android client - move, click and double click events can be sent by android client via touchpad screen.

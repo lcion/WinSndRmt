@@ -47,7 +47,8 @@ public class NetwrkComm {
 		Connect();
 	}
 	
-	private void DisConnect() {
+	public void DisConnect() {
+		addressStr = "";
 		if(timer != null)
 			timer.stop();
 		timer = null;

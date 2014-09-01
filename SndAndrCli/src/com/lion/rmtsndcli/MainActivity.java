@@ -219,4 +219,12 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
+    
+	@Override
+	protected void onStart() {
+		NetwrkComm nwrkCls = NetwrkComm.getNetwrkCommCls();
+		nwrkCls.DisConnect();
+		super.onStart();
+	};
+
 }

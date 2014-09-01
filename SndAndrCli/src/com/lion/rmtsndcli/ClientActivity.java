@@ -3,7 +3,6 @@ package com.lion.rmtsndcli;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,8 +18,10 @@ public class ClientActivity extends Activity {
 	private SeekBar volSeekBar;
 	private Button send20Btn;
 	private Button touchPatBtn;
+	private Button pauseBtn;
 	private CheckBox muteCheckBox;
 	private String message;
+	private NetwrkComm nwrkCls;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +75,16 @@ public class ClientActivity extends Activity {
 		muteCheckBox.setEnabled(false);
 		send20Btn = (Button)findViewById(R.id.send20);
 		touchPatBtn = (Button)findViewById(R.id.buttonTouch);
+		pauseBtn = (Button)findViewById(R.id.btnPause);
 		send20Btn.setEnabled(false);
 		touchPatBtn.setEnabled(false);
+		pauseBtn.setEnabled(false);
 	}
 
 	@Override
 	protected void onStart() {
 	    //create timer
-		NetwrkComm nwrkCls = NetwrkComm.getNetwrkCommCls();
+		nwrkCls = NetwrkComm.getNetwrkCommCls();
 		nwrkCls.setNetworkEvent(new NetwrkEvent() {
 			@Override
 			public void OnSuccessConnect() {
@@ -91,10 +94,12 @@ public class ClientActivity extends Activity {
 				muteCheckBox.setEnabled(true);
 				send20Btn.setEnabled(true);
 				touchPatBtn.setEnabled(true);
+				pauseBtn.setEnabled(true);
 			}
 			@Override
 			public void OnFailedConnect() {
-				textViewS.setText("Failed to connect!");				
+				textViewS.setText("Failed to connect!");
+				nwrkCls.DisConnect();
 			}
 			@Override
 			public void OnSetVolume(byte b) {
@@ -123,7 +128,6 @@ public class ClientActivity extends Activity {
     }
 
     private void sendBytes(byte[] buffer) {
-		NetwrkComm nwrkCls = NetwrkComm.getNetwrkCommCls();
 		nwrkCls.sendBytes(buffer);
 	}
 

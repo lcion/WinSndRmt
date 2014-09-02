@@ -21,10 +21,19 @@ public class NetwrkThread extends Thread{
 	public void run() {
 		openConnection();
 		while(mRun){
+			
 			//read UI queue and send to network
 			processUICommand();
+			
 			//read network data and write to UI thread
 			processNetwrkData();
+			
+			//take a break to avoid spinning the processor here
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		closeConnection();
 	}

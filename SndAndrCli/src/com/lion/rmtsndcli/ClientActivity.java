@@ -36,8 +36,13 @@ public class ClientActivity extends Activity {
 
 		textViewS = (TextView)findViewById(R.id.textViewAStatus);
 		
+		//get references to the UI controls
 		muteCheckBox = (CheckBox)findViewById(R.id.checkBoxMute);
 		volSeekBar = (SeekBar)findViewById(R.id.seekBarVol);
+		send20Btn = (Button)findViewById(R.id.send20);
+		touchPatBtn = (Button)findViewById(R.id.buttonTouch);
+		pauseBtn = (Button)findViewById(R.id.btnPause);
+		
 		volSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			
 			@Override
@@ -73,9 +78,6 @@ public class ClientActivity extends Activity {
 		//disable controls
 		volSeekBar.setEnabled(false);
 		muteCheckBox.setEnabled(false);
-		send20Btn = (Button)findViewById(R.id.send20);
-		touchPatBtn = (Button)findViewById(R.id.buttonTouch);
-		pauseBtn = (Button)findViewById(R.id.btnPause);
 		send20Btn.setEnabled(false);
 		touchPatBtn.setEnabled(false);
 		pauseBtn.setEnabled(false);

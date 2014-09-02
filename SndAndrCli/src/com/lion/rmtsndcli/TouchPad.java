@@ -219,5 +219,4 @@ public class TouchPad extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 }

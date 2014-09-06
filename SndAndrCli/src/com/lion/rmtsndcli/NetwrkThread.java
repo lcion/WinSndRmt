@@ -23,10 +23,13 @@ public class NetwrkThread extends Thread{
 		while(mRun){
 			
 			//read UI queue and send to network
-			processUICommand();
+			boolean dataProcessed = processUICommand();
 			
 			//read network data and write to UI thread
-			processNetwrkData();
+			dataProcessed |= processNetwrkData();
+			
+			//if there is work to do keep working, only sleep when idle
+			if(dataProcessed) continue;
 			
 			//take a break to avoid spinning the processor here
 			try {
@@ -38,7 +41,7 @@ public class NetwrkThread extends Thread{
 		closeConnection();
 	}
 	
-	private void processNetwrkData() {
+	private boolean processNetwrkData() {
     	int result[] = new int[4];
     	DataUnit value = null;
     	if(client.read(result) == true){
@@ -54,7 +57,9 @@ public class NetwrkThread extends Thread{
 		    		}
 	    		}
     		}
+    		return true;
     	}
+    	return false;
 	}
 	
 	private void openConnection() {
@@ -70,11 +75,13 @@ public class NetwrkThread extends Thread{
 			e.printStackTrace();
 		}
 	}
-	private void processUICommand() {
+	private boolean processUICommand() {
 		DataUnit value = uiQueue.poll();
 		if(value != null){
 			client.sendBytes(value.data);
+			return true;
 		}
+		return false;
 	}
 	
 	private void closeConnection() {

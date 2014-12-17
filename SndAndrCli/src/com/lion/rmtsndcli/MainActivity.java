@@ -150,7 +150,6 @@ public class MainActivity extends Activity {
     	try {
     		ip = detectServer();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	getNameIpFromUser("", ip);
@@ -160,22 +159,23 @@ public class MainActivity extends Activity {
 	private InetAddress getBroadcastAddress()  {
 		WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		DhcpInfo dhcp = wifi.getDhcpInfo();
-		// handle null somehow
-
+		// handle null, should probably ask user for local network...
 		int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
-		broadcast = 0xFF00A8C0;
-		//broadcast = 0xC0A800FF;
-		//broadcast = 0;
-		//broadcast = 0xFFFFFFFF;
-//		broadcast = 0xC0A8000A;
-//		broadcast = 0x0A00A8C0;
+		if(dhcp.ipAddress == 0 && dhcp.netmask == 0)
+			broadcast = 0xFF00A8C0; //192.168.0.255
+		else if(dhcp.ipAddress != 0 && dhcp.netmask != 0)
+			broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+		else if(dhcp.ipAddress != 0)
+			broadcast = (dhcp.ipAddress & 0x00FFFFFF) | 0xFF000000;
+		else
+			broadcast = 0xFF00A8C0; //192.168.0.255 - we only have netmask
+
 		byte[] quads = new byte[4];
 		for (int k = 0; k < 4; k++)
 			quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
 		try {
 			return InetAddress.getByAddress(quads);
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

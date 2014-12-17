@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
   <!-- when doing new release increment product version and generate new product id -->
-  <?define ProductVersion = 1.1.2.0 ?>
-  <Product Name='Remote Volume $(var.ProductVersion)' Id='111DA78F-8679-4C71-9D4F-A12DA507F2F8' UpgradeCode='A16AF464-76E5-4574-BAE3-750D11CAA600'
+  <?define ProductVersion = 1.1.3.0 ?>
+  <Product Name='Remote Volume $(var.ProductVersion)' Id='8911F00E-69F0-4473-9170-711C7D6A7D90' UpgradeCode='A16AF464-76E5-4574-BAE3-750D11CAA600'
     Language='1033' Codepage='1252' Version="$(var.ProductVersion)" Manufacturer='Lucian Ion Ltd.'>
 
     <Package Id='*' Keywords='Installer' Description="WinSndRmt $(var.ProductVersion) Installer"

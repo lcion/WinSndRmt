@@ -2,13 +2,23 @@ package com.lion.rmtsndcli;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.net.DhcpInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -136,7 +146,82 @@ public class MainActivity extends Activity {
 
     /** Called when the user clicks the Send button */
     public void onAddNewPCBtn(View view) {
-    	getNameIpFromUser("","");
+    	String ip = "";
+    	try {
+    		ip = detectServer();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	getNameIpFromUser("", ip);
+    }
+    
+	// Get broadcast address for LAN.
+	private InetAddress getBroadcastAddress()  {
+		WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		DhcpInfo dhcp = wifi.getDhcpInfo();
+		// handle null somehow
+
+		int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+		broadcast = 0xFF00A8C0;
+		//broadcast = 0xC0A800FF;
+		//broadcast = 0;
+		//broadcast = 0xFFFFFFFF;
+//		broadcast = 0xC0A8000A;
+//		broadcast = 0x0A00A8C0;
+		byte[] quads = new byte[4];
+		for (int k = 0; k < 4; k++)
+			quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+		try {
+			return InetAddress.getByAddress(quads);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+    private String detectServer() throws Exception{
+		// Broadcast ping to look for servers.
+    	int Timeout = 1500;
+    	int Port = 27015;
+		DatagramSocket beacon = new DatagramSocket(null);
+		beacon.setBroadcast(true);
+		beacon.setSoTimeout(Timeout);
+
+		if (android.os.Build.VERSION.SDK_INT > 9) {
+			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+			StrictMode.setThreadPolicy(policy); 
+		}
+		InetAddress broadcast = getBroadcastAddress();
+
+		byte[] buffer = new byte[] { 0x04, 0x08, 0x00, 0x00 };
+		beacon.send(new DatagramPacket(buffer, 4, broadcast, Port));
+
+		try {
+			// Add each ack to the menu.
+			for (int i = 0; i < 9; ++i) {
+				byte[] port = new byte[4];
+				DatagramPacket ack = new DatagramPacket(port, 4);
+				beacon.receive(ack);
+
+				ByteBuffer parser = ByteBuffer.wrap(port);
+
+				if (parser.get(1) == 0x09)
+				{
+					String addr = ack.getAddress().toString().substring(1);
+					String string;
+					// find the address in existing map
+			    	for(int j = 0; j < data.size() ; j++)
+			    	{
+			    		string = data.get(j).get("ip");
+			    		if(string.equals(addr)) return ""; // IP already in the list
+			    	}
+					return addr;
+				}
+			}
+		} catch (SocketTimeoutException e) { }
+		return "";
     }
     
     private int getNameIpFromUser(String name, String ip){

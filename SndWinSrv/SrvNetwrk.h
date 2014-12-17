@@ -22,12 +22,14 @@ public:
 	void CloseClientSocket();
 	void SendDataFromAudioEvents(int volume, BOOL bMute);
 	void OnSndEvent();
+	void ProcessUdpMessages();
 
 private:
 	WSADATA wsaData;
 	SOCKET ListenSocket;
     SOCKET AcceptSocket;
-    WSAOVERLAPPED ReadOverlapped;
+	SOCKET UdpSocket;
+	WSAOVERLAPPED ReadOverlapped;
     WSAOVERLAPPED WriteOverlapped;
     WSABUF DataBuf;
     char buffer[DATA_BUFSIZE];

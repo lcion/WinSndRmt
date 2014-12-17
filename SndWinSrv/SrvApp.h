@@ -21,5 +21,7 @@ enum _func_enum {
 	RMT_SLEEP,
 	RMT_MOUSE_DOWN_UP,
 	RMT_MOUSE_MOVE,
+	RMT_PING,
+	RMT_PONG,
 	RMT_LOGOUT
 };

@@ -5,7 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="top_main_string">Please choose one:</string>
     <string name="connecting">Connecting...</string>
-    <string name="onAddNewPCBtn">Add New Pc</string>
+    <string name="onAddNewPCBtn">Add New PC</string>
     <string name="alexBtn">Alex Pc</string>
     <string name="andreiBtn">AndreiPc</string>
     <string name="title_activity_client">Connected to server</string>

@@ -1,7 +1,11 @@
-window_sizes 1280 672 320 960 512 82
+window_sizes 1366 705 320 960 512 82
+diagrams
+  active  classdiagram_ref 134911 // AndrClassDiagram
+    1040 549 100 4 0 0
+end
 show_stereotypes
-selected 
-  package_ref 134783 // SndWinCli
+selected class_ref 150143 // Socket
 open
+  classview_ref 134655 // SndAndrCli
 end
 end

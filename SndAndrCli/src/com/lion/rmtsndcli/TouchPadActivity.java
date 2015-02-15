@@ -13,7 +13,7 @@ import android.view.ViewConfiguration;
 import android.view.View.OnTouchListener;
 import android.widget.LinearLayout;
 
-public class TouchPad extends Activity {
+public class TouchPadActivity extends Activity {
 	private LinearLayout touchpad;
 	private String message;
 

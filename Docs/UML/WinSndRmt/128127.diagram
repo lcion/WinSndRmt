@@ -1,0 +1,30 @@
+format 76
+
+classcanvas 128127 class_ref 135167 // Father
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 83 104 3005
+end
+classcanvas 128255 class_ref 135295 // Child1
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 328 57 3005
+end
+subject 128383 "PC, client, server"
+  xyzwh 138 115 3005 103 31
+classcanvas 128511 class_ref 135423 // Child2
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 335 137 3005
+end
+subject 128639 "pc, server"
+  xyzwh 375 66 3005 65 31
+subject 128767 "laptop, server"
+  xyzwh 389 142 3005 85 31
+usecasecanvas 128895 usecase_ref 128127 // wireless network
+  xyzwh 44 18 2000 483 295 label_xy 163 68
+end
+classcanvas 129023 class_ref 135551 // Mother
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 123 195 2005
+end
+subject 129151 "phone, client"
+  xyzwh 166 196 2005 79 31
+end

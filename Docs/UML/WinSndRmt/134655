@@ -1,6 +1,6 @@
 format 76
 "SndAndrCli" // SndAndrCli
-  revision 1
+  revision 3
   modified_by 127 "Lucian"
   // class settings
   //class diagram settings
@@ -26,4 +26,284 @@ format 76
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
   show_infonote default drawing_language default show_stereotype_properties default
   
+  classview 134655 "SndAndrCli"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default class_drawing_mode default drawing_language default package_name_in_tab default show_context default show_msg_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default show_class_context_mode default show_msg_context_mode default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    class 142207 "Requester"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128767 // <aggregation>
+	relation_ref 128383 // <aggregation>
+      end
+
+      classrelation 131199 // <aggregation>
+	relation 129663 o---
+	  a role_name "" private
+	    classrelation_ref 131199 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 131327 // <aggregation>
+      end
+    end
+
+    classdiagram 134911 "AndrClassDiagram"
+      draw_all_relations no hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 142335 "ClientActivity"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "In this activity user can turn volume up and down, lock pc, mute pc, start touchpad"
+      classrelation 129151 // <aggregation>
+	relation 128639 o---
+	  a role_name "" private
+	    classrelation_ref 129151 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 129279 // <aggregation>
+      end
+
+      classrelation 130431 // <aggregation>
+	relation 129279 o---
+	  a role_name "" private
+	    classrelation_ref 130431 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 130559 // <aggregation>
+      end
+    end
+
+    class 142463 "DataUnit"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128255 // <aggregation>
+	relation_ref 128127 // <aggregation>
+      end
+
+      classrelation 128511 // <aggregation>
+	relation_ref 128255 // <aggregation>
+      end
+    end
+
+    class 142591 "MainActivity"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "In this activity user choose pc to connect from list"
+      classrelation 130175 // <aggregation>
+	relation 129151 o---
+	  a role_name "" private
+	    classrelation_ref 130175 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 130303 // <aggregation>
+      end
+    end
+
+    class 142719 "NetwrkComm"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128127 // <aggregation>
+	relation 128127 o---
+	  a role_name "" private
+	    classrelation_ref 128127 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 128255 // <aggregation>
+      end
+
+      classrelation 128895 // <aggregation>
+	relation 128511 o---
+	  a role_name "" private
+	    classrelation_ref 128895 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 129023 // <aggregation>
+      end
+
+      classrelation 129663 // <aggregation>
+	relation 128895 o---
+	  a role_name "" private
+	    classrelation_ref 129663 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 129791 // <aggregation>
+      end
+
+      classrelation 129919 // <aggregation>
+	relation 129023 o---
+	  a role_name "" private
+	    classrelation_ref 129919 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 130047 // <aggregation>
+      end
+
+      classrelation 130303 // <aggregation>
+	relation_ref 129151 // <aggregation>
+      end
+
+      classrelation 130559 // <aggregation>
+	relation_ref 129279 // <aggregation>
+      end
+
+      classrelation 130815 // <aggregation>
+	relation_ref 129407 // <aggregation>
+      end
+
+      classrelation 131071 // <aggregation>
+	relation_ref 129535 // <aggregation>
+      end
+    end
+
+    class 142847 "NetwrkEvent"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129279 // <aggregation>
+	relation_ref 128639 // <aggregation>
+      end
+
+      classrelation 129535 // <aggregation>
+	relation_ref 128767 // <aggregation>
+      end
+
+      classrelation 129791 // <aggregation>
+	relation_ref 128895 // <aggregation>
+      end
+    end
+
+    class 142975 "NetwrkThread"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128383 // <aggregation>
+	relation 128255 o---
+	  a role_name "" private
+	    classrelation_ref 128383 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 128511 // <aggregation>
+      end
+
+      classrelation 128639 // <aggregation>
+	relation 128383 o---
+	  a role_name "" private
+	    classrelation_ref 128639 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 128767 // <aggregation>
+      end
+
+      classrelation 129023 // <aggregation>
+	relation_ref 128511 // <aggregation>
+      end
+    end
+
+    class 143103 "TouchPadActivity"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "In this activity touch events are collected and sent to server"
+      classrelation 129407 // <aggregation>
+	relation 128767 o---
+	  a role_name "" private
+	    classrelation_ref 129407 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 129535 // <aggregation>
+      end
+
+      classrelation 130687 // <aggregation>
+	relation 129407 o---
+	  a role_name "" private
+	    classrelation_ref 130687 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 130815 // <aggregation>
+      end
+
+      classrelation 130943 // <aggregation>
+	relation 129535 o---
+	  a role_name "" private
+	    classrelation_ref 130943 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 131071 // <aggregation>
+      end
+    end
+
+    class 143231 "UITimer"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130047 // <aggregation>
+	relation_ref 129023 // <aggregation>
+      end
+    end
+
+    class 150143 "Socket"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 131327 // <aggregation>
+	relation_ref 129663 // <aggregation>
+      end
+    end
+  end
 end

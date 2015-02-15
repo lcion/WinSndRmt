@@ -1,0 +1,19 @@
+format 76
+
+usecasecanvas 128127 usecase_ref 128127 // wireless network
+  xyzwh 51 38 3005 555 299 label_xy 195 77
+end
+subject 128255 "phone, client"
+  xyzwh 161 191 3010 79 31
+classcanvas 128383 class_ref 135679 // Human
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 118 186 3015
+end
+subject 128511 "laptop, server"
+  xyzwh 408 232 3010 85 31
+subject 128639 "TV, showing movie from laptop"
+  xyzwh 358 121 3010 181 110
+fragment 128767 "remote play, pause movie"
+  xyzwh 171 122 3010 151 43
+end
+end

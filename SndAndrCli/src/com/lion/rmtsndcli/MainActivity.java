@@ -144,7 +144,7 @@ public class MainActivity extends Activity {
     	}
 	}
 
-    /** Called when the user clicks the Send button */
+    /** Called when the user clicks the "Add New PC" button */
     public void onAddNewPCBtn(View view) {
     	String ip = "";
     	try {

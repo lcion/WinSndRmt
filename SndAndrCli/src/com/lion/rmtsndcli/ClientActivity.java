@@ -153,7 +153,7 @@ public class ClientActivity extends Activity {
 
 	public void onTouchPadBtn(View view) {
 		//launch touch pad activity
-    	Intent intent = new Intent(this, TouchPad.class);
+    	Intent intent = new Intent(this, TouchPadActivity.class);
     	intent.putExtra(MainActivity.EXTRA_MESSAGE, message);
     	startActivity(intent);
 	}

@@ -1,6 +1,6 @@
 format 76
 "SndAndrCli" // SndAndrCli
-  revision 3
+  revision 4
   modified_by 127 "Lucian"
   // class settings
   //class diagram settings
@@ -112,6 +112,7 @@ format 76
       classrelation 128511 // <aggregation>
 	relation_ref 128255 // <aggregation>
       end
+
     end
 
     class 142591 "MainActivity"

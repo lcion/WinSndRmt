@@ -2,10 +2,16 @@ window_sizes 1366 705 320 960 512 82
 diagrams
   active  classdiagram_ref 134911 // AndrClassDiagram
     1040 549 100 4 0 0
+  classdiagram_ref 134783 // ServerClassDiagram
+    828 439 100 4 0 0
+  classdiagram_ref 135039 // WinCliClassDiagram
+    828 439 100 4 0 0
 end
 show_stereotypes
-selected class_ref 150143 // Socket
+selected classdiagram_ref 134911 // AndrClassDiagram
 open
+  classview_ref 128127 // SndWindSrv
   classview_ref 134655 // SndAndrCli
+  classview_ref 134783 // SndWinCli
 end
 end

@@ -199,7 +199,7 @@ public class MainActivity extends Activity {
 		beacon.send(new DatagramPacket(buffer, 4, broadcast, Port));
 
 		try {
-			// Add each ack to the menu.
+			// Add each ack to the menu. receive up to 9
 			for (int i = 0; i < 9; ++i) {
 				byte[] port = new byte[4];
 				DatagramPacket ack = new DatagramPacket(port, 4);
@@ -210,14 +210,20 @@ public class MainActivity extends Activity {
 				if (parser.get(1) == 0x09)
 				{
 					String addr = ack.getAddress().toString().substring(1);
+					//System.out.println("got back udp from addr " + addr);
 					String string;
 					// find the address in existing map
+			    	boolean found=false;
 			    	for(int j = 0; j < data.size() ; j++)
 			    	{
 			    		string = data.get(j).get("ip");
-			    		if(string.equals(addr)) return ""; // IP already in the list
+			    		if(string.equals(addr)){
+			    			found = true;
+			    			break; // IP already in the list
+			    		}
 			    	}
-					return addr;
+			    	if(found == false)
+			    		return addr;
 				}
 			}
 		} catch (SocketTimeoutException e) { }

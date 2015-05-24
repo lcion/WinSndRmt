@@ -33,6 +33,7 @@ private:
     WSAOVERLAPPED WriteOverlapped;
     WSABUF DataBuf;
     char buffer[DATA_BUFSIZE];
+	char localHostName[256];
     DWORD RecvBytes;
     DWORD Flags;
     DWORD BytesTransferred;
@@ -46,5 +47,4 @@ private:
 	void SetReadEvent(HANDLE hEvent);
 	void SetWriteEvent(HANDLE hEvent);
 	void SetAudioEvent(HANDLE hEvent);
-
 };

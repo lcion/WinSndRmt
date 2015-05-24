@@ -147,12 +147,13 @@ public class MainActivity extends Activity {
     /** Called when the user clicks the "Add New PC" button */
     public void onAddNewPCBtn(View view) {
     	String ip = "";
+    	StringBuilder pcName = new StringBuilder("");
     	try {
-    		ip = detectServer();
+    		ip = detectServer(pcName);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	getNameIpFromUser("", ip);
+    	getNameIpFromUser(pcName.toString(), ip);
     }
     
 	// Get broadcast address for LAN.
@@ -181,7 +182,7 @@ public class MainActivity extends Activity {
 		return null;
 	}
 
-    private String detectServer() throws Exception{
+    private String detectServer(StringBuilder pcName) throws Exception{
 		// Broadcast ping to look for servers.
     	int Timeout = 1500;
     	int Port = 27015;
@@ -201,8 +202,8 @@ public class MainActivity extends Activity {
 		try {
 			// Add each ack to the menu. receive up to 9
 			for (int i = 0; i < 9; ++i) {
-				byte[] port = new byte[4];
-				DatagramPacket ack = new DatagramPacket(port, 4);
+				byte[] port = new byte[256];
+				DatagramPacket ack = new DatagramPacket(port, 256);
 				beacon.receive(ack);
 
 				ByteBuffer parser = ByteBuffer.wrap(port);
@@ -222,8 +223,23 @@ public class MainActivity extends Activity {
 			    			break; // IP already in the list
 			    		}
 			    	}
-			    	if(found == false)
+			    	if(found == false){
+			    		if(ack.getLength() > 4){
+			    			//we have received PC name
+			    			string = "";
+			    			char nextChar;
+			    			int j = 0;
+			    			do{
+			    				j++;
+			    				nextChar = (char)parser.get();
+			    				if(j>4 && nextChar != 0x0)
+			    					string += nextChar;
+			    			}while((j<5 || nextChar != 0x0) && j<(256-4));
+			    			System.out.println(string);
+			    			pcName.append(string);
+			    		}
 			    		return addr;
+			    	}
 				}
 			}
 		} catch (SocketTimeoutException e) { }

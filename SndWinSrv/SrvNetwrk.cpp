@@ -17,6 +17,7 @@ CSrvNetwrk::CSrvNetwrk(CSrvAudio &cSrvAudio, CSrvApp &cSrvApp)
 	ZeroMemory( &wsaData, sizeof(wsaData) );
 	ZeroMemory(&ReadOverlapped, sizeof (WSAOVERLAPPED));
     ZeroMemory(&WriteOverlapped, sizeof (WSAOVERLAPPED));
+	ZeroMemory(&localHostName, 256);
 }
 
 HRESULT CSrvNetwrk::Initialize(char *hostName, int port){
@@ -43,6 +44,10 @@ HRESULT CSrvNetwrk::Initialize(char *hostName, int port){
     service.sin_port = htons(uPort);
     hostent *thisHost;
 
+	//get local host name for sending to udp clients
+	gethostname(localHostName, 256);
+
+	//use configured host name to connect to user specified ip
     thisHost = gethostbyname(hostName);
     if (thisHost == NULL) {
         OutputDebugString("gethostbyname failed with error = \n");
@@ -133,7 +138,8 @@ void CSrvNetwrk::ProcessUdpMessages(){
 	buffer[1] = RMT_LOGIN;	// function
 	buffer[2] = 0;			// arg0
 	buffer[3] = 0;			// arg1
-	DataBuf.len = 4;
+	strcpy(&buffer[4], localHostName);
+	DataBuf.len = 4 + strlen(localHostName);
 	sockaddr from;
 	int sizeFrom = sizeof(from);
 
@@ -146,7 +152,7 @@ void CSrvNetwrk::ProcessUdpMessages(){
 
 	if (buffer[1] == RMT_PING){
 		buffer[1] = RMT_PONG;
-		if (sendto(UdpSocket, (char *)buffer, 4, 0, &from, sizeFrom) == SOCKET_ERROR)
+		if (sendto(UdpSocket, (char *)buffer, 4 + strlen(localHostName), 0, &from, sizeFrom) == SOCKET_ERROR)
 			return;
 	}
 }

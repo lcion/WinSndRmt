@@ -1,14 +1,13 @@
 package com.lion.rmtsndcli;
 
 import java.util.concurrent.LinkedBlockingQueue;
-
 import android.os.Handler;
 
 //we only need one instance of this class in the entire application
 public class NetwrkComm {
 
 	// the persistent instance
-	static NetwrkComm testPrstInst;
+	static NetwrkComm netComPrstInst;
 	private String addressStr;
 	private LinkedBlockingQueue<DataUnit> recNtwrkQ;
 	private LinkedBlockingQueue<DataUnit> sndNtwrkQ;
@@ -19,9 +18,9 @@ public class NetwrkComm {
 
 	// the function to get the persistent instance
 	static NetwrkComm getNetwrkCommCls(){
-		if(testPrstInst == null )
-			testPrstInst = new NetwrkComm();
-		return testPrstInst;
+		if(netComPrstInst == null )
+			netComPrstInst = new NetwrkComm();
+		return netComPrstInst;
 	}
 
 	private void Connect(){

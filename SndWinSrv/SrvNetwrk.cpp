@@ -37,37 +37,59 @@ HRESULT CSrvNetwrk::Initialize(char *hostName, int port){
 	UdpSocket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 	if (UdpSocket == INVALID_SOCKET) return -1;
 
-	u_short uPort = port;
-    char *ip;
-    sockaddr_in service;
-    service.sin_family = AF_INET;
-    service.sin_port = htons(uPort);
-    hostent *thisHost;
+	char strPort[20];
+	DWORD dwRetval;
+	sprintf_s(strPort, "%d", port);
+	struct addrinfo *result = NULL;
+	struct addrinfo *ptr = NULL;
+	struct sockaddr_in  *sockaddr_ipv4;
+	struct addrinfo hints;
 
 	//get local host name for sending to udp clients
 	gethostname(localHostName, 256);
 
+	//--------------------------------
+	// Setup the hints address info structure
+	// which is passed to the getaddrinfo() function
+	ZeroMemory(&hints, sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_protocol = IPPROTO_TCP;
 	//use configured host name to connect to user specified ip
-    thisHost = gethostbyname(hostName);
-    if (thisHost == NULL) {
-        OutputDebugString("gethostbyname failed with error = \n");
-        return -1;
-    }
-
-    ip = inet_ntoa(*(struct in_addr *) *thisHost->h_addr_list);
-
-    service.sin_addr.s_addr = inet_addr(ip);
-
+	dwRetval = getaddrinfo(hostName, strPort, &hints, &result);
+	if (dwRetval != 0) 
+	{
+		OutputDebugString("getaddrinfo failed with error\n");
+		return -1;
+	}
+	for (ptr = result; ptr != NULL; ptr = ptr->ai_next) 
+	{
+		switch (ptr->ai_family)
+		{
+		case AF_INET:
+			sockaddr_ipv4 = (struct sockaddr_in *) ptr->ai_addr;
+			break;
+		}
+	}
+	if (sockaddr_ipv4 == NULL)
+	{
+		OutputDebugString("couldn't find any ipv4 address\n");
+		return -1;
+	}
+	
     //-----------------------------------------
     // Bind the listening socket to the local IP address
     // and port number
-    iResult = bind(ListenSocket, (SOCKADDR *) & service, sizeof (SOCKADDR));
+	iResult = bind(ListenSocket, (SOCKADDR *)sockaddr_ipv4, sizeof(SOCKADDR));
     if (iResult != 0) {
         OutputDebugString("bind failed with error = %d\n");
         return -1;
     }
-	if (bind(UdpSocket, (SOCKADDR *)& service, sizeof(SOCKADDR)) == SOCKET_ERROR)
+	if (bind(UdpSocket, (SOCKADDR *)sockaddr_ipv4, sizeof(SOCKADDR)) == SOCKET_ERROR)
 		return -1;
+
+	//cleanup getaddrinfo result
+	freeaddrinfo(result);
 	//-----------------------------------------
     // Set the socket to listen for incoming
     // connection requests
@@ -76,8 +98,6 @@ HRESULT CSrvNetwrk::Initialize(char *hostName, int port){
         OutputDebugString("listen failed with error = \n");
         return -1;
     }
-    sprintf_s(outTextBuff, "Listening on ip %s port %d\n", ip, uPort);
-	OutputDebugString(outTextBuff);
 
 	// set server socket to non blocking accept
 	u_long nb = 1L;
@@ -138,7 +158,7 @@ void CSrvNetwrk::ProcessUdpMessages(){
 	buffer[1] = RMT_LOGIN;	// function
 	buffer[2] = 0;			// arg0
 	buffer[3] = 0;			// arg1
-	strcpy(&buffer[4], localHostName);
+	strcpy_s(&buffer[4], 4092, localHostName);
 	DataBuf.len = 4 + strlen(localHostName);
 	sockaddr from;
 	int sizeFrom = sizeof(from);

@@ -15,5 +15,6 @@
     <string name="pauseBtn">Pause/Play\nMedia</string>
     <string name="title_touch_pad">Touch Pad</string>
     <string name="touchpadBtn">Touch Pad</string>
+    <string name="netwrk_discovery">Network Discovery</string>
     
 </resources>

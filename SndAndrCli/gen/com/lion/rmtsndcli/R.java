@@ -54,6 +54,7 @@ public final class R {
         public static final int connecting=0x7f050003;
         public static final int contentDescription=0x7f05000a;
         public static final int mute=0x7f050009;
+        public static final int netwrk_discovery=0x7f05000e;
         public static final int onAddNewPCBtn=0x7f050004;
         public static final int pauseBtn=0x7f05000b;
         public static final int snd20Btn=0x7f050008;

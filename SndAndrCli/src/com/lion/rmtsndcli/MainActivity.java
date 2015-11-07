@@ -2,7 +2,6 @@ package com.lion.rmtsndcli;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -103,7 +102,7 @@ public class MainActivity extends Activity {
 		      	});
 
 		    	alert.show();
-								
+
 				return true;
 			}
 		});
@@ -148,12 +147,7 @@ public class MainActivity extends Activity {
     public void onAddNewPCBtn(View view) {
     	String ip = "";
     	StringBuilder pcName = new StringBuilder("");
-    	try {
-    		ip = detectServer(pcName);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    	getNameIpFromUser(pcName.toString(), ip);
+		ip = detectServer(pcName);
     }
     
 	// Get broadcast address for LAN.
@@ -182,70 +176,20 @@ public class MainActivity extends Activity {
 		return null;
 	}
 
-    private String detectServer(StringBuilder pcName) throws Exception{
-		// Broadcast ping to look for servers.
-    	int Timeout = 1500;
-    	int Port = 27015;
-		DatagramSocket beacon = new DatagramSocket(null);
-		beacon.setBroadcast(true);
-		beacon.setSoTimeout(Timeout);
-
-		if (android.os.Build.VERSION.SDK_INT > 9) {
-			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-			StrictMode.setThreadPolicy(policy); 
+    private String detectServer(final StringBuilder pcName){
+	   final StringBuilder ipAddr = new StringBuilder();
+	   LookUpPCsAsyncTask lkupTask = new LookUpPCsAsyncTask();
+	   WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+	   lkupTask.SetupInternals(wifi, data, pcName, ipAddr, this, new Callback(){
+		@Override
+		public void execute() {
+			getNameIpFromUser(pcName.toString(), ipAddr.toString());
 		}
-		InetAddress broadcast = getBroadcastAddress();
-
-		byte[] buffer = new byte[] { 0x04, 0x08, 0x00, 0x00 };
-		beacon.send(new DatagramPacket(buffer, 4, broadcast, Port));
-
-		try {
-			// Add each ack to the menu. receive up to 9
-			for (int i = 0; i < 9; ++i) {
-				byte[] port = new byte[256];
-				DatagramPacket ack = new DatagramPacket(port, 256);
-				beacon.receive(ack);
-
-				ByteBuffer parser = ByteBuffer.wrap(port);
-
-				if (parser.get(1) == 0x09)
-				{
-					String addr = ack.getAddress().toString().substring(1);
-					//System.out.println("got back udp from addr " + addr);
-					String string;
-					// find the address in existing map
-			    	boolean found=false;
-			    	for(int j = 0; j < data.size() ; j++)
-			    	{
-			    		string = data.get(j).get("ip");
-			    		if(string.equals(addr)){
-			    			found = true;
-			    			break; // IP already in the list
-			    		}
-			    	}
-			    	if(found == false){
-			    		if(ack.getLength() > 4){
-			    			//we have received PC name
-			    			string = "";
-			    			char nextChar;
-			    			int j = 0;
-			    			do{
-			    				j++;
-			    				nextChar = (char)parser.get();
-			    				if(j>4 && nextChar != 0x0)
-			    					string += nextChar;
-			    			}while((j<5 || nextChar != 0x0) && j<(256-4));
-			    			System.out.println(string);
-			    			pcName.append(string);
-			    		}
-			    		return addr;
-			    	}
-				}
-			}
-		} catch (SocketTimeoutException e) { }
-		return "";
+	   });
+	   lkupTask.execute();
+	   return ipAddr.toString();
     }
-    
+
     private int getNameIpFromUser(String name, String ip){
     	AlertDialog.Builder alert = new AlertDialog.Builder(this);
 

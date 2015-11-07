@@ -33,7 +33,7 @@ public class NetwrkComm {
         sndNtwrkQ = new LinkedBlockingQueue<DataUnit>();
         netThread = new NetwrkThread(recNtwrkQ, sndNtwrkQ, addressStr);
         netThread.setRunning(true);
-        netThread.start();				
+        netThread.start();
 	}
 	
 	public void Connect(String message) {
@@ -109,7 +109,7 @@ public class NetwrkComm {
 
 	private void OnSetMute(boolean b) {
 		if(netwrkEvent != null)
-			netwrkEvent.OnSetMute(b);		
+			netwrkEvent.OnSetMute(b);
 	}
 	
 	public void setNetworkEvent(NetwrkEvent netEvt){

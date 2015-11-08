@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
   <!-- when doing new release increment product version and generate new product id -->
-  <?define ProductVersion = 1.1.4.0 ?>
-  <Product Name='Remote Volume $(var.ProductVersion)' Id='9FC8EA91-6E9B-4079-B838-2D56064FC47B' UpgradeCode='A16AF464-76E5-4574-BAE3-750D11CAA600'
+  <?define ProductVersion = 1.1.5.0 ?>
+  <Product Name='Remote Volume $(var.ProductVersion)' Id='34C50E9F-414B-44DD-BCBB-4BFE094DDCEA' UpgradeCode='A16AF464-76E5-4574-BAE3-750D11CAA600'
     Language='1033' Codepage='1252' Version="$(var.ProductVersion)" Manufacturer='Lucian Ion Ltd.'>
 
     <Package Id='*' Keywords='Installer' Description="WinSndRmt $(var.ProductVersion) Installer"
@@ -64,7 +64,7 @@
         </RegistryKey>
       </Component>
       <!-- add dependency to visual studio C++ runtime library -->
-      <Merge Id="VCRedist" SourceFile="c:\Program Files (x86)\Common Files\Merge Modules\Microsoft_VC120_CRT_x86.msm" DiskId="1" Language="0"/>
+      <Merge Id="VCRedist" SourceFile="c:\Program Files (x86)\Common Files\Merge Modules\Microsoft_VC140_CRT_x86.msm" DiskId="1" Language="0"/>
     </DirectoryRef>
         
     <Feature Id='Complete' Level='1'>

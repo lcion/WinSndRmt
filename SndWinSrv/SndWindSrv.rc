@@ -13,8 +13,8 @@ IDI_SNDWINSRV        ICON                    "remoteVol.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,1,4,0
- PRODUCTVERSION 1,1,4,0
+ FILEVERSION 1,1,5,0
+ PRODUCTVERSION 1,1,5,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x9L
@@ -32,13 +32,13 @@ BEGIN
             VALUE "Comments", "Lucian Ion"
             VALUE "CompanyName", "LcIon"
             VALUE "FileDescription", "Remote Volume Control Server"
-            VALUE "FileVersion", "1, 1, 4, 0"
+            VALUE "FileVersion", "1, 1, 5, 0"
             VALUE "InternalName", "SndWinSrv.exe"
             VALUE "LegalCopyright", "Copyright (c) LcIon,  All rights reserved."
             VALUE "OriginalFilename", "SndWinSrv.exe"
             VALUE "PrivateBuild", "LcIon"
             VALUE "ProductName", "Remote Snd"
-            VALUE "ProductVersion", "1, 1, 4, 0"
+            VALUE "ProductVersion", "1, 1, 5, 0"
         END
     END
     BLOCK "VarFileInfo"

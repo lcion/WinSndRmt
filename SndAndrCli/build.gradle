@@ -28,7 +28,7 @@ android {
     }
     sourceSets {
         main {
-            manifest.srcFile 'app/src/com/lion/rmtsndcli/AndroidManifest.xml'
+            manifest.srcFile 'app/AndroidManifest.xml'
             java.srcDirs = ['app/src']
             resources.srcDirs = ['app/src']
             aidl.srcDirs = ['app/src']

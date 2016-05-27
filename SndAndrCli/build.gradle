@@ -1,0 +1,41 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.0'
+    }
+}
+repositories {
+        jcenter()
+}
+apply plugin: 'com.android.application'
+
+dependencies {
+    compile fileTree(include: '*.jar', dir: 'libs')
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.3'
+    dexOptions {
+        incremental false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'app/src/com/lion/rmtsndcli/AndroidManifest.xml'
+            java.srcDirs = ['app/src']
+            resources.srcDirs = ['app/src']
+            aidl.srcDirs = ['app/src']
+            renderscript.srcDirs = ['app/src']
+            res.srcDirs = ['app/res']
+            assets.srcDirs = ['assets']
+        }
+}
+
+}

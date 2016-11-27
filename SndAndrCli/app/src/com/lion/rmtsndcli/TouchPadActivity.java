@@ -50,7 +50,7 @@ public class TouchPadActivity extends Activity {
 		nwrkCls.Connect(message);
 
 		super.onStart();
-	};
+	}
 
 	@Override
 	public void onStop(){
@@ -131,7 +131,7 @@ public class TouchPadActivity extends Activity {
 			int index = e.findPointerIndex(pointerId);
 			return	Math.abs(e.getX(index) - downX) < vc.getScaledTouchSlop() && 
 					Math.abs(e.getY(index) - downY) < vc.getScaledTouchSlop() && 
-					e.getEventTime() - downTime < vc.getTapTimeout();
+					e.getEventTime() - downTime < ViewConfiguration.getTapTimeout();
 		}
 		
 		public boolean onDown(MotionEvent e) {
@@ -176,7 +176,8 @@ public class TouchPadActivity extends Activity {
 		
 		public void onMoveDelta(float dx, float dy) { }
 		public void onClick() { }
-	};
+	}
+
 	protected class MoveAction extends Action {
 		public void onMoveDelta(float dx, float dy) 
 		{
@@ -194,8 +195,8 @@ public class TouchPadActivity extends Activity {
 		public boolean cancel(MotionEvent e) {
 			return true;
 		}
-	};
-	
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

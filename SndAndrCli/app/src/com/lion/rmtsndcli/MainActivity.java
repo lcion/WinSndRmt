@@ -276,6 +276,6 @@ public class MainActivity extends Activity {
 		NetwrkComm nwrkCls = NetwrkComm.getNetwrkCommCls();
 		nwrkCls.DisConnect();
 		super.onStart();
-	};
+	}
 
 }

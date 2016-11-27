@@ -115,7 +115,7 @@ public class ClientActivity extends Activity {
 		nwrkCls.Connect(message);
 		
 		super.onStart();
-	};
+	}
 
 	public void onMuteChkBox(View view) {
     	byte buffer[] = new byte[4];

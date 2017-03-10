@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2012 for Windows Desktop
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SndWinSrv", "SndWinSrv\SndWinSrv.vcxproj", "{121E6462-4DB3-4906-9556-32BC6A5F5ABA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SndWinCli", "SndWinCli\SndWinCli.vcxproj", "{3844138E-14A1-427B-8B37-16316401E38D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkUnitTest", "NetworkUnitTest\NetworkUnitTest.vcxproj", "{A210B399-933E-4786-812C-B700B5074428}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "WinSndRmtSetup", "WinSndRmtSetup\WinSndRmtSetup.vdproj", "{2D7A62B8-2E3E-48CB-91CF-9031C7D69803}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +29,8 @@ Global
 		{A210B399-933E-4786-812C-B700B5074428}.Debug|Win32.Build.0 = Debug|Win32
 		{A210B399-933E-4786-812C-B700B5074428}.Release|Win32.ActiveCfg = Release|Win32
 		{A210B399-933E-4786-812C-B700B5074428}.Release|Win32.Build.0 = Release|Win32
+		{2D7A62B8-2E3E-48CB-91CF-9031C7D69803}.Debug|Win32.ActiveCfg = Debug
+		{2D7A62B8-2E3E-48CB-91CF-9031C7D69803}.Release|Win32.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

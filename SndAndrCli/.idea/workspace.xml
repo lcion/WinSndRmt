@@ -7,50 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="db47f3f4-65db-4022-a175-60afc9244eef" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__android_android_23.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/android_android_23.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SndAndrCli.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SndAndrCli.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/AndroidManifest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/drawable-hdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/drawable-mdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/drawable-xhdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/drawable-xxhdpi/ic_launcher.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/layout/activity_client_layout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/layout/activity_main.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/layout/activity_touch_pad.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/menu/client.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/menu/main.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/values-sw600dp/dimens.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/values-sw720dp-land/dimens.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/values/dimens.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/values/strings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/res/values/styles.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/com/lion/rmtsndcli/Callback.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/com/lion/rmtsndcli/ClientActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/com/lion/rmtsndcli/DataUnit.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/com/lion/rmtsndcli/LookUpPCsAsyncTask.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/com/lion/rmtsndcli/MainActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/com/lion/rmtsndcli/NetwrkComm.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/com/lion/rmtsndcli/NetwrkEvent.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/com/lion/rmtsndcli/NetwrkThread.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/com/lion/rmtsndcli/Requester.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/com/lion/rmtsndcli/TouchPadActivity.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/com/lion/rmtsndcli/UITimer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SndWinCli/SndWinCli.vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../SndWinCli/SndWinCli.vcxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SndWinSrv/SndWinSrv.vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../SndWinSrv/SndWinSrv.vcxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_client_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_client_layout.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

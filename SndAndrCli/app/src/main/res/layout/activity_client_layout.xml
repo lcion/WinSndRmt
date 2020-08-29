@@ -17,23 +17,27 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textViewStatus"
         android:layout_below="@+id/textViewStatus"
-        android:text="@string/snd20Btn"
-        android:onClick="onLockPcBtn" />
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="11dp"
+        android:onClick="onLockPcBtn"
+        android:text="@string/snd20Btn" />
 
     <CheckBox
         android:id="@+id/checkBoxMute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/send20"
+        android:layout_marginLeft="20dp"
         android:layout_toRightOf="@+id/send20"
-        android:text="@string/mute"
-        android:onClick="onMuteChkBox" />
+        android:onClick="onMuteChkBox"
+        android:text="@string/mute" />
 
     <TextView
         android:id="@+id/textViewAStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/send20"
+        android:layout_marginTop="11dp"
         android:text="@string/connecting"
         android:textSize="20sp" />
 
@@ -43,6 +47,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textViewAStatus"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="8dp"
         android:max="100" />
 
     <Button
@@ -61,7 +67,9 @@
         android:layout_alignLeft="@+id/seekBarVol"
         android:layout_alignRight="@+id/seekBarVol"
         android:layout_below="@+id/seekBarVol"
-        android:layout_marginTop="36dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="20dp"
         android:onClick="onTouchPadBtn"
         android:text="@string/touchpadBtn" />
 
@@ -70,6 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:layout_below="@id/buttonTouch"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPersonName" />
 

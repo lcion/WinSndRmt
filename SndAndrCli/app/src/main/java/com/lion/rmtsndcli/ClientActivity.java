@@ -1,13 +1,18 @@
 package com.lion.rmtsndcli;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -68,7 +73,54 @@ public class ClientActivity extends Activity {
 				// I have no interest at the moment to process this
 			}
 		});
+		final EditText searchTo = (EditText)findViewById(R.id.editTextTextTransferInput);
+		searchTo.setOnKeyListener(new EditText.OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				//You can identify which key pressed buy checking keyCode value with KeyEvent.KEYCODE_
+				if(keyCode == KeyEvent.KEYCODE_DEL) {
+					if(event.getAction() == KeyEvent.ACTION_DOWN) {
+						byte[] buffer = new byte[4];
+						buffer[0] = 4;  // package size
+						buffer[1] = 11;  // RMT_KEYBOARD
+						buffer[2] = 8;  // VK_BACK
+						buffer[3] = 0;  // reserved
+						sendBytes(buffer);
+					}
+				}
+				return false;
+			}
+		});
+		searchTo.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void afterTextChanged(Editable s) {
+				// skip message
+			}
 
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// skip message
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if(count == 0) return;
+				char typed = s.charAt(count-1);
+				byte charToSend = 0;
+				if(typed >= 'a' && typed <= 'z')
+					charToSend = (byte)( 0x41 + typed - 'a');
+				else if(typed == ' ') charToSend = (byte) typed;
+				if(charToSend != 0) {
+					byte[] buffer = new byte[4];
+					buffer[0] = 4;  // package size
+					buffer[1] = 11;  // RMT_KEYBOARD
+					buffer[2] = charToSend;  // value = letter a
+					buffer[3] = 0;  // reserved
+					sendBytes(buffer);
+				}
+				searchTo.setText("");
+			}
+		});
 	    // Set the text view as the activity layout
 	    //setContentView(textView);
 	    //create networking

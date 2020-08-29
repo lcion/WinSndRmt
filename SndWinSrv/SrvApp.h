@@ -10,6 +10,7 @@ public:
 	void OnCtrlP();
 	void OnMouseDownUp(char mseBtn);
 	void OnMouseMove(char dx, char dy);
+	void OnKeyboard(char key);
 };
 
 enum _func_enum {
@@ -23,5 +24,6 @@ enum _func_enum {
 	RMT_MOUSE_MOVE,
 	RMT_PING,
 	RMT_PONG,
-	RMT_LOGOUT
+	RMT_LOGOUT,
+	RMT_KEYBOARD
 };

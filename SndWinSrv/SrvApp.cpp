@@ -46,6 +46,9 @@ int CSrvApp::ProcessClient(char* buffer, unsigned long &len, int *cliResult)
 		case RMT_MOUSE_MOVE:
 			OnMouseMove(recBytesPtr[2], recBytesPtr[3]);
 			break;
+		case RMT_KEYBOARD:
+			OnKeyboard(recBytesPtr[2]);
+			break;
 
 		default:
 			break;
@@ -91,5 +94,21 @@ void CSrvApp::OnCtrlP(){
 
 	// Release the "ctrl" key
 	keyEvent.ki.wVk = VK_CONTROL; // ctrl up
+	SendInput(1, &keyEvent, sizeof(INPUT));
+}
+
+void CSrvApp::OnKeyboard(char key) {
+	/*static bool done = false;
+	if (done) { done = false; return; }
+	else done = true;*/
+	INPUT keyEvent = { 0 };
+	//send received key
+	keyEvent.ki.wScan = 0;
+	keyEvent.type = INPUT_KEYBOARD;
+	keyEvent.ki.wVk = key; //c
+	SendInput(1, &keyEvent, sizeof(keyEvent));
+
+	// Release the received key
+	keyEvent.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release
 	SendInput(1, &keyEvent, sizeof(INPUT));
 }

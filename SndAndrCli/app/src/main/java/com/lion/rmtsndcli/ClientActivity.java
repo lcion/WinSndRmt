@@ -109,6 +109,8 @@ public class ClientActivity extends Activity {
 				byte charToSend = 0;
 				if(typed >= 'a' && typed <= 'z')
 					charToSend = (byte)( 0x41 + typed - 'a');
+				else if(typed >= '0' && typed <= '9')
+					charToSend = (byte)( 0x30 + typed - '0');
 				else if(typed == ' ') charToSend = (byte) typed;
 				if(charToSend != 0) {
 					byte[] buffer = new byte[4];

@@ -1,42 +1,28 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
+    
+    repositories {
+        google()
+        jcenter()
+        
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.0.1'
+        
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
     repositories {
         google()
         jcenter()
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.1'
-    }
-}
-repositories {
-        jcenter()
-}
-apply plugin: 'com.android.application'
-
-dependencies {
-    compile fileTree(include: '*.jar', dir: 'libs')
 }
 
-android {
-    compileSdkVersion 23
-    buildToolsVersion '28.0.3'
-    dexOptions {
-        incremental false
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
-    }
-    sourceSets {
-        main {
-            manifest.srcFile 'app/AndroidManifest.xml'
-            java.srcDirs = ['app/src']
-            resources.srcDirs = ['app/src']
-            aidl.srcDirs = ['app/src']
-            renderscript.srcDirs = ['app/src']
-            res.srcDirs = ['app/res']
-            assets.srcDirs = ['assets']
-        }
-}
-
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

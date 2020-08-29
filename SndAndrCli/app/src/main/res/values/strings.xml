@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Remote Volume</string>
+    <string name="action_settings">Settings</string>
+    <string name="top_main_string">Please choose one:</string>
+    <string name="connecting">Connecting...</string>
+    <string name="onAddNewPCBtn">Add New PC</string>
+    <string name="title_activity_client">Connected to server</string>
+    <string name="snd20Btn">Lock PC</string>
+    <string name="mute">Mute</string>
+    <string name="contentDescription">Remote Volume Control</string>
+    <string name="pauseBtn">Pause/Play\nMedia</string>
+    <string name="title_touch_pad">Touch Pad</string>
+    <string name="touchpadBtn">Touch Pad</string>
+    <string name="netwrk_discovery">Network Discovery</string>
+
+</resources>

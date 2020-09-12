@@ -193,7 +193,7 @@ public class MainActivity extends Activity {
 
     	// Set an EditText view to get user input 
     	final LinearLayout linlay = new LinearLayout(this);
-    	linlay.setOrientation(1); //vertical
+    	linlay.setOrientation(LinearLayout.VERTICAL);
     	final EditText nameInp = new EditText(this);
     	nameInp.setSingleLine();
     	nameInp.setText(name);

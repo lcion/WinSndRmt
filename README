@@ -17,3 +17,4 @@ Android client so one can control the volume from a phone application. The andro
 
 17/02/2014 Do you use your laptop to play videos on TV via HDMI? Now the remote client can pause and play the pc media player!
 30/08/2014 Add remote mouse on the android client - move, click and double click events can be sent by android client via touchpad screen.
+29/08/2020 Add support for sending characters to PC to allow users to enter text in the search box for internet browsing

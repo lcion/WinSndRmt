@@ -5,17 +5,31 @@
       <config />
     </shared>
   </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="db47f3f4-65db-4022-a175-60afc9244eef" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable-hdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable-mdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/ic_launcher.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable-xxhdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_client_layout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_client_layout.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SndAndrCli.iml" beforeDir="false" afterPath="$PROJECT_DIR$/SndAndrCli.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="Nexus_S_API_29" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[00bb10780904]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -31,6 +45,9 @@
   <component name="FavoritesManager">
     <favorites_list name="GradleTestApp" />
   </component>
+  <component name="GenerateSignedApkSettings">
+    <option name="BUILD_TARGET_KEY" value="apk" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -38,13 +55,17 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ApkExportedModule" value="app" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="463d83e" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-08-29T16:31:33.015Z" />
+    <property name="ResourceManagerPrefKey.ResourceType" value="DRAWABLE" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../MOOC" />
     <property name="project.structure.last.edited" value="SDK Location" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -96,12 +117,13 @@
       </method>
     </configuration>
     <configuration name="MainActivity" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false" temporary="true">
-      <module name="app" />
+      <module name="SndAndrCli.app" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
       <option name="DEPLOY_AS_INSTANT" value="false" />
       <option name="ARTIFACT_NAME" value="" />
       <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="specific_activity" />
@@ -137,22 +159,28 @@
       </Native>
       <Profilers>
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
       </Profilers>
       <option name="DEEP_LINK" value="" />
       <option name="ACTIVITY_CLASS" value="com.lion.rmtsndcli.MainActivity" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
       <method v="2">
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
-      <module name="app" />
+      <module name="SndAndrCli.app" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
       <option name="DEPLOY_AS_INSTANT" value="false" />
       <option name="ARTIFACT_NAME" value="" />
       <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
@@ -188,11 +216,16 @@
       </Native>
       <Profilers>
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
         <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
       </Profilers>
       <option name="DEEP_LINK" value="" />
       <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
       <method v="2">
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
@@ -244,13 +277,12 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <ignored-roots>
@@ -277,10 +309,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="174" width="1092" height="693" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1598699222630" />
-    <state x="363" y="91" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1598472819562">
+    <state x="363" y="91" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1603637621387">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="363" y="91" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1366.728@0.0.1366.728" timestamp="1598472819562" />
+    <state x="363" y="91" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1366.728@0.0.1366.728" timestamp="1603637621387" />
     <state x="690" y="266" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1598219941629">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -297,55 +329,64 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1598215424811" />
-    <state x="846" y="284" key="FileChooserDialogImpl" timestamp="1598697423286">
+    <state x="846" y="284" key="FileChooserDialogImpl" timestamp="1603188897586">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="602" y="199" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1598473076548" />
-    <state x="846" y="284" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1598697423286" />
-    <state width="1877" height="274" key="GridCell.Tab.0.bottom" timestamp="1598220278014">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="846" y="284" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1603188897586" />
+    <state width="661" height="171" key="GridCell.Tab.0.bottom" timestamp="1598819547263">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="661" height="171" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1598819547263" />
     <state width="1877" height="274" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1598220278014" />
-    <state width="1877" height="274" key="GridCell.Tab.0.center" timestamp="1598220278014">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="661" height="171" key="GridCell.Tab.0.center" timestamp="1598819547263">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="661" height="171" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1598819547263" />
     <state width="1877" height="274" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1598220278014" />
-    <state width="1877" height="274" key="GridCell.Tab.0.left" timestamp="1598220278014">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="661" height="171" key="GridCell.Tab.0.left" timestamp="1598819547263">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="661" height="171" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1598819547263" />
     <state width="1877" height="274" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1598220278014" />
-    <state width="1877" height="274" key="GridCell.Tab.0.right" timestamp="1598220278014">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="661" height="171" key="GridCell.Tab.0.right" timestamp="1598819547263">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="661" height="171" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1598819547263" />
     <state width="1877" height="274" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1598220278014" />
-    <state width="1877" height="338" key="GridCell.Tab.1.bottom" timestamp="1598220051452">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="661" height="213" key="GridCell.Tab.1.bottom" timestamp="1598722993680">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="661" height="213" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1598722993680" />
     <state width="1877" height="338" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1598220051452" />
-    <state width="1877" height="338" key="GridCell.Tab.1.center" timestamp="1598220051452">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="661" height="213" key="GridCell.Tab.1.center" timestamp="1598722993680">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="661" height="213" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1598722993680" />
     <state width="1877" height="338" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1598220051452" />
-    <state width="1877" height="338" key="GridCell.Tab.1.left" timestamp="1598220051451">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="661" height="213" key="GridCell.Tab.1.left" timestamp="1598722993679">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="661" height="213" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1598722993679" />
     <state width="1877" height="338" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1598220051451" />
-    <state width="1877" height="338" key="GridCell.Tab.1.right" timestamp="1598220051452">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="661" height="213" key="GridCell.Tab.1.right" timestamp="1598722993680">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state width="661" height="213" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1598722993680" />
     <state width="1877" height="338" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1598220051452" />
     <state x="461" y="162" key="SettingsEditor" timestamp="1598698804145">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="162" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1598698804145" />
-    <state x="92" y="92" width="1736" height="856" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1598699395727">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="65" y="64" width="1236" height="600" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1598718923825">
+      <screen x="0" y="0" width="1366" height="728" />
     </state>
+    <state x="65" y="64" width="1236" height="600" key="com.android.tools.idea.avdmanager.AvdListDialog/0.0.1366.728@0.0.1366.728" timestamp="1598718923825" />
     <state x="92" y="92" width="1736" height="856" key="com.android.tools.idea.avdmanager.AvdListDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1598699395727" />
-    <state x="656" y="253" width="607" height="534" key="find.popup" timestamp="1598699901412">
+    <state x="656" y="253" width="607" height="534" key="find.popup" timestamp="1603190533742">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="656" y="253" width="607" height="534" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1598699901412" />
+    <state x="656" y="253" width="607" height="534" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603190533742" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1598699374770">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -358,6 +399,11 @@
           <url>file://$PROJECT_DIR$/app/src/main/java/com/example/gradletestapp/MainActivity.java</url>
           <line>17</line>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/lion/rmtsndcli/ClientActivity.java</url>
+          <line>82</line>
+          <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

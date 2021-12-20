@@ -4,7 +4,6 @@
     android:versionCode="1"
     android:versionName="1.1.5"
     android:installLocation="auto" >
-    <uses-sdk android:targetSdkVersion="16" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,7 +17,8 @@
 
         <activity
             android:name="com.lion.rmtsndcli.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,14 +27,16 @@
         </activity>
         <activity
             android:name="com.lion.rmtsndcli.ClientActivity"
-            android:label="@string/title_activity_client" >
+            android:label="@string/title_activity_client"
+            android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.lion.rmtsndcli.MainActivity" />
         </activity>
         <activity
             android:name="com.lion.rmtsndcli.TouchPadActivity"
-            android:label="@string/title_touch_pad" >
+            android:label="@string/title_touch_pad"
+            android:exported="false">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.lion.rmtsndcli.ClientActivity" />

@@ -3,13 +3,13 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         debug {
-            storeFile file('C:\\Users\\Lucian\\Documents\\Projects\\GitHub\\keys\\exesigning\\LucianIonANDR1.pfx')
+            storeFile file('C:\\Users\\lcion\\Documents\\Projects\\GitHub\\keys\\exesigning\\LucianIonANDR1.pfx')
             storePassword 'LucianIon'
             keyAlias 'LucianIon'
             keyPassword 'LucianIon'
         }
         release {
-            storeFile file('C:\\Users\\Lucian\\Documents\\Projects\\GitHub\\keys\\exesigning\\LucianIonANDR1.pfx')
+            storeFile file('C:\\Users\\lcion\\Documents\\Projects\\GitHub\\keys\\exesigning\\LucianIonANDR1.pfx')
             storePassword 'LucianIon'
             keyAlias 'LucianIon'
             keyPassword 'LucianIon'
